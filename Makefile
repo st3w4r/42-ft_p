@@ -21,15 +21,22 @@ PATH_SRC_SRV = ./src_server/
 PATH_INC_CLI = ./inc_client/
 PATH_INC_SRV = ./inc_server/
 
+PATH_INC_LIBFT = ./libft/includes/
+
+INCLUDES =  -I $(PATH_INC_CLI) -I $(PATH_INC_SRV) -I $(PATH_INC_LIBFT)
+
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -Ofast -I $(PATH_INC_CLI) -I $(PATH_INC_SRV)
+#CFLAGS = -Wall -Wextra -Werror -Ofast $(INCLUDES)
+CFLAGS = -Ofast $(INCLUDES)
 LIBS = -L libft/ -lft
 
 #____________FILES____________#
 
-SRC_CLI = client.c
+SRC_CLI =	ftp_client.c \
+			main.c
 
-SRC_SRV = server.c
+SRC_SRV =	ftp_server.c \
+			main.c
 
 OBJ_CLI = $(addprefix $(PATH_SRC_CLI), $(SRC_CLI:.c=.o))
 OBJ_SRV = $(addprefix $(PATH_SRC_SRV), $(SRC_SRV:.c=.o))

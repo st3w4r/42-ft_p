@@ -10,22 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
+#include "ftp_cli.h"
 
-void usage(char *str)
+int		ftp_create_client(char *addr, int port)
 {
-	printf("Usage: %s <addr> <port>\n", str);
-	exit(1);
-}
-
-int	create_client(char *addr, int port)
-{
+	int					r;
 	int					sock;
 	struct protoent		*proto;
 	struct sockaddr_in	sin;
@@ -38,30 +27,15 @@ int	create_client(char *addr, int port)
 	sin.sin_family = AF_INET;
 	sin.sin_port = htons(port);
 	sin.sin_addr.s_addr = inet_addr(addr);
-
 	if (connect(sock, (const struct sockaddr *)&sin, sizeof(sin)) == -1)
+		ft_error_str_exit("Connect error\n");
+
+	char buf[5];
+	while ((r = recv(sock, buf, 5, 0)) > 0)
 	{
-		printf("Connect error\n");
-		exit(2);
+		// ft_putstr(buf);
+		write(1, buf, r);
 	}
+
 	return(sock);
-}
-
-int main(int ac, char **av)
-{
-	int port;
-	int sock;
-	char buf[1024];
-	int r;
-
-	if (ac != 3)
-		usage(av[0]);
-	port = atoi(av[2]);
-	sock = create_client(av[1], port);
-	while ((r = read(STDIN_FILENO, buf, 1023)) > 0)
-	{
-		buf[r] = '\0';
-		write(sock, buf, r);
-	}
-	close(sock);
 }
