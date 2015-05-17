@@ -12,14 +12,25 @@
 
 #include "ftp_srv.h"
 
+static void		ftp_redirect_fd(int srcfd, int dstfd)
+{
+	if (dup2(srcfd, dstfd) == -1)
+		ft_error_str("Error redirect fd");
+}
+
 static void		ftp_fork_process(char *path, char **av)
 {
-	pid_t	father;
+	pid_t			pid;
+	int				options;
+	int				*status;
+	struct rusage	*rusage;
 
-	father = fork();
-	if (father > 0)
-		wait(0);
-	else if (father == 0)
+	pid = fork();
+	if (pid > 0)
+	{
+		wait4(pid, status, options, rusage);
+	}
+	else if (pid == 0)
 	{
 		if (execv(av[0], av) == -1)
 			ft_error_str("Exec format error.\n");
@@ -40,7 +51,7 @@ static void		ftp_read_on_socket(int cs)
 		args = ft_strsplit(buf, ' ');
 		ftp_fork_process(args[0], args);
 		ft_arrfree(&args);
-		// ftp_exec_cmd(buf);
+		send(cs, NULL, r, 0);
 	}
 }
 
@@ -75,7 +86,8 @@ void		ftp_create_socket(int port)
 
 	sock = ftp_create_server(port);
 	cs = accept(sock, (struct sockaddr*)&csin,  &cslen);
-
+	ftp_redirect_fd(cs, STDOUT_FILENO);
+	ftp_redirect_fd(cs, STDERR_FILENO);
 	ftp_read_on_socket(cs);
 	// send(cs, "ok1234567890", 7, 0);
 	close(cs);
