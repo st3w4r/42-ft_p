@@ -32,8 +32,9 @@ LIBS = -L libft/ -lft
 
 #____________FILES____________#
 
-SRC_CLI =	ftp_client.c \
-			main.c
+SRC_CLI =	main.c \
+			ftp_client.c \
+			ftp_helper.c
 
 SRC_SRV =	ftp_server.c \
 			main.c

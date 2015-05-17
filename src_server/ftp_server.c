@@ -12,16 +12,6 @@
 
 #include "ftp_srv.h"
 
-static void		ftp_exec_cmd(char *str)
-{
-	char **args;
-
-	args = ft_strsplit(str, ' ');
-	ft_putendl(args[0]);
-	// ft_putendl(args[1]);
-	execv("/bin/ls", args);
-}
-
 static void		ftp_fork_process(char *path, char **av)
 {
 	pid_t	father;
@@ -31,7 +21,7 @@ static void		ftp_fork_process(char *path, char **av)
 		wait(0);
 	else if (father == 0)
 	{
-		if (execv("/bin/ls", av) == -1)
+		if (execv(av[0], av) == -1)
 			ft_error_str("Exec format error.\n");
 		exit(0);
 	}
@@ -39,19 +29,14 @@ static void		ftp_fork_process(char *path, char **av)
 
 static void		ftp_read_on_socket(int cs)
 {
-	char **args;
+	char	*path;
+	char	**args;
 	char	buf[1024];
 	int		r;
 
 	while ((r = read(cs, buf, 1023)) > 0)
 	{
 		buf[r] = '\0';
-		// ft_putstr("Nd: ");
-		// ft_putnbr(r);
-		// ft_putstr(" Str: ");
-		// ft_putendl(buf);
-
-		// ftp_exec_cmd(buf);
 		args = ft_strsplit(buf, ' ');
 		ftp_fork_process(args[0], args);
 		ft_arrfree(&args);
@@ -91,8 +76,8 @@ void		ftp_create_socket(int port)
 	sock = ftp_create_server(port);
 	cs = accept(sock, (struct sockaddr*)&csin,  &cslen);
 
-	// ftp_read_on_socket(cs);
-	send(cs, "ok1234567890", 7, 0);
+	ftp_read_on_socket(cs);
+	// send(cs, "ok1234567890", 7, 0);
 	close(cs);
 	close(sock);
 }

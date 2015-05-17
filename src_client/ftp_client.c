@@ -30,12 +30,12 @@ int		ftp_create_client(char *addr, int port)
 	if (connect(sock, (const struct sockaddr *)&sin, sizeof(sin)) == -1)
 		ft_error_str_exit("Connect error\n");
 
-	char buf[5];
-	while ((r = recv(sock, buf, 5, 0)) > 0)
-	{
-		// ft_putstr(buf);
-		write(1, buf, r);
-	}
+	// char buf[5];
+	// while ((r = recv(sock, buf, 5, 0)) > 0)
+	// {
+	// 	// ft_putstr(buf);
+	// 	write(1, buf, r);
+	// }
 
 	return(sock);
 }

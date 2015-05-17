@@ -12,7 +12,7 @@
 
 #include "ftp_cli.h"
 
-void	usage(char *str)
+static void		usage(char *str)
 {
 	ft_putstr("Usage: ");
 	ft_putstr(str);
@@ -20,23 +20,32 @@ void	usage(char *str)
 	exit(1);
 }
 
-int		main(int ac, char **av)
+static void		ftp_loop(int sock)
+{
+	char *line;
+	int r;
+
+	while (42)
+	{
+		ftp_display_prompt();
+		if ((r = ft_get_next_line(0, &line)) == 0)
+			break ;
+		write(sock, line, ft_strlen(line));
+		free(line);
+	}
+	ft_putendl("Exit");
+}
+
+int				main(int ac, char **av)
 {
 	int port;
 	int sock;
-	char buf[1024];
-	int r;
 
 	if (ac != 3)
 		usage(av[0]);
 	port = ft_atoi(av[2]);
 	sock = ftp_create_client(av[1], port);
-
-	while ((r = read(STDIN_FILENO, buf, 1023)) > 0)
-	{
-		// write(STDIN_FILENO, "FT_P $> ", 8);
-		buf[r] = '\0';
-		write(sock, buf, r);
-	}
+	ftp_loop(sock);
 	close(sock);
+	return (0);
 }

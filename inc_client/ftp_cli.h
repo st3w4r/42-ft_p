@@ -29,5 +29,12 @@
 */
 int		ftp_create_client(char *addr, int port);
 
+/*
+** Name: ftp_helper
+** File: ftp_helper.c
+** Desc: Fucntions helpers
+*/
+void	ftp_display_prompt(void);
+
 
 #endif
