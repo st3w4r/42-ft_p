@@ -31,8 +31,9 @@ static void		ftp_loop_write(int sock)
 	{
 		if ((r = recv(sock, buf, 5, 0)) != 5)
 			read = FALSE;
-		// buf[r] = '\0';
-		// ft_putnbr(r);
+			// ft_error_str("Receive error\n");
+		buf[r] = '\0';
+		// ft_putnbr(recv(sock, buf, 1023, 0));
 		write(1, buf, r);
 	}
 }

@@ -71,7 +71,7 @@ static int		ftp_create_server(int port)
 	sin.sin_addr.s_addr = htonl(INADDR_ANY);
 	if (bind(sock, (const struct sockaddr *)&sin, sizeof(sin)) == -1)
 		ft_error_str_exit("Bind error\n");
-	if (listen(sock, 42) == -1)
+	if (listen(sock, 1) == -1)
 		ft_error_str_exit("Listen error\n");
 
 	return(sock);
@@ -79,17 +79,29 @@ static int		ftp_create_server(int port)
 
 void		ftp_create_socket(int port)
 {
+	pid_t				pid;
 	int					sock;
 	int					cs;
 	unsigned int		cslen;
 	struct sockaddr_in	csin;
 
 	sock = ftp_create_server(port);
-	cs = accept(sock, (struct sockaddr*)&csin,  &cslen);
-	ftp_redirect_fd(cs, STDOUT_FILENO);
-	ftp_redirect_fd(cs, STDERR_FILENO);
-	ftp_read_on_socket(cs);
-	// send(cs, "ok1234567890", 7, 0);
-	close(cs);
-	close(sock);
+	while (42)
+	{
+		cs = accept(sock, (struct sockaddr*)&csin,  &cslen);
+		ftp_redirect_fd(cs, STDOUT_FILENO);
+		ftp_redirect_fd(cs, STDERR_FILENO);
+		pid = fork();
+		if (pid > 0)
+		{
+			close(cs);
+		}
+		else if (pid == 0)
+		{
+			ftp_read_on_socket(cs);
+			close(sock);
+			exit(0);
+		}
+		// send(cs, "ok1234567890", 7, 0);
+	}
 }

@@ -22,7 +22,7 @@ static void		usage(char *str)
 
 int				main(int ac, char **av)
 {
-	int	port;
+	int		port;
 
 	if (ac != 2)
 		usage(av[0]);

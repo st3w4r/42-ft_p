@@ -18,3 +18,11 @@ void	ftp_display_prompt(void)
 	ft_putstr("FTP $> ");
 	ft_putstr("\033[0m");
 }
+
+void	ftp_receive_msg(t_bool done)
+{
+	if (done)
+		ft_putstr_fd("\033[1;34mSUCCESS\n\033[0m", 1);
+	else
+		ft_putstr_fd("\033[1;31mERROR\n\033[0m", 2);
+}

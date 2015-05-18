@@ -40,6 +40,7 @@ int		ftp_create_client(char *addr, int port);
 ** Desc: Fucntions helpers
 */
 void	ftp_display_prompt(void);
+void	ftp_receive_msg(t_bool done);
 
 
 #endif
