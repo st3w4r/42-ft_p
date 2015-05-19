@@ -89,8 +89,8 @@ void		ftp_create_socket(int port)
 	while (42)
 	{
 		cs = accept(sock, (struct sockaddr*)&csin,  &cslen);
-		ftp_redirect_fd(cs, STDOUT_FILENO);
-		ftp_redirect_fd(cs, STDERR_FILENO);
+		// ftp_redirect_fd(cs, STDOUT_FILENO);
+		// ftp_redirect_fd(cs, STDERR_FILENO);
 		pid = fork();
 		if (pid > 0)
 		{

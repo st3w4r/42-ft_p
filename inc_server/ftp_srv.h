@@ -22,6 +22,11 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+typedef struct	s_code_ret {
+	int			code_ret;
+	char		*msg_ret;
+}				t_code_ret;
+
 /*
 ** Name: ftp_server
 ** File: ftp_server.c
