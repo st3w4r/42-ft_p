@@ -25,21 +25,49 @@
 #define TRUE 1
 #define FALSE 0
 
-typedef unsigned char   t_bool;
+typedef unsigned char	t_bool;
+
+typedef struct	s_cli_ftp
+{
+	char	*addr;
+	int		port;
+	int		sock;
+}				t_cli_ftp;
+
+
+typedef struct	s_cmd
+{
+	char *name;
+	char **args;
+
+}				t_cmd;
 
 /*
-** Name: ftp_client
-** File: ftp_client.c
-** Desc: Fucntions start client
+** Name: ftp_client_ui
+** File: ftp_client_ui.c
+** Desc: Fucntions User Interface
 */
-int		ftp_create_client(char *addr, int port);
+
+
+/*
+** Name: ftp_client_pi
+** File: ftp_client_pi.c
+** Desc: Fucntions start client, Protocol Interpreteur
+*/
+void	ftp_cli_pi_write(t_cli_ftp *cli_ftp, char *line);
+void	ftp_cli_pi_cmd(t_cli_ftp *cli_ftp, char *line);
+int		ftp_cli_pi_create(t_cli_ftp *cli_ftp);
+
+// int		ftp_create_client(char *addr, int port);
+
+
 
 /*
 ** Name: ftp_helper
 ** File: ftp_helper.c
 ** Desc: Fucntions helpers
 */
-void	ftp_display_prompt(void);
+// void	ftp_display_prompt(void);
 void	ftp_receive_msg(t_bool done);
 
 

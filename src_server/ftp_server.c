@@ -71,7 +71,7 @@ static int		ftp_create_server(int port)
 	sin.sin_addr.s_addr = htonl(INADDR_ANY);
 	if (bind(sock, (const struct sockaddr *)&sin, sizeof(sin)) == -1)
 		ft_error_str_exit("Bind error\n");
-	if (listen(sock, 1) == -1)
+	if (listen(sock, 42) == -1)
 		ft_error_str_exit("Listen error\n");
 
 	return(sock);

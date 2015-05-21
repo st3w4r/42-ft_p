@@ -12,13 +12,6 @@
 
 #include "ftp_cli.h"
 
-void	ftp_display_prompt(void)
-{
-	ft_putstr("\033[1;37m");
-	ft_putstr("FTP $> ");
-	ft_putstr("\033[0m");
-}
-
 void	ftp_receive_msg(t_bool done)
 {
 	if (done)
