@@ -49,16 +49,30 @@ typedef struct	s_cmd
 */
 
 
+
 /*
 ** Name: ftp_client_pi
 ** File: ftp_client_pi.c
 ** Desc: Fucntions start client, Protocol Interpreteur
 */
-void	ftp_cli_pi_write(t_cli_ftp *cli_ftp, char *line);
-void	ftp_cli_pi_cmd(t_cli_ftp *cli_ftp, char *line);
+// void	ftp_cli_pi_write(t_cli_ftp *cli_ftp, char *line);
+void	ftp_cli_pi_send_cmd(t_cli_ftp *cli_ftp, char *line);
+int		ftp_cli_pi_search_builtins(t_cli_ftp *cli_ftp, char **agrs);
 int		ftp_cli_pi_create(t_cli_ftp *cli_ftp);
-
 // int		ftp_create_client(char *addr, int port);
+
+/*
+** Name: ftp_client_builtins
+** File: ftp_client_builtins.c
+** Desc: All builtins clients
+*/
+void	ftp_cli_builtin_cd(t_cli_ftp *cli_ftp, char **args);
+void	ftp_cli_builtin_pwd(t_cli_ftp *cli_ftp, char **args);
+void	ftp_cli_builtin_ls(t_cli_ftp *cli_ftp, char **args);
+void	ftp_cli_builtin_get(t_cli_ftp *cli_ftp, char **args);
+void	ftp_cli_builtin_put(t_cli_ftp *cli_ftp, char **args);
+void	ftp_cli_builtin_quit(t_cli_ftp *cli_ftp, char **args);
+
 
 
 

@@ -30,6 +30,7 @@ static void		ftp_display_prompt(void)
 static void		ftp_loop(t_cli_ftp *cli_ftp)
 {
 	char	*line;
+	char	**args;
 	int		r;
 
 	while (42)
@@ -37,7 +38,9 @@ static void		ftp_loop(t_cli_ftp *cli_ftp)
 		ftp_display_prompt();
 		if ((r = ft_get_next_line(0, &line)) == 0)
 			break ;
-		ftp_cli_pi_cmd(cli_ftp, line);
+		// ftp_cli_pi_cmd(cli_ftp, line);
+		args = ft_strsplit(line, ' ');
+		ftp_cli_pi_search_builtins(cli_ftp, args);
 		// ftp_cli_pi_write(cli_ftp, line);
 		// write(sock, line, ft_strlen(line));
 		free(line);
