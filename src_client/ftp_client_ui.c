@@ -60,7 +60,7 @@ int				main(int ac, char **av)
 	cli_ftp.port = ft_atoi(av[2]);
 	cli_ftp.addr = ft_strdup(av[1]);
 
-	cli_ftp.sock = ftp_cli_pi_create(cli.addr, cli.port);
+	cli_ftp.sock = ftp_cli_pi_create(&cli_ftp);
 	ftp_loop(&cli_ftp);
 	// sock = ftp_create_client(av[1], port);
 
