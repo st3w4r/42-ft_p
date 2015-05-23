@@ -41,7 +41,7 @@ static void		ftp_loop(t_cli_ftp *cli_ftp)
 		// ftp_cli_pi_cmd(cli_ftp, line);
 		args = ft_strsplit(line, ' ');
 		ftp_cli_pi_search_builtins(cli_ftp, args);
-		ft_arrfree(&args);
+		FREE_ARR(args);
 		// ftp_cli_pi_write(cli_ftp, line);
 		// write(sock, line, ft_strlen(line));
 		free(line);

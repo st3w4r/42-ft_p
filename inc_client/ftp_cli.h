@@ -25,6 +25,9 @@
 # define TRUE 1
 # define FALSE 0
 
+# define FREE_ARR(x) { if (x) ft_arrfree(&x); }
+
+
 typedef unsigned char	t_bool;
 
 typedef struct	s_cli_ftp

@@ -24,7 +24,7 @@ t_bool		ftp_cli_pi_search_builtins(t_cli_ftp *cli_ftp, char **args)
 
 	i = 0;
 	state = FALSE;
-	while (g_cmd_cli_list[i].name && state == FALSE)
+	while (args && g_cmd_cli_list[i].name && state == FALSE)
 	{
 		if (ft_strcmp(args[0], g_cmd_cli_list[i].name) == 0)
 		{
