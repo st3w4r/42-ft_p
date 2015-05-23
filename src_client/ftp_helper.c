@@ -19,3 +19,16 @@ void	ftp_receive_msg(t_bool done)
 	else
 		ft_putstr_fd("\033[1;31mERROR\n\033[0m", 2);
 }
+
+char	*ftp_create_cmd_line(char *name, char **args)
+{
+	char *cmd_line;
+
+	cmd_line = ft_strdup(name);
+	while (*args)
+	{
+		cmd_line = ft_strjoin_free_l(ft_strjoin_free_l(cmd_line, " "), *args);
+		++args;
+	}
+	return (cmd_line);
+}

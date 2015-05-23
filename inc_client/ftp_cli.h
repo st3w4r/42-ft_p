@@ -13,17 +13,17 @@
 #ifndef FTP_CLI_H
 # define FTP_CLI_H
 
-#include "libft.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
+# include "libft.h"
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <sys/socket.h>
+# include <netdb.h>
+# include <netinet/in.h>
+# include <arpa/inet.h>
 
-#define TRUE 1
-#define FALSE 0
+# define TRUE 1
+# define FALSE 0
 
 typedef unsigned char	t_bool;
 
@@ -39,6 +39,7 @@ typedef struct	s_cmd_nvt
 {
 	char	*name;
 	char	**args;
+	char	*line_send;
 }				t_cmd_nvt;
 /*
 typedef t_cmd_nvt	s_cmd_list[] =
@@ -94,29 +95,29 @@ void	ftp_cli_builtin_quit(t_cli_ftp *cli_ftp, char **args);
 ** Desc: Fucntions helpers
 */
 // void	ftp_display_prompt(void);
+char	*ftp_create_cmd_line(char *name, char **args);
 void	ftp_receive_msg(t_bool done);
 
 /*
-** Name: Struct of commands user
+** Name: Struct of commands user, list in a global array.
 */
-typedef	void	(*builtin_func)(t_cli_ftp *, char **);
+typedef	void	(*t_builtin_func)(t_cli_ftp *, char **);
 
 typedef struct	s_cmd_cli
 {
 	char			*name;
-	char			**args;
-	builtin_func	builtin;
+	t_builtin_func	builtin;
 }				t_cmd_cli;
 
-t_cmd_cli	cmd_cli_list[] =
+static t_cmd_cli	g_cmd_cli_list[] =
 {
-	{ "ls",		NULL,	ftp_cli_builtin_ls },
-	{ "pwd",	NULL,	ftp_cli_builtin_pwd },
-	{ "cd",		NULL,	ftp_cli_builtin_cd },
-	{ "get",	NULL,	ftp_cli_builtin_get },
-	{ "put",	NULL,	ftp_cli_builtin_put },
-	{ "quit",	NULL,	ftp_cli_builtin_quit },
-	{ 0 }
+	{"ls", ftp_cli_builtin_ls},
+	{"pwd", ftp_cli_builtin_pwd},
+	{"cd", ftp_cli_builtin_cd},
+	{"get", ftp_cli_builtin_get},
+	{"put", ftp_cli_builtin_put},
+	{"quit", ftp_cli_builtin_quit},
+	{0}
 };
 
 #endif

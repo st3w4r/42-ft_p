@@ -18,7 +18,10 @@ void	ftp_cli_builtin_cd(t_cli_ftp *cli_ftp, char **args)
 
 	cmd.name = "CWD";
 	cmd.args = ++args;
+	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
 	ftp_cli_pi_send_cmd(cli_ftp, cmd);
+	free(cmd.line_send);
+
 }
 
 void	ftp_cli_builtin_pwd(t_cli_ftp *cli_ftp, char **args)
@@ -27,7 +30,9 @@ void	ftp_cli_builtin_pwd(t_cli_ftp *cli_ftp, char **args)
 
 	cmd.name = "PWD";
 	cmd.args = ++args;
+	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
 	ftp_cli_pi_send_cmd(cli_ftp, cmd);
+	free(cmd.line_send);
 }
 
 void	ftp_cli_builtin_ls(t_cli_ftp *cli_ftp, char **args)
@@ -36,7 +41,9 @@ void	ftp_cli_builtin_ls(t_cli_ftp *cli_ftp, char **args)
 
 	cmd.name = "LIST";
 	cmd.args = ++args;
+	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
 	ftp_cli_pi_send_cmd(cli_ftp, cmd);
+	free(cmd.line_send);
 }
 
 void	ftp_cli_builtin_get(t_cli_ftp *cli_ftp, char **args)
@@ -45,7 +52,9 @@ void	ftp_cli_builtin_get(t_cli_ftp *cli_ftp, char **args)
 
 	cmd.name = "RETR";
 	cmd.args = ++args;
+	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
 	ftp_cli_pi_send_cmd(cli_ftp, cmd);
+	free(cmd.line_send);
 }
 
 void	ftp_cli_builtin_put(t_cli_ftp *cli_ftp, char **args)
@@ -54,7 +63,9 @@ void	ftp_cli_builtin_put(t_cli_ftp *cli_ftp, char **args)
 
 	cmd.name = "STOR";
 	cmd.args = ++args;
+	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
 	ftp_cli_pi_send_cmd(cli_ftp, cmd);
+	free(cmd.line_send);
 }
 
 void	ftp_cli_builtin_quit(t_cli_ftp *cli_ftp, char **args)
@@ -63,5 +74,7 @@ void	ftp_cli_builtin_quit(t_cli_ftp *cli_ftp, char **args)
 
 	cmd.name = "QUIT";
 	cmd.args = ++args;
+	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
 	ftp_cli_pi_send_cmd(cli_ftp, cmd);
+	free(cmd.line_send);
 }
