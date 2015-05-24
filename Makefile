@@ -37,7 +37,8 @@ SRC_CLI =	ftp_client_ui.c \
 			ftp_client_builtins.c \
 			ftp_helper.c
 
-SRC_SRV =	ftp_server.c \
+SRC_SRV =	ftp_server_pi.c \
+			ftp_server_builtins.c \
 			main.c
 
 OBJ_CLI = $(addprefix $(PATH_SRC_CLI), $(SRC_CLI:.c=.o))

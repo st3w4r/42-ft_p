@@ -78,3 +78,14 @@ void	ftp_cli_builtin_quit(t_cli_ftp *cli_ftp, char **args)
 	ftp_cli_pi_send_cmd(cli_ftp, cmd);
 	free(cmd.line_send);
 }
+
+void	ftp_cli_builtin_user(t_cli_ftp *cli_ftp, char **args)
+{
+	t_cmd_nvt cmd;
+
+	cmd.name = "USER";
+	cmd.args = ++args;
+	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
+	ftp_cli_pi_send_cmd(cli_ftp, cmd);
+	free(cmd.line_send);
+}

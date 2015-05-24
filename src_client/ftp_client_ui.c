@@ -27,6 +27,24 @@ static void		ftp_display_prompt(void)
 	ft_putstr("\033[0m");
 }
 
+static void		ftp_loop_write(int sock)
+{
+	char	buf[1024];
+	int		r;
+	t_bool	read;
+
+	read = TRUE;
+	// while (read)
+	// {
+		if ((r = recv(sock, buf, 1024, 0)) != 1024)
+			read = FALSE;
+			// ft_error_str("Receive error\n");
+		buf[r] = '\0';
+		// ft_putnbr(recv(sock, buf, 1023, 0));
+		write(1, buf, 1024);
+	// }
+}
+
 static void		ftp_loop(t_cli_ftp *cli_ftp)
 {
 	char	*line;
@@ -45,7 +63,7 @@ static void		ftp_loop(t_cli_ftp *cli_ftp)
 		// ftp_cli_pi_write(cli_ftp, line);
 		// write(sock, line, ft_strlen(line));
 		free(line);
-		// ftp_loop_write(sock);
+		// ftp_loop_write(cli_ftp->sock);
 	}
 	ft_putendl("Exit");
 }

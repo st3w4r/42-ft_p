@@ -22,11 +22,12 @@ static void		usage(char *str)
 
 int				main(int ac, char **av)
 {
+	t_srv_ftp srv_ftp;
 	int		port;
 
 	if (ac != 2)
 		usage(av[0]);
-	port = ft_atoi(av[1]);
-	ftp_create_socket(port);
+	srv_ftp.port = ft_atoi(av[1]);
+	ftp_create_socket(&srv_ftp);
 	return (0);
 }
