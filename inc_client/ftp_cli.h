@@ -94,8 +94,8 @@ void	ftp_cli_builtin_user(t_cli_ftp *cli_ftp, char **args);
 
 
 /*
-** Name: ftp_helper
-** File: ftp_helper.c
+** Name: ftp_client_helper
+** File: ftp_client_helper.c
 ** Desc: Fucntions helpers
 */
 // void	ftp_display_prompt(void);

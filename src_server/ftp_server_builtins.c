@@ -52,6 +52,13 @@ void	ftp_srv_builtin_pwd(t_srv_ftp *srv_ftp, char **args)
 
 void	ftp_srv_builtin_ls(t_srv_ftp *srv_ftp, char **args)
 {
+	// args[0] = "/bin/ls";
+	args++;
+	ftp_redirect_fd(srv_ftp->cs, STDOUT_FILENO);
+	ftp_fork_process("/bin/ls", args);
+
+	ftp_redirect_fd(0, STDOUT_FILENO);
+
 	ft_putstr_fd("\n", 1);
 	while (args && args[0])
 	{
@@ -59,6 +66,7 @@ void	ftp_srv_builtin_ls(t_srv_ftp *srv_ftp, char **args)
 		++args;
 
 	}
+
 	// t_cmd_nvt cmd;
 	//
 	// cmd.name = "LIST";

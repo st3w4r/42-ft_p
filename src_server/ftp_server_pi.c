@@ -21,7 +21,7 @@ static t_bool	ftp_srv_pi_search_builtins(t_srv_ftp *srv_ftp, char **args)
 	state = FALSE;
 	while (args && g_cmd_nvt_list[i].name && state == FALSE)
 	{
-		if (ft_strcmp(args[0], g_cmd_nvt_list[i].name) == 0)
+		if (ft_strcmp(ft_str_toupper(args[0]), g_cmd_nvt_list[i].name) == 0)
 		{
 			g_cmd_nvt_list[i].builtin(srv_ftp, args);
 			state = TRUE;
@@ -38,7 +38,7 @@ static void		ftp_read_on_socket(t_srv_ftp *srv_ftp)
 	char	buf[1024];
 	int		r;
 
-	while ((r = read(srv_ftp->cs, buf, 1023)) > 0)
+	while ((r = read(srv_ftp->cs, buf, 8)) > 0)
 	{
 		buf[r] = '\0';
 		args = ft_strsplit(buf, ' ');
@@ -46,6 +46,25 @@ static void		ftp_read_on_socket(t_srv_ftp *srv_ftp)
 		// ftp_fork_process(args[0], args);
 		ft_arrfree(&args);
 		// send(srv_ftp->cs, NULL, r, 0);
+	}
+}
+
+static void		ftp_recv_on_socket(t_srv_ftp *srv_ftp)
+{
+	t_bool	eof;
+	int r;
+	char buf[1024];
+
+	eof = FALSE;
+	r = 0;
+	while (!eof)
+	{
+		if ((r = recv(srv_ftp->sock, buf, 100, 0)) < 0)
+			ft_error_str("Recv error\n");
+		buf[r] = '\0';
+		if (buf[0] == '\n')
+			eof = TRUE;
+		puts(buf);
 	}
 }
 

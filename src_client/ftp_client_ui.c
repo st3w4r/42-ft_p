@@ -30,19 +30,27 @@ static void		ftp_display_prompt(void)
 static void		ftp_loop_write(int sock)
 {
 	char	buf[1024];
-	int		r;
-	t_bool	read;
+	size_t	r;
+	// t_bool	read;
 
-	read = TRUE;
+	// read = TRUE;
 	// while (read)
 	// {
-		if ((r = recv(sock, buf, 1024, 0)) != 1024)
-			read = FALSE;
+		// if ((r = recv(sock, buf, 1024, 0)) != 1024)
+			// read = FALSE;
 			// ft_error_str("Receive error\n");
-		buf[r] = '\0';
+		// buf[r] = '\0';
 		// ft_putnbr(recv(sock, buf, 1023, 0));
-		write(1, buf, 1024);
+	// while (buf[i])
+	// {
+		// write(1, buf, 1024);
+		// i += 100;
 	// }
+	// }
+
+	// r = read(sock, buf, 1024);
+		// read = FALSE;
+	// write(1, buf, r);
 }
 
 static void		ftp_loop(t_cli_ftp *cli_ftp)

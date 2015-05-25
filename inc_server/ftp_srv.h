@@ -64,6 +64,14 @@ void	ftp_srv_builtin_put(t_srv_ftp *srv_ftp, char **args);
 void	ftp_srv_builtin_quit(t_srv_ftp *srv_ftp, char **args);
 void	ftp_srv_builtin_user(t_srv_ftp *srv_ftp, char **args);
 
+/*
+** Name: ftp_server_helper
+** File: ftp_server_helper.c
+** Desc: Function supplementary for server
+*/
+void	ftp_redirect_fd(int srcfd, int dstfd);
+void	ftp_fork_process(char *path, char **av);
+char	*ft_str_toupper(char *str);
 
 
 /*
