@@ -38,10 +38,13 @@ static void		ftp_read_on_socket(t_srv_ftp *srv_ftp)
 	char	buf[1024];
 	int		r;
 
-	while ((r = read(srv_ftp->cs, buf, 8)) > 0)
+	while ((r = read(srv_ftp->cs, buf, 1)) > 0)
 	{
 		buf[r] = '\0';
+		// ft_strreplace_char(buf, '\r', '\0');
+		// ft_strreplace_char(buf, '\n', '\0');
 		args = ft_strsplit(buf, ' ');
+		// puts(args[0]);
 		ftp_srv_pi_search_builtins(srv_ftp, args);
 		// ftp_fork_process(args[0], args);
 		ft_arrfree(&args);
@@ -51,20 +54,29 @@ static void		ftp_read_on_socket(t_srv_ftp *srv_ftp)
 
 static void		ftp_recv_on_socket(t_srv_ftp *srv_ftp)
 {
-	t_bool	eof;
+	t_bool	eol;
+	// t_bool	cr;
+	// t_bool	lf;
 	int r;
 	char buf[1024];
 
-	eof = FALSE;
+	eol = FALSE;
+	// cr = FALSE;
+	// lf = FALSE;
 	r = 0;
-	while (!eof)
+	while (!eol)
 	{
-		if ((r = recv(srv_ftp->sock, buf, 100, 0)) < 0)
+		if ((r = recv(srv_ftp->sock, buf, 1, 0)) < 0)
 			ft_error_str("Recv error\n");
 		buf[r] = '\0';
-		if (buf[0] == '\n')
-			eof = TRUE;
-		puts(buf);
+		if (buf[0] == '\r')
+			if (buf[1] == '\n')
+				eol = TRUE;
+		// if (buf[0] == '\n')
+			// eof = TRUE;
+		// puts(buf);
+		ft_putchar(buf[0]);
+		ft_putchar(buf[1]);
 	}
 }
 

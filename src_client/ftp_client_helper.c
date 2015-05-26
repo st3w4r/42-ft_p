@@ -30,5 +30,6 @@ char	*ftp_create_cmd_line(char *name, char **args)
 		cmd_line = ft_strjoin_free_l(ft_strjoin_free_l(cmd_line, " "), *args);
 		++args;
 	}
+	// cmd_line = ft_strjoin_free_l(cmd_line, "\r\n");
 	return (cmd_line);
 }
