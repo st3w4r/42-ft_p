@@ -21,14 +21,14 @@ void		ftp_redirect_fd(int srcfd, int dstfd)
 void		ftp_fork_process(char *path, char **av)
 {
 	pid_t			pid;
-	int				options;
-	int				*status;
-	struct rusage	*rusage;
+	// int				options;
+	// int				*status;
+	// struct rusage	*rusage;
 
 	pid = fork();
 	if (pid > 0)
 	{
-		wait4(pid, status, options, rusage);
+		wait4(pid, 0, 0, 0);
 	}
 	else if (pid == 0)
 	{

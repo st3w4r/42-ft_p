@@ -29,24 +29,41 @@ static void		ftp_display_prompt(void)
 
 static void		ftp_loop_write(int sock)
 {
-	char	buf[1024];
-	size_t	r;
-	// t_bool	read;
+	char	buf[2];
+	int		r;
+	int i;
+	t_bool	eol;
+	t_bool	cr;
 
-	// read = TRUE;
-	// while (read)
-	// {
-		// if ((r = recv(sock, buf, 1024, 0)) != 1024)
-			// read = FALSE;
-			// ft_error_str("Receive error\n");
-		// buf[r] = '\0';
+	eol = FALSE;
+	cr = FALSE;
+	while (!eol)
+	{
+		if ((r = recv(sock, buf, 1, 0)) < 0)
+		{
+			ft_error_str("Receive error\n");
+			break;
+		}
 		// ft_putnbr(recv(sock, buf, 1023, 0));
-	// while (buf[i])
-	// {
-		// write(1, buf, 1024);
-		// i += 100;
-	// }
-	// }
+
+		// ft_putnbr(r);
+		// ft_bzero(buf, 2);
+		buf[r] = '\0';
+		if (buf[0] == '\r')
+			cr = TRUE;
+		else if (cr && buf[0] == '\n')
+			eol = TRUE;
+		else if (cr && buf[0] != '\n')
+			cr = FALSE;
+		ft_putstr(buf);
+		/*
+		i = 0;
+		while (buf[i])
+		{
+			write(1, buf, 1024);
+			i += 100;
+		}*/
+	}
 
 	// r = read(sock, buf, 1024);
 		// read = FALSE;
@@ -58,20 +75,23 @@ static void		ftp_loop(t_cli_ftp *cli_ftp)
 	char	*line;
 	char	**args;
 	int		r;
+	t_bool	sened;
 
 	while (42)
 	{
+		sened = FALSE;
 		ftp_display_prompt();
 		if ((r = ft_get_next_line(0, &line)) == 0)
 			break ;
 		// ftp_cli_pi_cmd(cli_ftp, line);
 		args = ft_strsplit(line, ' ');
-		ftp_cli_pi_search_builtins(cli_ftp, args);
+		sened = ftp_cli_pi_search_builtins(cli_ftp, args);
 		FREE_ARR(args);
 		// ftp_cli_pi_write(cli_ftp, line);
 		// write(sock, line, ft_strlen(line));
 		free(line);
-		// ftp_loop_write(cli_ftp->sock);
+		if (sened)
+			ftp_loop_write(cli_ftp->sock);
 	}
 	ft_putendl("Exit");
 }

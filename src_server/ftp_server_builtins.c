@@ -41,6 +41,8 @@ void	ftp_srv_builtin_pwd(t_srv_ftp *srv_ftp, char **args)
 		++args;
 
 	}
+	// send(srv_ftp->cs, "\r\n", 2, 0);
+
 	// t_cmd_nvt cmd;
 
 	// cmd.name = "PWD";
@@ -52,12 +54,45 @@ void	ftp_srv_builtin_pwd(t_srv_ftp *srv_ftp, char **args)
 
 void	ftp_srv_builtin_ls(t_srv_ftp *srv_ftp, char **args)
 {
+	int fd;
+	// char buf[1024];
+	// char *str;
+	// int r;
 	// args[0] = "/bin/ls";
 	args++;
+	// fd = open("out", O_RDONLY);
 	ftp_redirect_fd(srv_ftp->cs, STDOUT_FILENO);
+	ftp_redirect_fd(srv_ftp->cs, STDERR_FILENO);
+	// dup2(srv_ftp->cs, STDOUT_FILENO);
+	// dup2(srv_ftp->cs, STDERR_FILENO);
 	ftp_fork_process("/bin/ls", args);
+	// dup2(1, STDOUT_FILENO);
 
-	ftp_redirect_fd(0, STDOUT_FILENO);
+	ftp_redirect_fd(STDIN_FILENO, STDOUT_FILENO);
+	ftp_redirect_fd(STDIN_FILENO, STDERR_FILENO);
+
+	// ftp_redirect_fd(STDIN_FILENO, STDERR_FILENO);
+
+	// ftp_redirect_fd(STDERR_FILENO, 2);
+
+	// write(srv_ftp->cs, "\r\n", 2);
+	// send(srv_ftp->cs, "\r\n", 2, 0);
+
+	// send(srv_ftp->cs, "Error\n\r", 5)
+	// send(srv_ftp->cs, NULL, 1024, 0);
+	// str = ft_strdup("test");
+	/*
+	while ((r = read(srv_ftp->cs, buf, 254)) > 0)
+	{
+		buf[r] = '\0';
+
+		// ft_putstr(buf);
+		ft_putnbr(r);
+	}
+	ft_putendl("END");
+*/
+
+
 
 	ft_putstr_fd("\n", 1);
 	while (args && args[0])

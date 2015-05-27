@@ -12,6 +12,11 @@
 
 #include "ftp_srv.h"
 
+void	ftp_srv_pi_send_response(t_srv_ftp *srv_ftp, int code, char *msg)
+{
+	// send(srv_ftp->cs, "\r\n", 2, 0);
+}
+
 static t_bool	ftp_srv_pi_search_builtins(t_srv_ftp *srv_ftp, char **args)
 {
 	t_bool	state;
@@ -38,14 +43,19 @@ static void		ftp_read_on_socket(t_srv_ftp *srv_ftp)
 	char	buf[1024];
 	int		r;
 
-	while ((r = read(srv_ftp->cs, buf, 1)) > 0)
+	while ((r = read(srv_ftp->cs, buf, 1023)) > 0)
 	{
 		buf[r] = '\0';
-		// ft_strreplace_char(buf, '\r', '\0');
+		// puts("EOL");
+		// ft_putnbr(r);
+
+		ft_strreplace_char(buf, '\n', '\0');
+		ft_strreplace_char(buf, '\r', '\0');
 		// ft_strreplace_char(buf, '\n', '\0');
 		args = ft_strsplit(buf, ' ');
 		// puts(args[0]);
 		ftp_srv_pi_search_builtins(srv_ftp, args);
+		send(srv_ftp->cs, "\r\n", 2, 0);
 		// ftp_fork_process(args[0], args);
 		ft_arrfree(&args);
 		// send(srv_ftp->cs, NULL, r, 0);
@@ -54,30 +64,40 @@ static void		ftp_read_on_socket(t_srv_ftp *srv_ftp)
 
 static void		ftp_recv_on_socket(t_srv_ftp *srv_ftp)
 {
-	t_bool	eol;
-	// t_bool	cr;
-	// t_bool	lf;
-	int r;
+	int		r;
 	char buf[1024];
+	char *cmd;
+	t_bool	eol;
+	t_bool	cr;
 
 	eol = FALSE;
-	// cr = FALSE;
-	// lf = FALSE;
+	cr = FALSE;
 	r = 0;
+	cmd = ft_strdup("");
 	while (!eol)
 	{
-		if ((r = recv(srv_ftp->sock, buf, 1, 0)) < 0)
-			ft_error_str("Recv error\n");
+		r = recv(srv_ftp->sock, buf, 1, 0);
+		// {
+			// ft_error_str("Receive error\n");
+			// break;
+		// }
 		buf[r] = '\0';
 		if (buf[0] == '\r')
-			if (buf[1] == '\n')
-				eol = TRUE;
+			cr = TRUE;
+		else if (cr && buf[0] == '\n')
+			eol = TRUE;
+		else if (cr && buf[0] != '\n')
+			cr = FALSE;
+
+		// ft_putstr(buf);
+		cmd = ft_strjoin(cmd, buf);
 		// if (buf[0] == '\n')
 			// eof = TRUE;
 		// puts(buf);
-		ft_putchar(buf[0]);
-		ft_putchar(buf[1]);
+		// ft_putchar(buf[0]);
+		// ft_putchar(buf[1]);
 	}
+	ft_putstr(cmd);
 }
 
 static int		ftp_create_server(int port)
