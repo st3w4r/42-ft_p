@@ -74,6 +74,12 @@ void	ftp_redirect_fd(int srcfd, int dstfd);
 void	ftp_fork_process(char *path, char **av);
 char	*ft_str_toupper(char *str);
 
+/*
+** Name: ftp_server_helper
+** File: ftp_server_helper.c
+** Desc: Function supplementary for server
+*/
+void	ftp_srv_ui_display_cmd(char *cmd);
 
 /*
 ** Name: Struct of commands nvt, list in a global array.

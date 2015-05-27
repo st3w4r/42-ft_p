@@ -65,39 +65,42 @@ static void		ftp_read_on_socket(t_srv_ftp *srv_ftp)
 static void		ftp_recv_on_socket(t_srv_ftp *srv_ftp)
 {
 	int		r;
-	char buf[1024];
-	char *cmd;
+	char	buf[2];
+	char	*cmd;
+	char	**args;
 	t_bool	eol;
 	t_bool	cr;
 
-	eol = FALSE;
-	cr = FALSE;
-	r = 0;
-	cmd = ft_strdup("");
-	while (!eol)
+	while (42)
 	{
-		r = recv(srv_ftp->sock, buf, 1, 0);
-		// {
-			// ft_error_str("Receive error\n");
-			// break;
-		// }
-		buf[r] = '\0';
-		if (buf[0] == '\r')
-			cr = TRUE;
-		else if (cr && buf[0] == '\n')
-			eol = TRUE;
-		else if (cr && buf[0] != '\n')
-			cr = FALSE;
-
-		// ft_putstr(buf);
-		cmd = ft_strjoin(cmd, buf);
-		// if (buf[0] == '\n')
-			// eof = TRUE;
-		// puts(buf);
-		// ft_putchar(buf[0]);
-		// ft_putchar(buf[1]);
+		eol = FALSE;
+		cr = FALSE;
+		cmd = ft_strdup("");
+		while (!eol)
+		{
+			if ((r = recv(srv_ftp->cs, buf, 1, 0)) < 0)
+			{
+				ft_error_str("Receive error\n");
+				return ;
+			}
+			if (buf[0] == '\0')
+				return ;
+			buf[r] = '\0';
+			if (buf[0] == '\r')
+				cr = TRUE;
+			else if (cr && buf[0] == '\n')
+				eol = TRUE;
+			else if (cr && buf[0] != '\n')
+				cr = FALSE;
+			cmd = ft_strjoin_free_l(cmd, buf);
+		}
+	ft_strreplace_char(cmd, '\n', '\0');
+	ft_strreplace_char(cmd, '\r', '\0');
+	args = ft_strsplit(cmd, ' ');
+	ftp_srv_ui_display_cmd(cmd);
+	ftp_srv_pi_search_builtins(srv_ftp, args);
+	send(srv_ftp->cs, "\r\n", 2, 0);
 	}
-	ft_putstr(cmd);
 }
 
 static int		ftp_create_server(int port)
@@ -132,9 +135,12 @@ void			ftp_create_socket(t_srv_ftp *srv_ftp)
 	srv_ftp->sock = ftp_create_server(srv_ftp->port);
 	while (42)
 	{
-		srv_ftp->cs = accept(srv_ftp->sock, (struct sockaddr*)&csin,  &cslen);
 		// ftp_redirect_fd(cs, STDOUT_FILENO);
 		// ftp_redirect_fd(cs, STDERR_FILENO);
+		cslen = sizeof(csin);
+		srv_ftp->cs = accept(srv_ftp->sock, (struct sockaddr*)&csin,  &cslen);
+		printf("[%s:%d] Connected\n",
+			inet_ntoa(csin.sin_addr), ntohs(csin.sin_port));
 		pid = fork();
 		if (pid > 0)
 		{
@@ -142,11 +148,14 @@ void			ftp_create_socket(t_srv_ftp *srv_ftp)
 		}
 		else if (pid == 0)
 		{
-			// ftp_recv_on_socket(srv_ftp);
-			ftp_read_on_socket(srv_ftp);
+			ftp_recv_on_socket(srv_ftp);
+			// ftp_read_on_socket(srv_ftp);
+			printf("[%s:%d] Disconnected\n",
+				inet_ntoa(csin.sin_addr), ntohs(csin.sin_port));
 			close(srv_ftp->sock);
 			exit(0);
 		}
+
 		// send(cs, "ok1234567890", 7, 0);
 	}
 }

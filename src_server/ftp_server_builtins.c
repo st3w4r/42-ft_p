@@ -59,7 +59,9 @@ void	ftp_srv_builtin_ls(t_srv_ftp *srv_ftp, char **args)
 	// char *str;
 	// int r;
 	// args[0] = "/bin/ls";
-	args++;
+	free(*args);
+	args[0] = ft_strdup("/bin/ls");
+	// args++;
 	// fd = open("out", O_RDONLY);
 	ftp_redirect_fd(srv_ftp->cs, STDOUT_FILENO);
 	ftp_redirect_fd(srv_ftp->cs, STDERR_FILENO);
@@ -71,6 +73,7 @@ void	ftp_srv_builtin_ls(t_srv_ftp *srv_ftp, char **args)
 	ftp_redirect_fd(STDIN_FILENO, STDOUT_FILENO);
 	ftp_redirect_fd(STDIN_FILENO, STDERR_FILENO);
 
+	// puts("IN");
 	// ftp_redirect_fd(STDIN_FILENO, STDERR_FILENO);
 
 	// ftp_redirect_fd(STDERR_FILENO, 2);
@@ -93,14 +96,14 @@ void	ftp_srv_builtin_ls(t_srv_ftp *srv_ftp, char **args)
 */
 
 
-
+/*
 	ft_putstr_fd("\n", 1);
 	while (args && args[0])
 	{
 		ft_putstr_fd(args[0], 1);
 		++args;
 
-	}
+	}*/
 
 	// t_cmd_nvt cmd;
 	//
