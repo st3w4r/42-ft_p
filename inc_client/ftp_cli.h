@@ -89,6 +89,7 @@ void	ftp_cli_builtin_get(t_cli_ftp *cli_ftp, char **args);
 void	ftp_cli_builtin_put(t_cli_ftp *cli_ftp, char **args);
 void	ftp_cli_builtin_quit(t_cli_ftp *cli_ftp, char **args);
 void	ftp_cli_builtin_user(t_cli_ftp *cli_ftp, char **args);
+void	ftp_cli_builtin_pass(t_cli_ftp *cli_ftp, char **args);
 
 
 
@@ -122,6 +123,7 @@ static t_cmd_cli	g_cmd_cli_list[] =
 	{"put", ftp_cli_builtin_put},
 	{"quit", ftp_cli_builtin_quit},
 	{"user", ftp_cli_builtin_user},
+	{"pass", ftp_cli_builtin_pass},
 	{0}
 };
 

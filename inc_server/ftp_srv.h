@@ -63,6 +63,7 @@ void	ftp_srv_builtin_get(t_srv_ftp *srv_ftp, char **args);
 void	ftp_srv_builtin_put(t_srv_ftp *srv_ftp, char **args);
 void	ftp_srv_builtin_quit(t_srv_ftp *srv_ftp, char **args);
 void	ftp_srv_builtin_user(t_srv_ftp *srv_ftp, char **args);
+void	ftp_srv_builtin_pass(t_srv_ftp *srv_ftp, char **args);
 
 /*
 ** Name: ftp_server_helper
@@ -96,6 +97,7 @@ static t_cmd_nvt	g_cmd_nvt_list[] =
 	{ "STOR",	NULL, ftp_srv_builtin_put},
 	{ "QUIT",	NULL, ftp_srv_builtin_quit},
 	{ "USER",	NULL, ftp_srv_builtin_user},
+	{ "PASS",	NULL, ftp_srv_builtin_pass},
 	{ 0 }
 };
 

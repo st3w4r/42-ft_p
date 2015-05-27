@@ -14,7 +14,7 @@
 
 void		ftp_cli_pi_send_cmd(t_cli_ftp *cli_ftp, t_cmd_nvt cmd)
 {
-	send(cli_ftp->sock, cmd.line_send, ft_strlen(cmd.line_send) + 1, 0);
+	send(cli_ftp->sock, cmd.line_send, ft_strlen(cmd.line_send), 0);
 }
 
 t_bool		ftp_cli_pi_search_builtins(t_cli_ftp *cli_ftp, char **args)

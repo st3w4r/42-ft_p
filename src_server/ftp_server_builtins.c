@@ -143,3 +143,20 @@ void	ftp_srv_builtin_user(t_srv_ftp *srv_ftp, char **args)
 	// ftp_srv_pi_send_cmd(srv_ftp, cmd);
 	// free(cmd.line_send);
 }
+
+void	ftp_srv_builtin_pass(t_srv_ftp *srv_ftp, char **args)
+{
+	ft_putstr_fd("\n", 1);
+	while (args && args[0])
+	{
+		ft_putstr_fd(args[0], 1);
+		++args;
+	}
+	// t_cmd_nvt cmd;
+	//
+	// cmd.name = "USER";
+	// cmd.args = ++args;
+	// cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
+	// ftp_srv_pi_send_cmd(srv_ftp, cmd);
+	// free(cmd.line_send);
+}
