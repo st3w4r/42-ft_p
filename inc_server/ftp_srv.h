@@ -29,10 +29,17 @@
 
 typedef unsigned char	t_bool;
 
-typedef struct	s_code_ret {
-	int			code_ret;
-	char		*msg_ret;
-}				t_code_ret;
+typedef struct	s_res {
+	int			code_res;
+	char		*msg_res;
+}				t_res;
+
+static t_res	g_res_list[] =
+{
+	{200, "Command success."},
+	{500, "Unknown command."},
+	{0}
+};
 
 typedef struct	s_srv_ftp
 {
@@ -44,10 +51,11 @@ typedef struct	s_srv_ftp
 
 
 /*
-** Name: ftp_server
-** File: ftp_server.c
+** Name: ftp_server_pi
+** File: ftp_server_pi.c
 ** Desc: Fucntions start server
 */
+void	ftp_srv_pi_send_response(t_srv_ftp *srv_ftp, int code, char *msg);
 void	ftp_create_socket(t_srv_ftp *srv_ftp);
 
 
@@ -64,6 +72,7 @@ void	ftp_srv_builtin_put(t_srv_ftp *srv_ftp, char **args);
 void	ftp_srv_builtin_quit(t_srv_ftp *srv_ftp, char **args);
 void	ftp_srv_builtin_user(t_srv_ftp *srv_ftp, char **args);
 void	ftp_srv_builtin_pass(t_srv_ftp *srv_ftp, char **args);
+void	ftp_srv_builtin_noop(t_srv_ftp *srv_ftp, char **args);
 
 /*
 ** Name: ftp_server_helper
@@ -104,7 +113,10 @@ static t_cmd_nvt	g_cmd_nvt_list[] =
 	{ "QUIT",	NULL, ftp_srv_builtin_quit},
 	{ "USER",	NULL, ftp_srv_builtin_user},
 	{ "PASS",	NULL, ftp_srv_builtin_pass},
+	{ "NOOP",	NULL, ftp_srv_builtin_noop},
 	{ 0 }
 };
+
+
 
 #endif

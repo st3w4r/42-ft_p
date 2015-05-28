@@ -101,7 +101,8 @@ static void		ftp_recv_on_socket(t_srv_ftp *srv_ftp)
 	args = ft_strsplit(cmd, ' ');
 	ftp_srv_ui_display_cmd(cmd);
 	find = ftp_srv_pi_search_builtins(srv_ftp, args);
-	ftp_srv_pi_send_response(srv_ftp, (find ? 200 : 500), (find ? "OK" : "KO"));
+	if (!find)
+		ftp_srv_pi_send_response(srv_ftp, 500, "Unknown command.");
 	// send(srv_ftp->cs, "\r\n", 2, 0);
 	}
 }

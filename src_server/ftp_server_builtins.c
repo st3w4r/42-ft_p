@@ -34,6 +34,17 @@ void	ftp_srv_builtin_cd(t_srv_ftp *srv_ftp, char **args)
 
 void	ftp_srv_builtin_pwd(t_srv_ftp *srv_ftp, char **args)
 {
+	free(*args);
+	args[0] = ft_strdup("/bin/pwd");
+	ftp_redirect_fd(srv_ftp->cs, STDOUT_FILENO);
+	ftp_redirect_fd(srv_ftp->cs, STDERR_FILENO);
+	ftp_fork_process("/bin/pwd", args);
+	ftp_redirect_fd(STDIN_FILENO, STDOUT_FILENO);
+	ftp_redirect_fd(STDIN_FILENO, STDERR_FILENO);
+
+	ftp_srv_pi_send_response(srv_ftp, 257, "SUCCESS");
+
+	/*
 	ft_putstr_fd("\n", 1);
 	while (args && args[0])
 	{
@@ -41,6 +52,7 @@ void	ftp_srv_builtin_pwd(t_srv_ftp *srv_ftp, char **args)
 		++args;
 
 	}
+	*/
 	// send(srv_ftp->cs, "\r\n", 2, 0);
 
 	// t_cmd_nvt cmd;
@@ -54,37 +66,18 @@ void	ftp_srv_builtin_pwd(t_srv_ftp *srv_ftp, char **args)
 
 void	ftp_srv_builtin_ls(t_srv_ftp *srv_ftp, char **args)
 {
-	int fd;
-	// char buf[1024];
-	// char *str;
-	// int r;
-	// args[0] = "/bin/ls";
 	free(*args);
 	args[0] = ft_strdup("/bin/ls");
-	// args++;
-	// fd = open("out", O_RDONLY);
 	ftp_redirect_fd(srv_ftp->cs, STDOUT_FILENO);
 	ftp_redirect_fd(srv_ftp->cs, STDERR_FILENO);
-	// dup2(srv_ftp->cs, STDOUT_FILENO);
-	// dup2(srv_ftp->cs, STDERR_FILENO);
 	ftp_fork_process("/bin/ls", args);
-	// dup2(1, STDOUT_FILENO);
-
 	ftp_redirect_fd(STDIN_FILENO, STDOUT_FILENO);
 	ftp_redirect_fd(STDIN_FILENO, STDERR_FILENO);
 
-	// puts("IN");
-	// ftp_redirect_fd(STDIN_FILENO, STDERR_FILENO);
+	ftp_srv_pi_send_response(srv_ftp, 226, "SUCCESS");
 
-	// ftp_redirect_fd(STDERR_FILENO, 2);
 
-	// write(srv_ftp->cs, "\r\n", 2);
-	// send(srv_ftp->cs, "\r\n", 2, 0);
-
-	// send(srv_ftp->cs, "Error\n\r", 5)
-	// send(srv_ftp->cs, NULL, 1024, 0);
-	// str = ft_strdup("test");
-	/*
+/*
 	while ((r = read(srv_ftp->cs, buf, 254)) > 0)
 	{
 		buf[r] = '\0';
@@ -197,4 +190,9 @@ void	ftp_srv_builtin_pass(t_srv_ftp *srv_ftp, char **args)
 	// cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
 	// ftp_srv_pi_send_cmd(srv_ftp, cmd);
 	// free(cmd.line_send);
+}
+
+void	ftp_srv_builtin_noop(t_srv_ftp *srv_ftp, char **args)
+{
+	ftp_srv_pi_send_response(srv_ftp, 200, "NOOP ok.");
 }
