@@ -14,7 +14,13 @@
 
 void	ftp_srv_pi_send_response(t_srv_ftp *srv_ftp, int code, char *msg)
 {
-	// send(srv_ftp->cs, "\r\n", 2, 0);
+	char *res;
+
+	res = ft_itoa(code);
+	res = ft_strjoin_free_l(res, " ");
+	res = ft_strjoin_free_l(res, msg);
+	res = ft_strjoin_free_l(res, "\r\n");
+	send(srv_ftp->cs, res, ft_strlen(res), 0);
 }
 
 static t_bool	ftp_srv_pi_search_builtins(t_srv_ftp *srv_ftp, char **args)
@@ -69,12 +75,12 @@ static void		ftp_recv_on_socket(t_srv_ftp *srv_ftp)
 	char	*cmd;
 	char	**args;
 	t_bool	eol;
-	t_bool	cr;
+	t_bool	find;
 
+	find = FALSE;
 	while (42)
 	{
 		eol = FALSE;
-		cr = FALSE;
 		cmd = ft_strdup("");
 		while (!eol)
 		{
@@ -83,23 +89,20 @@ static void		ftp_recv_on_socket(t_srv_ftp *srv_ftp)
 				ft_error_str("Receive error\n");
 				return ;
 			}
+			buf[r] = '\0';
 			if (buf[0] == '\0')
 				return ;
-			buf[r] = '\0';
-			if (buf[0] == '\r')
-				cr = TRUE;
-			else if (cr && buf[0] == '\n')
+			if (buf[0] == '\n')
 				eol = TRUE;
-			else if (cr && buf[0] != '\n')
-				cr = FALSE;
 			cmd = ft_strjoin_free_l(cmd, buf);
 		}
 	ft_strreplace_char(cmd, '\n', '\0');
 	ft_strreplace_char(cmd, '\r', '\0');
 	args = ft_strsplit(cmd, ' ');
 	ftp_srv_ui_display_cmd(cmd);
-	ftp_srv_pi_search_builtins(srv_ftp, args);
-	send(srv_ftp->cs, "\r\n", 2, 0);
+	find = ftp_srv_pi_search_builtins(srv_ftp, args);
+	ftp_srv_pi_send_response(srv_ftp, (find ? 200 : 500), (find ? "OK" : "KO"));
+	// send(srv_ftp->cs, "\r\n", 2, 0);
 	}
 }
 
