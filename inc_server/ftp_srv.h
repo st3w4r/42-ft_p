@@ -27,6 +27,9 @@
 
 # define FREE_ARR(x) { if (x) ft_arrfree(&x); }
 
+# define TYPE_DEFAULT BINARY
+# define MODE_FTP_DEFAULT PASSIVE
+
 typedef unsigned char	t_bool;
 
 typedef struct	s_res {
@@ -41,12 +44,27 @@ static t_res	g_res_list[] =
 	{0}
 };
 
+typedef enum	e_type
+{
+	ASCII,
+	BINARY
+}				t_type;
+
+typedef enum	e_mode_ftp
+{
+	ACTIVE,
+	PASSIVE
+}				t_mode_ftp;
+
 typedef struct	s_srv_ftp
 {
-	char	*addr;
-	int		port;
-	int		sock;
-	int		cs;
+	char		*addr;
+	int			port;
+	int			sock;
+	int			cs;
+	t_type		type;
+	t_mode_ftp	mode_ftp;
+
 }				t_srv_ftp;
 
 
