@@ -75,23 +75,24 @@ static void		ftp_loop(t_cli_ftp *cli_ftp)
 	char	*line;
 	char	**args;
 	int		r;
-	t_bool	sened;
+	t_bool	sended;
 
+	sended = TRUE;
 	while (42)
 	{
-		sened = FALSE;
+		if (sended)
+			ftp_loop_write(cli_ftp->sock);
+		sended = FALSE;
 		ftp_display_prompt();
 		if ((r = ft_get_next_line(0, &line)) == 0)
 			break ;
 		// ftp_cli_pi_cmd(cli_ftp, line);
 		args = ft_strsplit(line, ' ');
-		sened = ftp_cli_pi_search_builtins(cli_ftp, args);
+		sended = ftp_cli_pi_search_builtins(cli_ftp, args);
 		FREE_ARR(args);
 		// ftp_cli_pi_write(cli_ftp, line);
 		// write(sock, line, ft_strlen(line));
 		free(line);
-		if (sened)
-			ftp_loop_write(cli_ftp->sock);
 	}
 	ft_putendl("Exit");
 }

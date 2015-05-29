@@ -145,6 +145,7 @@ void			ftp_create_socket(t_srv_ftp *srv_ftp)
 		srv_ftp->cs = accept(srv_ftp->sock, (struct sockaddr*)&csin,  &cslen);
 		printf("[%s:%d] Connected\n",
 			inet_ntoa(csin.sin_addr), ntohs(csin.sin_port));
+		ftp_srv_pi_send_response(srv_ftp, 220, "Server ftp by BY");
 		pid = fork();
 		if (pid > 0)
 		{
