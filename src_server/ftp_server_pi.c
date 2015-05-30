@@ -71,7 +71,7 @@ static void		ftp_read_on_socket(t_srv_ftp *srv_ftp)
 static void		ftp_recv_on_socket(t_srv_ftp *srv_ftp)
 {
 	int		r;
-	char	buf[2];
+	char	buf[50];
 	char	*cmd;
 	char	**args;
 	t_bool	eol;

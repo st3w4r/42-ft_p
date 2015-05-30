@@ -77,6 +77,7 @@ void	ftp_srv_builtin_ls(t_srv_ftp *srv_ftp, char **args)
 	ftp_srv_pi_send_response(srv_ftp, 226, "SUCCESS");
 
 
+	ftp_srv_dtp_create_channel(srv_ftp);
 /*
 	while ((r = read(srv_ftp->cs, buf, 254)) > 0)
 	{

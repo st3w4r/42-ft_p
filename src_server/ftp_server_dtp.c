@@ -12,7 +12,7 @@
 
 #include "ftp_srv.h"
 
-void	ftp_srv_dtp_create_data_channel(t_srv_ftp *srv_ftp)
+void	ftp_srv_dtp_create_channel(t_srv_ftp *srv_ftp)
 {
 	int					sock;
 	struct protoent		*proto;
@@ -30,5 +30,5 @@ void	ftp_srv_dtp_create_data_channel(t_srv_ftp *srv_ftp)
 		ft_error_str_exit("Bind error\n");
 	if (listen(sock, 42) == -1)
 		ft_error_str_exit("Listen error\n");
-	return(sock);
+	// return(sock);
 }

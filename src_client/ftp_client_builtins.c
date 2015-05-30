@@ -44,6 +44,7 @@ void	ftp_cli_builtin_ls(t_cli_ftp *cli_ftp, char **args)
 	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
 	ftp_cli_pi_send_cmd(cli_ftp, cmd);
 	free(cmd.line_send);
+	ftp_cli_dtp_create_channel(cli_ftp);
 }
 
 void	ftp_cli_builtin_get(t_cli_ftp *cli_ftp, char **args)

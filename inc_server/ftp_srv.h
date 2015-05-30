@@ -76,6 +76,14 @@ typedef struct	s_srv_ftp
 void	ftp_srv_pi_send_response(t_srv_ftp *srv_ftp, int code, char *msg);
 void	ftp_create_socket(t_srv_ftp *srv_ftp);
 
+/*
+** Name: ftp_server_dtp
+** File: ftp_server_dtp.c
+** Desc: Function of server Data Channel
+*/
+void	ftp_srv_dtp_create_channel(t_srv_ftp *srv_ftp);
+
+
 
 /*
 ** Name: ftp_server_builtins
