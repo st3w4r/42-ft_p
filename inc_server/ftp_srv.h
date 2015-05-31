@@ -61,7 +61,9 @@ typedef struct	s_srv_ftp
 	char		*addr;
 	int			port;
 	int			sock;
+	int			sock_data;
 	int			cs;
+	int			cs_data;
 	t_type		type;
 	t_mode_ftp	mode_ftp;
 
@@ -81,7 +83,8 @@ void	ftp_create_socket(t_srv_ftp *srv_ftp);
 ** File: ftp_server_dtp.c
 ** Desc: Function of server Data Channel
 */
-void	ftp_srv_dtp_create_channel(t_srv_ftp *srv_ftp);
+void	ftp_srv_dtp_accept_connection(t_srv_ftp *srv_ftp);
+int		ftp_srv_dtp_create_channel(t_srv_ftp *srv_ftp);
 
 
 
@@ -99,6 +102,8 @@ void	ftp_srv_builtin_quit(t_srv_ftp *srv_ftp, char **args);
 void	ftp_srv_builtin_user(t_srv_ftp *srv_ftp, char **args);
 void	ftp_srv_builtin_pass(t_srv_ftp *srv_ftp, char **args);
 void	ftp_srv_builtin_noop(t_srv_ftp *srv_ftp, char **args);
+
+void	ftp_srv_builtin_pasv(t_srv_ftp *srv_ftp, char **args);
 
 /*
 ** Name: ftp_server_helper
@@ -140,6 +145,7 @@ static t_cmd_nvt	g_cmd_nvt_list[] =
 	{ "USER",	NULL, ftp_srv_builtin_user},
 	{ "PASS",	NULL, ftp_srv_builtin_pass},
 	{ "NOOP",	NULL, ftp_srv_builtin_noop},
+	{ "PASV",	NULL, ftp_srv_builtin_pasv},
 	{ 0 }
 };
 

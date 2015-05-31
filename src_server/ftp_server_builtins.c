@@ -66,18 +66,23 @@ void	ftp_srv_builtin_pwd(t_srv_ftp *srv_ftp, char **args)
 
 void	ftp_srv_builtin_ls(t_srv_ftp *srv_ftp, char **args)
 {
+	// ftp_srv_dtp_create_channel(srv_ftp);
+
+
 	free(*args);
 	args[0] = ft_strdup("/bin/ls");
-	ftp_redirect_fd(srv_ftp->cs, STDOUT_FILENO);
-	ftp_redirect_fd(srv_ftp->cs, STDERR_FILENO);
+	ftp_redirect_fd(srv_ftp->cs_data, STDOUT_FILENO);
+	ftp_redirect_fd(srv_ftp->cs_data, STDERR_FILENO);
 	ftp_fork_process("/bin/ls", args);
 	ftp_redirect_fd(STDIN_FILENO, STDOUT_FILENO);
 	ftp_redirect_fd(STDIN_FILENO, STDERR_FILENO);
 
+	close(srv_ftp->cs_data);
+	close(srv_ftp->sock_data);
+
 	ftp_srv_pi_send_response(srv_ftp, 226, "SUCCESS");
 
 
-	ftp_srv_dtp_create_channel(srv_ftp);
 /*
 	while ((r = read(srv_ftp->cs, buf, 254)) > 0)
 	{
@@ -116,6 +121,7 @@ void	ftp_srv_builtin_get(t_srv_ftp *srv_ftp, char **args)
 		ft_putstr_fd(args[0], 1);
 		++args;
 	}
+
 	// t_cmd_nvt cmd;
 	//
 	// cmd.name = "RETR";
@@ -196,4 +202,28 @@ void	ftp_srv_builtin_pass(t_srv_ftp *srv_ftp, char **args)
 void	ftp_srv_builtin_noop(t_srv_ftp *srv_ftp, char **args)
 {
 	ftp_srv_pi_send_response(srv_ftp, 200, "NOOP ok.");
+}
+
+void	ftp_srv_builtin_pasv(t_srv_ftp *srv_ftp, char **args)
+{
+	int					port;
+	struct sockaddr_in	sin;
+	socklen_t			len;
+	char				*msg;
+
+	srv_ftp->sock_data = ftp_srv_dtp_create_channel(srv_ftp);
+	len = sizeof(sin);
+	port = getsockname(srv_ftp->sock_data, (struct sockaddr *)&sin, &len);
+
+
+	// inet_ntoa(sin.sin_addr);
+	// msg = ft_itoa(ntohs(sin.sin_port));
+
+	// msg = ft_strjoin("Entering Passive Mode (", inet_ntoa(sin.sin_addr));
+	msg = ft_strjoin("Entering Passive Mode (", " IP ");
+	msg = ft_strjoin_free_lr(msg, ft_itoa(ntohs(sin.sin_port)));
+	msg = ft_strjoin_free_l(msg, ")");
+
+	ftp_srv_pi_send_response(srv_ftp, 227, msg);
+	ftp_srv_dtp_accept_connection(srv_ftp);
 }

@@ -12,7 +12,18 @@
 
 #include "ftp_srv.h"
 
-void	ftp_srv_dtp_create_channel(t_srv_ftp *srv_ftp)
+void	ftp_srv_dtp_accept_connection(t_srv_ftp *srv_ftp)
+{
+	unsigned int		cslen;
+	struct sockaddr_in	csin;
+
+	puts("ACCEPT IN");
+	cslen = sizeof(csin);
+	srv_ftp->cs_data = accept(srv_ftp->sock_data, (struct sockaddr*)&csin,  &cslen);
+	puts("ACCEPT OUT");
+}
+
+int		ftp_srv_dtp_create_channel(t_srv_ftp *srv_ftp)
 {
 	int					sock;
 	struct protoent		*proto;
@@ -24,11 +35,12 @@ void	ftp_srv_dtp_create_channel(t_srv_ftp *srv_ftp)
 
 	sock = socket(PF_INET, SOCK_STREAM, proto->p_proto);
 	sin.sin_family = AF_INET;
-	sin.sin_port = htons(srv_ftp->port - 1);
+	sin.sin_port = 0;
 	sin.sin_addr.s_addr = htonl(INADDR_ANY);
+
 	if (bind(sock, (const struct sockaddr *)&sin, sizeof(sin)) == -1)
 		ft_error_str_exit("Bind error\n");
 	if (listen(sock, 42) == -1)
 		ft_error_str_exit("Listen error\n");
-	// return(sock);
+	return(sock);
 }

@@ -83,6 +83,7 @@ int		ftp_cli_pi_create(t_cli_ftp *cli_ftp);
 ** Desc: Function of Data Channel
 */
 void	ftp_cli_dtp_create_channel(t_cli_ftp *cli_ftp);
+void	ftp_cli_dtp_read_on_channel(t_cli_ftp *cli_ftp);
 
 /*
 ** Name: ftp_client_builtins

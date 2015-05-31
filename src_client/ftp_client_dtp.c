@@ -12,6 +12,17 @@
 
 #include "ftp_cli.h"
 
+void	ftp_cli_dtp_read_on_channel(t_cli_ftp *cli_ftp)
+{
+	int r;
+	char buf[1024];
+
+	while ((r = recv(cli_ftp->sock, buf, 1023, 0)) > 0)
+	{
+		puts(buf);
+	}
+}
+
 void	ftp_cli_dtp_create_channel(t_cli_ftp *cli_ftp)
 {
 	int					r;
