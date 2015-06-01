@@ -203,27 +203,182 @@ void	ftp_srv_builtin_noop(t_srv_ftp *srv_ftp, char **args)
 {
 	ftp_srv_pi_send_response(srv_ftp, 200, "NOOP ok.");
 }
+/*
+#define	pack2(var, off) \
+	(((var[(off) + 0] & 0xff) << 8) | ((var[(off) + 1] & 0xff) << 0))
+#define	pack4(var, off) \
+	(((var[(off) + 0] & 0xff) << 24) | ((var[(off) + 1] & 0xff) << 16) | \
+	((var[(off) + 2] & 0xff) << 8) | ((var[(off) + 3] & 0xff) << 0))
+#define	UC(b)	(((int)b)&0xff)
+*/
 
 void	ftp_srv_builtin_pasv(t_srv_ftp *srv_ftp, char **args)
 {
-	int					port;
+	int					port_ret;
 	struct sockaddr_in	sin;
 	socklen_t			len;
 	char				*msg;
+	struct hostent		*h;
+	struct in_addr		**addr_list;
+	struct addrinfo		hints;
+	struct addrinfo		*srvinfo;
+	struct addrinfo		*res;
+	struct sockaddr_in	*saddr;
+	char				*addr[4];
+	char				*port[2];
+
+	// struct ifaddrs		*ifa;
+	// struct sockaddr_in	*sa;
+	// char				*addr;
 
 	srv_ftp->sock_data = ftp_srv_dtp_create_channel(srv_ftp);
 	len = sizeof(sin);
-	port = getsockname(srv_ftp->sock_data, (struct sockaddr *)&sin, &len);
+	port_ret = getsockname(srv_ftp->sock_data, (struct sockaddr *)&sin, &len);
 
+	h = gethostbyname("localhost");
+	addr_list = (struct in_addr**)h->h_addr_list;
+	printf("%s\n", inet_ntoa(*addr_list[0]));
 
-	// inet_ntoa(sin.sin_addr);
-	// msg = ft_itoa(ntohs(sin.sin_port));
+	// struct addrinfo hints, *servinfo, *p;
 
-	// msg = ft_strjoin("Entering Passive Mode (", inet_ntoa(sin.sin_addr));
-	msg = ft_strjoin("Entering Passive Mode (", " IP ");
-	msg = ft_strjoin_free_lr(msg, ft_itoa(ntohs(sin.sin_port)));
+	memset(&hints, 0, sizeof hints);
+	hints.ai_family = AF_INET;
+	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_flags = AI_PASSIVE; // use my IP address
+
+	if (getaddrinfo(IP_DATA_CHANNEL, NULL, &hints, &srvinfo) != 0)
+	{
+		ft_error_str("Erreur getaddrinfo\n");
+		ftp_srv_pi_send_response(srv_ftp, 425, "Cannot open data connection.");
+		return ;
+	}
+
+	res = srvinfo;
+	saddr = (struct sockaddr_in*)res->ai_addr;
+	addr[0] = ft_itoa(saddr->sin_addr.s_addr >> 0 & 0xff);
+	addr[1] = ft_itoa(saddr->sin_addr.s_addr >> 8 & 0xff);
+	addr[2] = ft_itoa(saddr->sin_addr.s_addr >> 16 & 0xff);
+	addr[3] = ft_itoa(saddr->sin_addr.s_addr >> 24 & 0xff);
+	port[0] = ft_itoa(sin.sin_port >> 0 & 0xff);
+	port[1] = ft_itoa(sin.sin_port >> 8 & 0xff);
+
+	msg = ft_strdup("Entering Passive Mode (");
+	msg = ft_strjoin_free_lr(msg, addr[0]);
+	msg = ft_strjoin_free_l(msg, ",");
+	msg = ft_strjoin_free_lr(msg, addr[1]);
+	msg = ft_strjoin_free_l(msg, ",");
+	msg = ft_strjoin_free_lr(msg, addr[2]);
+	msg = ft_strjoin_free_l(msg, ",");
+	msg = ft_strjoin_free_lr(msg, addr[3]);
+	msg = ft_strjoin_free_l(msg, ",");
+	msg = ft_strjoin_free_lr(msg, port[0]);
+	msg = ft_strjoin_free_l(msg, ",");
+	msg = ft_strjoin_free_lr(msg, port[1]);
 	msg = ft_strjoin_free_l(msg, ")");
 
 	ftp_srv_pi_send_response(srv_ftp, 227, msg);
 	ftp_srv_dtp_accept_connection(srv_ftp);
 }
+		/*
+		msg = ft_strjoin(a0, ",");
+		msg = ft_strjoin(msg, a1);
+		msg = ft_strjoin(msg, ",");
+		msg = ft_strjoin(msg, a2);
+		msg = ft_strjoin(msg, ",");
+		msg = ft_strjoin(msg, a3);
+*/
+		// puts(ft_itoa(saddr->sin_addr.s_addr >> 0 & 0xff));
+		// puts(ft_itoa(saddr->sin_addr.s_addr >> 8 & 0xff));
+		// puts(ft_itoa(saddr->sin_addr.s_addr >> 16 & 0xff));
+		// puts(ft_itoa(saddr->sin_addr.s_addr >> 24 & 0xff));
+		// msg = ft_strjoin(msg, a3);
+		// msg = ft_strjoin(msg, ",");
+		// msg = ft_itoa(saddr->sin_addr.s_addr & 0xff << 16);
+		// msg = ft_strjoin(msg, ",");
+		// msg = ft_itoa(saddr->sin_addr.s_addr & 0xff << 24);
+		// msg = ft_strjoin(msg, " ");
+
+	// struct addrinfo *res;
+	// for(res = servinfo; res != NULL; res = res->ai_next)
+	// {
+    /* ideally look at the sa_family here to make sure it is AF_INET before casting */
+    // struct sockaddr_in* saddr = (struct sockaddr_in*)res->ai_addr;
+    // printf("hostname: %s\n", inet_ntoa(saddr->sin_addr));
+	// }
+	// char *msg_arr[8] = {"Entering Passive Mode (",
+	// 					addr[0], ",",
+	// 					addr[1], ",",
+	// 					addr[2], ",",
+	// 					addr[3], ",",
+	// 					port[0], ",",
+	// 					port[1], ")",
+	// 					NULL};
+	//
+	// msg = ft_arrjoin(msg_arr);
+	// msg = ft_strdup("Entering Passive Mode (");
+	// addr_str = ft_arrjoin_separator(addr, ",");
+	// port_str = ft_arrjoin_separator(port, ",");
+
+	// addr_str = ft_arrjoin(addr);
+	// addr_str = ft_arrjoin(port);
+	// msg = ft_strjoin("Entering Passive Mode (", addr_str);
+	// msg = ft_strjoin_free_l(msg, port_str);
+	// msg = ft_strjoin_free_l(msg, ")");
+
+/*
+	getifaddrs(&ifa);
+	sa = (struct sockaddr_in *) ifa->ifa_addr;
+	addr = inet_ntoa(sa->sin_addr);
+	printf("Interface: %s\tAddress: %s\n", ifa->ifa_name, addr);
+
+	// while (ifa)
+	// {
+	sa = (struct sockaddr_in *) ifa->ifa_addr;
+	addr = inet_ntoa(sa->sin_addr);
+	printf("%s\n", addr);
+
+	sa = (struct sockaddr_in *) ifa->ifa_next->ifa_addr;
+	addr = inet_ntoa(sa->sin_addr);
+	printf("%s\n", addr);
+	// }
+*/
+/*
+	struct ifaddrs *ifap, *ifa;
+    struct sockaddr_in *sa;
+    char *addr;
+
+    getifaddrs(&ifap);
+    // for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
+	ifa = ifap;
+	while (ifa)
+	{
+        // if (ifa->ifa_addr->sa_family==AF_INET)
+		// {
+            sa = (struct sockaddr_in *) ifa->ifa_addr;
+            addr = inet_ntoa(sa->sin_addr);
+            printf("Interface: %s\tAddress: %s\n", ifa->ifa_name, addr);
+        // }
+		ifa = ifa->ifa_next;
+    }
+    freeifaddrs(ifap);
+*/
+/*
+	printf("%d\n", data_addr.si_su.su_sin.sin_port);
+
+	memset(&data_addr, 0, sizeof(data_addr));
+	data_addr.su_family = AF_INET;
+	data_addr.su_len = sizeof(struct sockaddr_in);
+	data_addr.si_su.su_sin.sin_addr.s_addr =
+		htonl(pack4(addr, 0));
+	data_addr.su_port = htons(pack2(port, 0));
+*/
+	// char *name;
+	// int nm;
+	// nm = gethostname(name, len);
+// printf("Name: %s | %d\n", name, nm);
+	// inet_ntoa(sin.sin_addr);
+	// msg = ft_itoa(ntohs(sin.sin_port));
+// puts(inet_ntoa(sin.sin_addr));
+// printf("%d\n", ntohs(sin.sin_addr.s_addr));
+
+	// msg = ft_strjoin("Entering Passive Mode (", inet_ntoa(sin.sin_addr));

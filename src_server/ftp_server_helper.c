@@ -51,3 +51,27 @@ char	*ft_str_toupper(char *str)
 	str = first;
 	return (str);
 }
+
+char	*ft_arrjoin(char **arr_str)
+{
+	char	*new_str;
+	int		len_arr;
+	int		len_arr_sum;
+	int		i;
+
+	len_arr = ft_arrlen(arr_str);
+	len_arr_sum = 0;
+	while (i < len_arr)
+	{
+		len_arr_sum += ft_strlen(arr_str[i]);
+		i++;
+	}
+	new_str = (char*)malloc((sizeof(char) * (len_arr_sum + 1)));
+	*new_str = 0;
+	while (arr_str && *arr_str)
+	{
+		new_str = ft_strcat(new_str, *arr_str);
+		++arr_str;
+	}
+	return (new_str);
+}

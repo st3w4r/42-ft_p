@@ -42,5 +42,8 @@ int		ftp_srv_dtp_create_channel(t_srv_ftp *srv_ftp)
 		ft_error_str_exit("Bind error\n");
 	if (listen(sock, 42) == -1)
 		ft_error_str_exit("Listen error\n");
+// printf("%d\n", sin.sin_port);
+// printf("%d\n", ntohs(sin.sin_addr.s_addr));
+
 	return(sock);
 }

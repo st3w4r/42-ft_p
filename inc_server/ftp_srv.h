@@ -13,14 +13,17 @@
 #ifndef FTP_SRV_H
 # define FTP_SRV_H
 
-#include "libft.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
+# include "libft.h"
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <sys/socket.h>
+# include <netdb.h>
+# include <netinet/in.h>
+# include <arpa/inet.h>
+# include <sys/types.h>
+# include <ifaddrs.h>
+
 
 # define TRUE 1
 # define FALSE 0
@@ -29,6 +32,8 @@
 
 # define TYPE_DEFAULT BINARY
 # define MODE_FTP_DEFAULT PASSIVE
+
+# define IP_DATA_CHANNEL "localhost"
 
 typedef unsigned char	t_bool;
 
@@ -113,6 +118,8 @@ void	ftp_srv_builtin_pasv(t_srv_ftp *srv_ftp, char **args);
 void	ftp_redirect_fd(int srcfd, int dstfd);
 void	ftp_fork_process(char *path, char **av);
 char	*ft_str_toupper(char *str);
+char	*ft_arrjoin(char **arr_str);
+
 
 /*
 ** Name: ftp_server_helper
