@@ -167,12 +167,16 @@ void	ftp_srv_builtin_quit(t_srv_ftp *srv_ftp, char **args)
 
 void	ftp_srv_builtin_user(t_srv_ftp *srv_ftp, char **args)
 {
+	ftp_srv_pi_send_response(srv_ftp, 331, "Please pawword.");
+
+	/*
 	ft_putstr_fd("\n", 1);
 	while (args && args[0])
 	{
 		ft_putstr_fd(args[0], 1);
 		++args;
 	}
+	*/
 	// t_cmd_nvt cmd;
 	//
 	// cmd.name = "USER";
@@ -184,12 +188,16 @@ void	ftp_srv_builtin_user(t_srv_ftp *srv_ftp, char **args)
 
 void	ftp_srv_builtin_pass(t_srv_ftp *srv_ftp, char **args)
 {
+	ftp_srv_pi_send_response(srv_ftp, 230, "Login successful.");
+
+	/*
 	ft_putstr_fd("\n", 1);
 	while (args && args[0])
 	{
 		ft_putstr_fd(args[0], 1);
 		++args;
 	}
+	*/
 	// t_cmd_nvt cmd;
 	//
 	// cmd.name = "USER";
