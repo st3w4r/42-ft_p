@@ -33,8 +33,6 @@
 # define TYPE_DEFAULT BINARY
 # define MODE_FTP_DEFAULT PASSIVE
 
-# define IP_DATA_CHANNEL "localhost"
-
 typedef unsigned char	t_bool;
 
 typedef struct	s_res {
