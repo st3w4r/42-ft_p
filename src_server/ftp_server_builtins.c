@@ -34,6 +34,7 @@ void	ftp_srv_builtin_cd(t_srv_ftp *srv_ftp, char **args)
 
 void	ftp_srv_builtin_pwd(t_srv_ftp *srv_ftp, char **args)
 {
+/*
 	free(*args);
 	args[0] = ft_strdup("/bin/pwd");
 	ftp_redirect_fd(srv_ftp->cs, STDOUT_FILENO);
@@ -41,8 +42,8 @@ void	ftp_srv_builtin_pwd(t_srv_ftp *srv_ftp, char **args)
 	ftp_fork_process("/bin/pwd", args);
 	ftp_redirect_fd(STDIN_FILENO, STDOUT_FILENO);
 	ftp_redirect_fd(STDIN_FILENO, STDERR_FILENO);
-
-	ftp_srv_pi_send_response(srv_ftp, 257, "SUCCESS");
+*/
+	ftp_srv_pi_send_response(srv_ftp, 257, "\"/test/ok\"");
 
 	/*
 	ft_putstr_fd("\n", 1);
@@ -68,19 +69,26 @@ void	ftp_srv_builtin_ls(t_srv_ftp *srv_ftp, char **args)
 {
 	// ftp_srv_dtp_create_channel(srv_ftp);
 
+		// ft_putnbr(srv_ftp->sock_data);
+	if (srv_ftp->sock_data != -1)
+	{
+		ftp_srv_dtp_accept_connection(srv_ftp);
+		ftp_srv_pi_send_response(srv_ftp, 150, "Here comes the directory listing.");
 
-	free(*args);
-	args[0] = ft_strdup("/bin/ls");
-	ftp_redirect_fd(srv_ftp->cs_data, STDOUT_FILENO);
-	ftp_redirect_fd(srv_ftp->cs_data, STDERR_FILENO);
-	ftp_fork_process("/bin/ls", args);
-	ftp_redirect_fd(STDIN_FILENO, STDOUT_FILENO);
-	ftp_redirect_fd(STDIN_FILENO, STDERR_FILENO);
+		free(*args);
+		args[0] = ft_strdup("/bin/ls");
+		ftp_redirect_fd(srv_ftp->cs_data, STDOUT_FILENO);
+		ftp_redirect_fd(srv_ftp->cs_data, STDERR_FILENO);
+		ftp_fork_process("/bin/ls", args);
+		ftp_redirect_fd(STDIN_FILENO, STDOUT_FILENO);
+		ftp_redirect_fd(STDIN_FILENO, STDERR_FILENO);
 
-	close(srv_ftp->cs_data);
-	close(srv_ftp->sock_data);
+		ftp_srv_dtp_close_channel(srv_ftp);
+		ftp_srv_pi_send_response(srv_ftp, 226, "SUCCESS");
+	}
+	else
+		ftp_srv_pi_send_response(srv_ftp, 425, "Use PORT or PASV first.");
 
-	ftp_srv_pi_send_response(srv_ftp, 226, "SUCCESS");
 
 
 /*
@@ -281,7 +289,34 @@ void	ftp_srv_builtin_pasv(t_srv_ftp *srv_ftp, char **args)
 	msg = ft_strjoin_free_l(msg, ")");
 
 	ftp_srv_pi_send_response(srv_ftp, 227, msg);
-	ftp_srv_dtp_accept_connection(srv_ftp);
+	// ftp_srv_dtp_accept_connection(srv_ftp);
+}
+
+void	ftp_srv_builtin_port(t_srv_ftp *srv_ftp, char **args)
+{
+	ftp_srv_pi_send_response(srv_ftp, 500, "Illegal PORT command.");
+}
+
+void	ftp_srv_builtin_type(t_srv_ftp *srv_ftp, char **args)
+{
+	if (ft_arrlen(args) == 2)
+	{
+		if (!ft_strcmp(ft_str_toupper(args[1]), "I"))
+		{
+			srv_ftp->type = BINARY;
+			ftp_srv_pi_send_response(srv_ftp, 200, "Switching to Binary mode.");
+		}
+		else if (!ft_strcmp(ft_str_toupper(args[1]), "A"))
+		{
+			srv_ftp->type = ASCII;
+			ftp_srv_pi_send_response(srv_ftp, 200, "Switching to ASCII mode.");
+		}
+		else
+			ftp_srv_pi_send_response(srv_ftp, 504,
+				"Command not implemented for that parameter.");
+	}
+	else
+		ftp_srv_pi_send_response(srv_ftp, 500, "Unrecognised TYPE command.");
 }
 
 /*

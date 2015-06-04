@@ -27,6 +27,8 @@ int				main(int ac, char **av)
 
 	if (ac != 2)
 		usage(av[0]);
+	srv_ftp.sock_data = -1;
+	srv_ftp.cs_data = -1;
 	srv_ftp.mode_ftp = MODE_FTP_DEFAULT;
 	srv_ftp.type = TYPE_DEFAULT;
 	srv_ftp.port = ft_atoi(av[1]);

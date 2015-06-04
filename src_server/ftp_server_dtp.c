@@ -19,7 +19,7 @@ void	ftp_srv_dtp_accept_connection(t_srv_ftp *srv_ftp)
 
 	ft_putendl("[CONNECTION LISTEN]");
 	cslen = sizeof(csin);
-	srv_ftp->cs_data = accept(srv_ftp->sock_data, (struct sockaddr*)&csin,  &cslen);
+	srv_ftp->cs_data = accept(srv_ftp->sock_data, (struct sockaddr*)&csin, &cslen);
 	ft_putendl("[CONNECTION ACCEPT]");
 }
 
@@ -43,4 +43,12 @@ int		ftp_srv_dtp_create_channel(t_srv_ftp *srv_ftp)
 	if (listen(sock, 42) == -1)
 		ft_error_str_exit("Listen error\n");
 	return(sock);
+}
+
+void	ftp_srv_dtp_close_channel(t_srv_ftp *srv_ftp)
+{
+	close(srv_ftp->cs_data);
+	close(srv_ftp->sock_data);
+	srv_ftp->cs_data = -1;
+	srv_ftp->sock_data = -1;
 }

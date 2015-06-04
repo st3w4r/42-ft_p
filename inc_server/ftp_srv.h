@@ -88,6 +88,7 @@ void	ftp_create_socket(t_srv_ftp *srv_ftp);
 */
 void	ftp_srv_dtp_accept_connection(t_srv_ftp *srv_ftp);
 int		ftp_srv_dtp_create_channel(t_srv_ftp *srv_ftp);
+void	ftp_srv_dtp_close_channel(t_srv_ftp *srv_ftp);
 
 
 
@@ -107,6 +108,8 @@ void	ftp_srv_builtin_pass(t_srv_ftp *srv_ftp, char **args);
 void	ftp_srv_builtin_noop(t_srv_ftp *srv_ftp, char **args);
 
 void	ftp_srv_builtin_pasv(t_srv_ftp *srv_ftp, char **args);
+void	ftp_srv_builtin_port(t_srv_ftp *srv_ftp, char **args);
+void	ftp_srv_builtin_type(t_srv_ftp *srv_ftp, char **args);
 
 /*
 ** Name: ftp_server_helper
@@ -151,6 +154,8 @@ static t_cmd_nvt	g_cmd_nvt_list[] =
 	{ "PASS",	NULL, ftp_srv_builtin_pass},
 	{ "NOOP",	NULL, ftp_srv_builtin_noop},
 	{ "PASV",	NULL, ftp_srv_builtin_pasv},
+	{ "PORT",	NULL, ftp_srv_builtin_port},
+	{ "TYPE",	NULL, ftp_srv_builtin_type},
 	{ 0 }
 };
 
