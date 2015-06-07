@@ -82,7 +82,6 @@ void	ftp_srv_builtin_ls(t_srv_ftp *srv_ftp, char **args)
 		ftp_fork_process("/bin/ls", args);
 		ftp_redirect_fd(STDIN_FILENO, STDOUT_FILENO);
 		ftp_redirect_fd(STDIN_FILENO, STDERR_FILENO);
-
 		ftp_srv_dtp_close_channel(srv_ftp);
 		ftp_srv_pi_send_response(srv_ftp, 226, "SUCCESS");
 	}
@@ -219,6 +218,7 @@ void	ftp_srv_builtin_noop(t_srv_ftp *srv_ftp, char **args)
 {
 	ftp_srv_pi_send_response(srv_ftp, 200, "NOOP ok.");
 }
+
 /*
 #define	pack2(var, off) \
 	(((var[(off) + 0] & 0xff) << 8) | ((var[(off) + 1] & 0xff) << 0))

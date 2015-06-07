@@ -54,3 +54,47 @@ int			ftp_cli_pi_create(t_cli_ftp *cli_ftp)
 		ft_error_str_exit("Connect error\n");
 	return (sock);
 }
+
+char		*ftp_cli_pi_recive_data(t_cli_ftp *cli_ftp)
+{
+	char	buf[2];
+	char	*data;
+	int		r;
+	int		i;
+	t_bool	eol;
+	t_bool	cr;
+
+	eol = FALSE;
+	cr = FALSE;
+	data = ft_strdup("");
+	while (!eol)
+	{
+		if ((r = recv(cli_ftp->sock, buf, 1, 0)) < 0)
+		{
+			ft_error_str("Receive error\n");
+			break;
+		}
+		buf[r] = '\0';
+		if (buf[0] == '\r')
+			cr = TRUE;
+		else if (cr && buf[0] == '\n')
+			eol = TRUE;
+		else if (cr && buf[0] != '\n')
+			cr = FALSE;
+		data = ft_strjoin_free_l(data, buf);
+	}
+	return (data);
+}
+
+void	ftp_cli_pi_open_data_channel(t_cli_ftp *cli_ftp)
+{
+	t_cmd_nvt	cmd;
+	char		*data;
+
+	cmd.name = ft_strdup("PASV");
+	cmd.args = NULL;
+	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
+	ftp_cli_pi_send_cmd(cli_ftp, cmd);
+	data = ftp_cli_pi_recive_data(cli_ftp);
+	ftp_parse_addr_port(cli_ftp, data);
+}

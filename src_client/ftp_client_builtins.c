@@ -39,10 +39,13 @@ void	ftp_cli_builtin_ls(t_cli_ftp *cli_ftp, char **args)
 {
 	t_cmd_nvt cmd;
 
+	ftp_cli_pi_open_data_channel(cli_ftp);
+
 	cmd.name = "LIST";
 	cmd.args = ++args;
 	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
 	ftp_cli_pi_send_cmd(cli_ftp, cmd);
+	// free(cmd.name);
 	free(cmd.line_send);
 }
 
@@ -95,6 +98,28 @@ void	ftp_cli_builtin_pass(t_cli_ftp *cli_ftp, char **args)
 	t_cmd_nvt cmd;
 
 	cmd.name = "PASS";
+	cmd.args = ++args;
+	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
+	ftp_cli_pi_send_cmd(cli_ftp, cmd);
+	free(cmd.line_send);
+}
+
+void	ftp_cli_builtin_binary(t_cli_ftp *cli_ftp, char **args)
+{
+	t_cmd_nvt cmd;
+
+	cmd.name = "TYPE I";
+	cmd.args = ++args;
+	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
+	ftp_cli_pi_send_cmd(cli_ftp, cmd);
+	free(cmd.line_send);
+}
+
+void	ftp_cli_builtin_ascii(t_cli_ftp *cli_ftp, char **args)
+{
+	t_cmd_nvt cmd;
+
+	cmd.name = "TYPE A";
 	cmd.args = ++args;
 	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
 	ftp_cli_pi_send_cmd(cli_ftp, cmd);

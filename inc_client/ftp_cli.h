@@ -33,7 +33,9 @@ typedef unsigned char	t_bool;
 typedef struct	s_cli_ftp
 {
 	char	*addr;
+	char	*addr_data;
 	int		port;
+	int		port_data;
 	int		sock;
 }				t_cli_ftp;
 
@@ -64,7 +66,6 @@ typedef t_cmd_nvt	s_cmd_list[] =
 */
 
 
-
 /*
 ** Name: ftp_client_pi
 ** File: ftp_client_pi.c
@@ -75,6 +76,8 @@ typedef t_cmd_nvt	s_cmd_list[] =
 void	ftp_cli_pi_send_cmd(t_cli_ftp *cli_ftp, t_cmd_nvt cmd);
 t_bool	ftp_cli_pi_search_builtins(t_cli_ftp *cli_ftp, char **agrs);
 int		ftp_cli_pi_create(t_cli_ftp *cli_ftp);
+void	ftp_cli_pi_open_data_channel(t_cli_ftp *cli_ftp);
+
 // int		ftp_create_client(char *addr, int port);
 
 /*
@@ -98,6 +101,8 @@ void	ftp_cli_builtin_put(t_cli_ftp *cli_ftp, char **args);
 void	ftp_cli_builtin_quit(t_cli_ftp *cli_ftp, char **args);
 void	ftp_cli_builtin_user(t_cli_ftp *cli_ftp, char **args);
 void	ftp_cli_builtin_pass(t_cli_ftp *cli_ftp, char **args);
+void	ftp_cli_builtin_binary(t_cli_ftp *cli_ftp, char **args);
+void	ftp_cli_builtin_ascii(t_cli_ftp *cli_ftp, char **args);
 
 
 
@@ -110,6 +115,8 @@ void	ftp_cli_builtin_pass(t_cli_ftp *cli_ftp, char **args);
 // void	ftp_display_prompt(void);
 char	*ftp_create_cmd_line(char *name, char **args);
 void	ftp_receive_msg(t_bool done);
+void	ftp_parse_addr_port(t_cli_ftp *cli_ftp, char *msg);
+
 
 /*
 ** Name: Struct of commands user, list in a global array.
@@ -132,6 +139,8 @@ static t_cmd_cli	g_cmd_cli_list[] =
 	{"quit", ftp_cli_builtin_quit},
 	{"user", ftp_cli_builtin_user},
 	{"pass", ftp_cli_builtin_pass},
+	{"binary", ftp_cli_builtin_binary},
+	{"ascii", ftp_cli_builtin_ascii},
 	{0}
 };
 
