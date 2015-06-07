@@ -30,13 +30,19 @@
 
 typedef unsigned char	t_bool;
 
+typedef struct	s_res {
+	int			code_res;
+	char		*msg_res;
+}				t_res;
+
 typedef struct	s_cli_ftp
 {
-	char	*addr;
+	char	*addr_ctl;
 	char	*addr_data;
-	int		port;
+	int		port_ctl;
 	int		port_data;
-	int		sock;
+	int		sock_ctl;
+	int		sock_data;
 }				t_cli_ftp;
 
 
@@ -77,6 +83,8 @@ void	ftp_cli_pi_send_cmd(t_cli_ftp *cli_ftp, t_cmd_nvt cmd);
 t_bool	ftp_cli_pi_search_builtins(t_cli_ftp *cli_ftp, char **agrs);
 int		ftp_cli_pi_create(t_cli_ftp *cli_ftp);
 void	ftp_cli_pi_open_data_channel(t_cli_ftp *cli_ftp);
+char	*ftp_cli_pi_recive_data(int sock);
+
 
 // int		ftp_create_client(char *addr, int port);
 
@@ -113,8 +121,9 @@ void	ftp_cli_builtin_ascii(t_cli_ftp *cli_ftp, char **args);
 ** Desc: Fucntions helpers
 */
 // void	ftp_display_prompt(void);
-char	*ftp_create_cmd_line(char *name, char **args);
 void	ftp_receive_msg(t_bool done);
+t_res	ftp_parse_response(char *response);
+char	*ftp_create_cmd_line(char *name, char **args);
 void	ftp_parse_addr_port(t_cli_ftp *cli_ftp, char *msg);
 
 

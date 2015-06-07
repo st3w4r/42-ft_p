@@ -26,7 +26,7 @@ static void		ftp_display_prompt(void)
 	ft_putstr("FTP $> ");
 	ft_putstr("\033[0m");
 }
-
+/*
 static void		ftp_loop_write(int sock)
 {
 	char	buf[2];
@@ -56,22 +56,23 @@ static void		ftp_loop_write(int sock)
 		else if (cr && buf[0] != '\n')
 			cr = FALSE;
 		ft_putstr(buf);
-		/*
-		i = 0;
-		while (buf[i])
-		{
-			write(1, buf, 1024);
-			i += 100;
-		}*/
+
+		// i = 0;
+		// while (buf[i])
+		// {
+		// 	write(1, buf, 1024);
+		// 	i += 100;
+		// }
 	}
 
 	// r = read(sock, buf, 1024);
 		// read = FALSE;
 	// write(1, buf, r);
-}
+}*/
 
 static void		ftp_loop(t_cli_ftp *cli_ftp)
 {
+	char	*msg;
 	char	*line;
 	char	**args;
 	int		r;
@@ -81,7 +82,11 @@ static void		ftp_loop(t_cli_ftp *cli_ftp)
 	while (42)
 	{
 		if (sended)
-			ftp_loop_write(cli_ftp->sock);
+		{
+			msg = ftp_cli_pi_recive_data(cli_ftp->sock_ctl);
+			ft_putstr(msg);
+			free(msg);
+		}
 		sended = FALSE;
 		ftp_display_prompt();
 		if ((r = ft_get_next_line(0, &line)) == 0)
@@ -105,14 +110,14 @@ int				main(int ac, char **av)
 
 	if (ac != 3)
 		usage(av[0]);
-	cli_ftp.port = ft_atoi(av[2]);
-	cli_ftp.addr = ft_strdup(av[1]);
+	cli_ftp.port_ctl = ft_atoi(av[2]);
+	cli_ftp.addr_ctl = ft_strdup(av[1]);
 
-	cli_ftp.sock = ftp_cli_pi_create(&cli_ftp);
+	cli_ftp.sock_ctl = ftp_cli_pi_create(&cli_ftp);
 	ftp_loop(&cli_ftp);
 	// sock = ftp_create_client(av[1], port);
 
 	// ftp_loop(sock);
-	close(cli_ftp.sock);
+	close(cli_ftp.sock_ctl);
 	return (0);
 }

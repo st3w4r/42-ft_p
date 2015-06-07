@@ -20,6 +20,23 @@ void	ftp_receive_msg(t_bool done)
 		ft_putstr_fd("\033[1;31mERROR\n\033[0m", 2);
 }
 
+t_res	ftp_parse_response(char *response)
+{
+	t_res	res;
+	char	code[4];
+
+	if (!response)
+	{
+		res.code_res = -1;
+		res.msg_res = ft_strdup("Error\r\n");
+		return (res);
+	}
+	res.code_res = ft_atoi(ft_strncpy(code, response, 3));
+	response = ft_strchr(response, ' ');
+	res.msg_res = ft_strdup(++response);
+	return (res);
+}
+
 char	*ftp_create_cmd_line(char *name, char **args)
 {
 	char *cmd_line;
@@ -53,6 +70,6 @@ void	ftp_parse_addr_port(t_cli_ftp *cli_ftp, char *msg)
 	port = 256 * ft_atoi(msg_arr[4]) + ft_atoi(msg_arr[5]);
 	cli_ftp->addr_data = addr;
 	cli_ftp->port_data = port;
-	printf("Addr: %s Port: %d\n", cli_ftp->addr_data, cli_ftp->port_data);
+	// printf("Addr: %s Port: %d\n", cli_ftp->addr_data, cli_ftp->port_data);
 	FREE_ARR(msg_arr);
 }
