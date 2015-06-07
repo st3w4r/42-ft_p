@@ -86,7 +86,7 @@ static void		ftp_recv_on_socket(t_srv_ftp *srv_ftp)
 		{
 			if ((r = recv(srv_ftp->cs, buf, 1, 0)) < 0)
 			{
-				ft_error_str("Receive error\n");
+				ft_error_str("[ERROR RECEIVE]\n");
 				return ;
 			}
 			buf[r] = '\0';

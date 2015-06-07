@@ -157,12 +157,16 @@ void	ftp_srv_builtin_put(t_srv_ftp *srv_ftp, char **args)
 
 void	ftp_srv_builtin_quit(t_srv_ftp *srv_ftp, char **args)
 {
+	ftp_srv_pi_send_response(srv_ftp, 221, "Goodbye.");
+	close(srv_ftp->cs);
+	close(srv_ftp->sock);
+	/*
 	ft_putstr_fd("\n", 1);
 	while (args && args[0])
 	{
 		ft_putstr_fd(args[0], 1);
 		++args;
-	}
+	}*/
 	// t_cmd_nvt cmd;
 	//
 	// cmd.name = "QUIT";

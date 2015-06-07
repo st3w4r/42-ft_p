@@ -81,13 +81,20 @@ void	ftp_cli_builtin_put(t_cli_ftp *cli_ftp, char **args)
 
 void	ftp_cli_builtin_quit(t_cli_ftp *cli_ftp, char **args)
 {
-	t_cmd_nvt cmd;
+	t_cmd_nvt	cmd;
+	char		*msg;
 
 	cmd.name = "QUIT";
-	cmd.args = ++args;
+	cmd.args = NULL;
 	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
 	ftp_cli_pi_send_cmd(cli_ftp, cmd);
 	free(cmd.line_send);
+
+	msg = ftp_cli_pi_recive_data(cli_ftp->sock_ctl);
+	ft_putstr(msg);
+	free(msg);
+	close(cli_ftp->sock_ctl);
+	exit(0);
 }
 
 void	ftp_cli_builtin_user(t_cli_ftp *cli_ftp, char **args)

@@ -90,7 +90,11 @@ static void		ftp_loop(t_cli_ftp *cli_ftp)
 		sended = FALSE;
 		ftp_display_prompt();
 		if ((r = ft_get_next_line(0, &line)) == 0)
+		{
+			ft_putendl("");
+			ftp_cli_builtin_quit(cli_ftp, NULL);
 			break ;
+		}
 		// ftp_cli_pi_cmd(cli_ftp, line);
 		args = ft_strsplit(line, ' ');
 		sended = ftp_cli_pi_search_builtins(cli_ftp, args);
@@ -99,7 +103,6 @@ static void		ftp_loop(t_cli_ftp *cli_ftp)
 		// write(sock, line, ft_strlen(line));
 		free(line);
 	}
-	ft_putendl("Exit");
 }
 
 int				main(int ac, char **av)
