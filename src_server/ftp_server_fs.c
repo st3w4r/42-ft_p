@@ -10,4 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ftp_srv.h"
 
+int		ftp_srv_fs_open_file(char *name)
+{
+	return (open(name, O_RDONLY));
+}

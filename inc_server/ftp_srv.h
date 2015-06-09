@@ -90,6 +90,12 @@ void	ftp_srv_dtp_accept_connection(t_srv_ftp *srv_ftp);
 int		ftp_srv_dtp_create_channel(t_srv_ftp *srv_ftp);
 void	ftp_srv_dtp_close_channel(t_srv_ftp *srv_ftp);
 
+/*
+** Name: ftp_server_file
+** File: ftp_server_file.c
+** Desc: Function of File System
+*/
+int		ftp_srv_fs_open_file(char *name);
 
 
 /*
