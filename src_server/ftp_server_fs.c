@@ -17,16 +17,16 @@ int		ftp_srv_fs_open_file(char *name)
 	return (open(name, O_RDONLY));
 }
 
-char	*ftp_srv_fs_read_file(int fd)
+char	*ftp_srv_fs_read_file(int fd, int *len)
 {
 	int		r;
 	char	*buf;
 
 	if (!(buf = (char*)malloc(sizeof(char) * 1024)))
 		ft_malloc_error();
-	if ((r = read(fd, buf, 1023)) > 0)
+	if ((r = read(fd, buf, 1024)) > 0)
 	{
-		buf[r] = '\0';
+		*len = r;
 		return (buf);
 	}
 	else

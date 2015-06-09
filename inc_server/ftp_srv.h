@@ -89,7 +89,7 @@ void	ftp_create_socket(t_srv_ftp *srv_ftp);
 void	ftp_srv_dtp_accept_connection(t_srv_ftp *srv_ftp);
 int		ftp_srv_dtp_create_channel(t_srv_ftp *srv_ftp);
 void	ftp_srv_dtp_close_channel(t_srv_ftp *srv_ftp);
-void	ftp_srv_dtp_send_data(t_srv_ftp *srv_ftp, char *data);
+void	ftp_srv_dtp_send_data(t_srv_ftp *srv_ftp, char *data, int len);
 
 /*
 ** Name: ftp_server_file
@@ -97,7 +97,7 @@ void	ftp_srv_dtp_send_data(t_srv_ftp *srv_ftp, char *data);
 ** Desc: Function of File System
 */
 int		ftp_srv_fs_open_file(char *name);
-char	*ftp_srv_fs_read_file(int fd);
+char	*ftp_srv_fs_read_file(int fd, int *len);
 
 /*
 ** Name: ftp_server_builtins

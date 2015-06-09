@@ -71,6 +71,7 @@ typedef t_cmd_nvt	s_cmd_list[] =
 ** Desc: Fucntions User Interface
 */
 
+int		g_need_read;
 
 /*
 ** Name: ftp_client_pi
@@ -93,7 +94,7 @@ char	*ftp_cli_pi_recive_data(int sock);
 ** File: ftp_client_dtp.c
 ** Desc: Function of Data Channel
 */
-char	*ftp_cli_dtp_read_on_channel_one(t_cli_ftp *cli_ftp);
+char	*ftp_cli_dtp_read_on_channel_one(t_cli_ftp *cli_ftp, int *len);
 void	ftp_cli_dtp_read_on_channel(t_cli_ftp *cli_ftp);
 void	ftp_cli_dtp_create_channel(t_cli_ftp *cli_ftp);
 
@@ -103,7 +104,7 @@ void	ftp_cli_dtp_create_channel(t_cli_ftp *cli_ftp);
 ** Desc: Function of File System
 */
 int		ftp_cli_fs_create_file(char *name);
-void	ftp_cli_fs_write_in_file(int fd, char *data);
+t_bool	ftp_cli_fs_write_in_file(int fd, char *data, int len);
 
 
 /*

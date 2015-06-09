@@ -123,6 +123,7 @@ void	ftp_srv_builtin_ls(t_srv_ftp *srv_ftp, char **args)
 void	ftp_srv_builtin_get(t_srv_ftp *srv_ftp, char **args)
 {
 	int		fd;
+	int		len_data;
 	char	*data;
 
 	if (srv_ftp->sock_data != -1)
@@ -132,9 +133,9 @@ void	ftp_srv_builtin_get(t_srv_ftp *srv_ftp, char **args)
 		{
 			ftp_srv_pi_send_response(srv_ftp, 150,
 				"Opening BINARY mode data connection for ...");
-			while ((data = ftp_srv_fs_read_file(fd)))
+			while ((data = ftp_srv_fs_read_file(fd, &len_data)))
 			{
-				ftp_srv_dtp_send_data(srv_ftp, data);
+				ftp_srv_dtp_send_data(srv_ftp, data, len_data);
 				free(data);
 			}
 			ftp_srv_dtp_close_channel(srv_ftp);
@@ -142,11 +143,13 @@ void	ftp_srv_builtin_get(t_srv_ftp *srv_ftp, char **args)
 			close(fd);
 		}
 		else
+		{
+			// ftp_srv_dtp_close_channel(srv_ftp);
 			ftp_srv_pi_send_response(srv_ftp, 550, "Failed to open file.");
+		}
 	}
 	else
 		ftp_srv_pi_send_response(srv_ftp, 425, "Use PORT or PASV first.");
-
 	/*
 	ft_putstr_fd("\n", 1);
 	while (args && args[0])

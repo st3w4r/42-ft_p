@@ -70,7 +70,7 @@ static void		ftp_loop_write(int sock)
 	// write(1, buf, r);
 }*/
 
-static void		ftp_loop(t_cli_ftp *cli_ftp)
+void		ftp_loop(t_cli_ftp *cli_ftp)
 {
 	char	*msg;
 	char	*line;
@@ -79,15 +79,17 @@ static void		ftp_loop(t_cli_ftp *cli_ftp)
 	t_bool	sended;
 
 	sended = TRUE;
+	g_need_read = TRUE;
 	while (42)
 	{
-		if (sended)
+		if (sended && g_need_read)
 		{
 			msg = ftp_cli_pi_recive_data(cli_ftp->sock_ctl);
 			ft_putstr(msg);
 			free(msg);
 		}
 		sended = FALSE;
+		g_need_read = TRUE;
 		ftp_display_prompt();
 		if ((r = ft_get_next_line(0, &line)) == 0)
 		{

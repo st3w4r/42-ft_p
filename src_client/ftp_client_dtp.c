@@ -12,16 +12,16 @@
 
 #include "ftp_cli.h"
 
-char	*ftp_cli_dtp_read_on_channel_one(t_cli_ftp *cli_ftp)
+char	*ftp_cli_dtp_read_on_channel_one(t_cli_ftp *cli_ftp, int *len)
 {
 	int		r;
 	char	*buf;
 
 	if (!(buf = (char*)malloc(sizeof(char) * 1024)))
 		ft_malloc_error();
-	if ((r = recv(cli_ftp->sock_data, buf, 1023, 0)) > 0)
+	if ((r = recv(cli_ftp->sock_data, buf, 1024, 0)) > 0)
 	{
-		buf[r] = '\0';
+		*len = r;
 		return (buf);
 	}
 	else
