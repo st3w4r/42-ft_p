@@ -42,7 +42,7 @@ void	ftp_cli_builtin_ls(t_cli_ftp *cli_ftp, char **args)
 	char		*response;
 
 	ftp_cli_pi_open_data_channel(cli_ftp);
-	cmd.name = ft_strdup("LIST");
+	cmd.name = "LIST";
 	cmd.args = ++args;
 	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
 	ftp_cli_pi_send_cmd(cli_ftp, cmd);
@@ -53,7 +53,6 @@ void	ftp_cli_builtin_ls(t_cli_ftp *cli_ftp, char **args)
 		ftp_cli_dtp_read_on_channel(cli_ftp);
 	free(res.msg_res);
 	free(response);
-	free(cmd.name);
 	free(cmd.line_send);
 }
 
@@ -67,7 +66,7 @@ void	ftp_cli_builtin_get(t_cli_ftp *cli_ftp, char **args)
 	int			fd_create;
 
 	ftp_cli_pi_open_data_channel(cli_ftp);
-	cmd.name = ft_strdup("RETR");
+	cmd.name = "RETR";
 	cmd.args = ++args;
 	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
 	ftp_cli_pi_send_cmd(cli_ftp, cmd);
@@ -91,7 +90,6 @@ void	ftp_cli_builtin_get(t_cli_ftp *cli_ftp, char **args)
 		g_need_read = FALSE;
 	free(res.msg_res);
 	free(response);
-	free(cmd.name);
 	free(cmd.line_send);
 }
 
@@ -162,6 +160,17 @@ void	ftp_cli_builtin_ascii(t_cli_ftp *cli_ftp, char **args)
 	t_cmd_nvt cmd;
 
 	cmd.name = "TYPE A";
+	cmd.args = ++args;
+	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
+	ftp_cli_pi_send_cmd(cli_ftp, cmd);
+	free(cmd.line_send);
+}
+
+void	ftp_cli_builtin_size(t_cli_ftp *cli_ftp, char **args)
+{
+	t_cmd_nvt cmd;
+
+	cmd.name = "SIZE";
 	cmd.args = ++args;
 	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
 	ftp_cli_pi_send_cmd(cli_ftp, cmd);

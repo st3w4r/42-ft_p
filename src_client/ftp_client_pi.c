@@ -99,6 +99,7 @@ void	ftp_cli_pi_open_data_channel(t_cli_ftp *cli_ftp)
 	ft_putstr(data);
 	ftp_parse_addr_port(cli_ftp, data);
 	ftp_cli_dtp_create_channel(cli_ftp);
-	free(cmd.name);
 	free(data);
+	free(cmd.name);
+	free(cmd.line_send);
 }
