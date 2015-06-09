@@ -352,6 +352,24 @@ void	ftp_srv_builtin_type(t_srv_ftp *srv_ftp, char **args)
 		ftp_srv_pi_send_response(srv_ftp, 500, "Unrecognised TYPE command.");
 }
 
+void	ftp_srv_builtin_size(t_srv_ftp *srv_ftp, char **args)
+{
+	int	fd;
+	int	size;
+
+	if(ft_arrlen(args) == 2)
+	{
+		if ((fd = ftp_srv_fs_open_file(args[1])) != -1)
+		{
+			size = ftp_srv_fs_size_file(fd);
+			close(fd);
+			ftp_srv_pi_send_response(srv_ftp, 213, ft_itoa(size));
+			return ;
+		}
+	}
+	ftp_srv_pi_send_response(srv_ftp, 550, "Could not get file size.");
+}
+
 /*
 	struct hostent		*h;
 	struct in_addr		**addr_list;

@@ -32,3 +32,12 @@ char	*ftp_srv_fs_read_file(int fd, int *len)
 	else
 		return (NULL);
 }
+
+int		ftp_srv_fs_size_file(int fd)
+{
+	struct stat info;
+
+	if (fstat(fd, &info) < 0)
+		return (-1);
+	return (info.st_size);
+}

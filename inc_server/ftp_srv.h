@@ -17,11 +17,12 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 # include <sys/socket.h>
 # include <netdb.h>
 # include <netinet/in.h>
 # include <arpa/inet.h>
-# include <sys/types.h>
 # include <ifaddrs.h>
 
 
@@ -49,13 +50,13 @@ static t_res	g_res_list[] =
 
 typedef enum	e_type
 {
-	ASCII,
+	ASCII = 0,
 	BINARY
 }				t_type;
 
 typedef enum	e_mode_ftp
 {
-	ACTIVE,
+	ACTIVE = 0,
 	PASSIVE
 }				t_mode_ftp;
 
@@ -98,6 +99,7 @@ void	ftp_srv_dtp_send_data(t_srv_ftp *srv_ftp, char *data, int len);
 */
 int		ftp_srv_fs_open_file(char *name);
 char	*ftp_srv_fs_read_file(int fd, int *len);
+int		ftp_srv_fs_size_file(int fd);
 
 /*
 ** Name: ftp_server_builtins
@@ -117,6 +119,7 @@ void	ftp_srv_builtin_noop(t_srv_ftp *srv_ftp, char **args);
 void	ftp_srv_builtin_pasv(t_srv_ftp *srv_ftp, char **args);
 void	ftp_srv_builtin_port(t_srv_ftp *srv_ftp, char **args);
 void	ftp_srv_builtin_type(t_srv_ftp *srv_ftp, char **args);
+void	ftp_srv_builtin_size(t_srv_ftp *srv_ftp, char **args);
 
 /*
 ** Name: ftp_server_helper
@@ -163,6 +166,7 @@ static t_cmd_nvt	g_cmd_nvt_list[] =
 	{ "PASV",	NULL, ftp_srv_builtin_pasv},
 	{ "PORT",	NULL, ftp_srv_builtin_port},
 	{ "TYPE",	NULL, ftp_srv_builtin_type},
+	{ "SIZE",	NULL, ftp_srv_builtin_size},
 	{ 0 }
 };
 
