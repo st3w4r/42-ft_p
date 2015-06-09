@@ -52,3 +52,8 @@ void	ftp_srv_dtp_close_channel(t_srv_ftp *srv_ftp)
 	srv_ftp->cs_data = -1;
 	srv_ftp->sock_data = -1;
 }
+
+void	ftp_srv_dtp_send_data(t_srv_ftp *srv_ftp, char *data)
+{
+	send(srv_ftp->cs_data, data, ft_strlen(data), 0);
+}

@@ -71,6 +71,7 @@ void	ftp_cli_builtin_get(t_cli_ftp *cli_ftp, char **args)
 	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
 	ftp_cli_pi_send_cmd(cli_ftp, cmd);
 	response = ftp_cli_pi_recive_data(cli_ftp->sock_ctl);
+	// ft_putstr(response);
 	res = ftp_parse_response(response);
 	if (res.code_res == 150)
 	{
@@ -78,10 +79,11 @@ void	ftp_cli_builtin_get(t_cli_ftp *cli_ftp, char **args)
 		{
 			while ((data_one = ftp_cli_dtp_read_on_channel_one(cli_ftp)))
 			{
-				ft_putstr(data_one);
+				// ft_putstr(data_one);
 				ftp_cli_fs_write_in_file(fd_create, data_one);
 				free(data_one);
 			}
+			close(fd_create);
 		}
 	}
 	free(res.msg_res);

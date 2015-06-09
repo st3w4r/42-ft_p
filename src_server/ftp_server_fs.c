@@ -16,3 +16,19 @@ int		ftp_srv_fs_open_file(char *name)
 {
 	return (open(name, O_RDONLY));
 }
+
+char	*ftp_srv_fs_read_file(int fd)
+{
+	int		r;
+	char	*buf;
+
+	if (!(buf = (char*)malloc(sizeof(char) * 1024)))
+		ft_malloc_error();
+	if ((r = read(fd, buf, 1023)) > 0)
+	{
+		buf[r] = '\0';
+		return (buf);
+	}
+	else
+		return (NULL);
+}
