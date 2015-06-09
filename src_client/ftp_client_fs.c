@@ -14,7 +14,8 @@
 
 int		ftp_cli_fs_create_file(char *name)
 {
-	return (open(name, O_CREAT | O_RDWR | O_TRUNC));
+	return (open(name, O_CREAT | O_RDWR | O_TRUNC, S_IRUSR | S_IWUSR
+		 		| S_IRGRP | S_IROTH));
 }
 
 t_bool	ftp_cli_fs_write_in_file(int fd, char *data, int len)
