@@ -57,3 +57,19 @@ void	ftp_srv_dtp_send_data(t_srv_ftp *srv_ftp, char *data, int len)
 {
 	send(srv_ftp->cs_data, data, len, 0);
 }
+
+char	*ftp_srv_dtp_read_on_channel_one(t_srv_ftp *srv_ftp, int *len)
+{
+	int		r;
+	char	*buf;
+
+	if (!(buf = (char*)malloc(sizeof(char) * 1024)))
+		ft_malloc_error();
+	if ((r = recv(srv_ftp->sock_data, buf, 1024, 0)) > 0)
+	{
+		*len = r;
+		return (buf);
+	}
+	else
+		return (NULL);
+}

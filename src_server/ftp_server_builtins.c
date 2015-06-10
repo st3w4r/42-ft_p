@@ -125,14 +125,20 @@ void	ftp_srv_builtin_get(t_srv_ftp *srv_ftp, char **args)
 	int		fd;
 	int		len_data;
 	char	*data;
+	char	*msg;
 
 	if (srv_ftp->sock_data != -1)
 	{
 		ftp_srv_dtp_accept_connection(srv_ftp);
 		if ((fd = ftp_srv_fs_open_file(args[1])) != -1)
 		{
-			ftp_srv_pi_send_response(srv_ftp, 150,
-				"Opening BINARY mode data connection for ...");
+			msg = ft_strdup("Opening BINARY mode data connection for ");
+			msg = ft_strjoin_free_l(msg, args[1]);
+			msg = ft_strjoin_free_l(msg, " (");
+			msg = ft_strjoin_free_lr(msg, ft_itoa(ftp_srv_fs_size_file(fd)));
+			msg = ft_strjoin_free_l(msg, " bytes).");
+			ftp_srv_pi_send_response(srv_ftp, 150, msg);
+			free(msg);
 			while ((data = ftp_srv_fs_read_file(fd, &len_data)))
 			{
 				ftp_srv_dtp_send_data(srv_ftp, data, len_data);
@@ -169,12 +175,38 @@ void	ftp_srv_builtin_get(t_srv_ftp *srv_ftp, char **args)
 
 void	ftp_srv_builtin_put(t_srv_ftp *srv_ftp, char **args)
 {
+	int		fd_create;
+	int		len;
+	char	*data_one;
+
+	if (srv_ftp->sock_data != -1)
+	{
+		ftp_srv_dtp_accept_connection(srv_ftp);
+		ftp_srv_pi_send_response(srv_ftp, 150, "STOR WAITING");
+		if ((fd_create = ftp_srv_fs_create_file(args[1])) != -1)
+		{
+			while ((data_one = ftp_srv_dtp_read_on_channel_one(srv_ftp, &len)))
+			{
+				ft_putstr(data_one);
+				ftp_srv_fs_write_in_file(fd_create, data_one, len);
+				free(data_one);
+			}
+			close(fd_create);
+		}
+		else
+			ftp_srv_pi_send_response(srv_ftp, 550, "Failed to create file.");
+	}
+	else
+		ftp_srv_pi_send_response(srv_ftp, 425, "Use PORT or PASV first.");
+
+/*
 	ft_putstr_fd("\n", 1);
 	while (args && args[0])
 	{
 		ft_putstr_fd(args[0], 1);
 		++args;
 	}
+*/
 	// t_cmd_nvt cmd;
 	//
 	// cmd.name = "STOR";

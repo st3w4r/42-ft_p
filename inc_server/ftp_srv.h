@@ -91,14 +91,17 @@ void	ftp_srv_dtp_accept_connection(t_srv_ftp *srv_ftp);
 int		ftp_srv_dtp_create_channel(t_srv_ftp *srv_ftp);
 void	ftp_srv_dtp_close_channel(t_srv_ftp *srv_ftp);
 void	ftp_srv_dtp_send_data(t_srv_ftp *srv_ftp, char *data, int len);
+char	*ftp_srv_dtp_read_on_channel_one(t_srv_ftp *srv_ftp, int *len);
 
 /*
 ** Name: ftp_server_file
 ** File: ftp_server_file.c
 ** Desc: Function of File System
 */
+int		ftp_srv_fs_create_file(char *name);
 int		ftp_srv_fs_open_file(char *name);
 char	*ftp_srv_fs_read_file(int fd, int *len);
+t_bool	ftp_srv_fs_write_in_file(int fd, char *data, int len);
 int		ftp_srv_fs_size_file(int fd);
 
 /*
