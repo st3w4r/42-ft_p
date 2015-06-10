@@ -12,6 +12,11 @@
 
 #include "ftp_cli.h"
 
+void	ftp_cli_dtp_send_data(t_cli_ftp *cli_ftp, char *data, int len)
+{
+	send(cli_ftp->sock_data, data, len, 0);
+}
+
 char	*ftp_cli_dtp_read_on_channel_one(t_cli_ftp *cli_ftp, int *len)
 {
 	int		r;
@@ -58,4 +63,10 @@ void	ftp_cli_dtp_create_channel(t_cli_ftp *cli_ftp)
 	if (connect(sock, (const struct sockaddr *)&sin, sizeof(sin)) == -1)
 		ft_error_str_exit("Connect error\n");
 	cli_ftp->sock_data = sock;
+}
+
+void	ftp_cli_dtp_close_channel(t_cli_ftp *cli_ftp)
+{
+	close(cli_ftp->sock_data);
+	cli_ftp->sock_data = -1;
 }

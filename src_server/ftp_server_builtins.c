@@ -182,15 +182,16 @@ void	ftp_srv_builtin_put(t_srv_ftp *srv_ftp, char **args)
 	if (srv_ftp->sock_data != -1)
 	{
 		ftp_srv_dtp_accept_connection(srv_ftp);
-		ftp_srv_pi_send_response(srv_ftp, 150, "STOR WAITING");
+		ftp_srv_pi_send_response(srv_ftp, 150,
+			"Opening BINARY mode data connection for");
 		if ((fd_create = ftp_srv_fs_create_file(args[1])) != -1)
 		{
 			while ((data_one = ftp_srv_dtp_read_on_channel_one(srv_ftp, &len)))
 			{
-				ft_putstr(data_one);
 				ftp_srv_fs_write_in_file(fd_create, data_one, len);
 				free(data_one);
 			}
+			ftp_srv_pi_send_response(srv_ftp, 226, "SUCCESS");
 			close(fd_create);
 		}
 		else

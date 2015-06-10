@@ -94,17 +94,21 @@ char	*ftp_cli_pi_recive_data(int sock);
 ** File: ftp_client_dtp.c
 ** Desc: Function of Data Channel
 */
+void	ftp_cli_dtp_send_data(t_cli_ftp *cli_ftp, char *data, int len);
 char	*ftp_cli_dtp_read_on_channel_one(t_cli_ftp *cli_ftp, int *len);
 void	ftp_cli_dtp_read_on_channel(t_cli_ftp *cli_ftp);
 void	ftp_cli_dtp_create_channel(t_cli_ftp *cli_ftp);
+void	ftp_cli_dtp_close_channel(t_cli_ftp *cli_ftp);
 
 /*
 ** Name: ftp_client_file
 ** File: ftp_client_file.c
 ** Desc: Function of File System
 */
+int		ftp_cli_fs_open_file(char *name);
 int		ftp_cli_fs_create_file(char *name);
 t_bool	ftp_cli_fs_write_in_file(int fd, char *data, int len);
+char	*ftp_cli_fs_read_file(int fd, int *len);
 
 
 /*
