@@ -149,10 +149,7 @@ void	ftp_srv_builtin_get(t_srv_ftp *srv_ftp, char **args)
 			close(fd);
 		}
 		else
-		{
-			// ftp_srv_dtp_close_channel(srv_ftp);
 			ftp_srv_pi_send_response(srv_ftp, 550, "Failed to open file.");
-		}
 	}
 	else
 		ftp_srv_pi_send_response(srv_ftp, 425, "Use PORT or PASV first.");
@@ -191,6 +188,7 @@ void	ftp_srv_builtin_put(t_srv_ftp *srv_ftp, char **args)
 				ftp_srv_fs_write_in_file(fd_create, data_one, len);
 				free(data_one);
 			}
+			ftp_srv_dtp_close_channel(srv_ftp);
 			ftp_srv_pi_send_response(srv_ftp, 226, "SUCCESS");
 			close(fd_create);
 		}
