@@ -20,6 +20,11 @@ static void		usage(char *str)
 	exit(1);
 }
 
+static void	ftp_clean_process(int sig_number)
+{
+	wait4(-1, 0, WNOHANG, 0);
+}
+
 int				main(int ac, char **av)
 {
 	t_srv_ftp srv_ftp;
@@ -27,6 +32,7 @@ int				main(int ac, char **av)
 
 	if (ac != 2)
 		usage(av[0]);
+	signal(SIGCHLD, &ftp_clean_process);
 	srv_ftp.sock_data = -1;
 	srv_ftp.cs_data = -1;
 	srv_ftp.mode_ftp = MODE_FTP_DEFAULT;

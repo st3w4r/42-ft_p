@@ -24,6 +24,7 @@
 # include <netinet/in.h>
 # include <arpa/inet.h>
 # include <ifaddrs.h>
+# include <signal.h>
 
 
 # define TRUE 1
