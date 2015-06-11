@@ -64,7 +64,15 @@ void	ftp_cli_builtin_get(t_cli_ftp *cli_ftp, char **args)
 	char		*data_one;
 	int			len;
 	int			fd_create;
+	int			argc;
 
+	argc = ft_arrlen(args) -1;
+	if (argc != 1 && argc != 2)
+	{
+		ft_putstr("usage: get remote-file [local-file]\n");
+		g_need_read = FALSE;
+		return ;
+	}
 	ftp_cli_pi_open_data_channel(cli_ftp);
 	cmd.name = "RETR";
 	cmd.args = ++args;
@@ -74,9 +82,10 @@ void	ftp_cli_builtin_get(t_cli_ftp *cli_ftp, char **args)
 	response = ftp_cli_pi_recive_data(cli_ftp->sock_ctl);
 	ft_putstr(response);
 	res = ftp_parse_response(response);
+
 	if (res.code_res == 150)
 	{
-		if ((fd_create = ftp_cli_fs_create_file(args[0])) != -1)
+		if ((fd_create = ftp_cli_fs_create_file(args[argc - 1])) != -1)
 		{
 			while ((data_one = ftp_cli_dtp_read_on_channel_one(cli_ftp, &len)))
 			{
@@ -101,10 +110,18 @@ void	ftp_cli_builtin_put(t_cli_ftp *cli_ftp, char **args)
 	int			len_data;
 	char		*response;
 	int			fd;
+	int			argc;
 
+	argc = ft_arrlen(args) -1;
+	if (argc != 1 && argc != 2)
+	{
+		ft_putstr("usage: put remote-file [local-file]\n");
+		g_need_read = FALSE;
+		return ;
+	}
 	ftp_cli_pi_open_data_channel(cli_ftp);
 	cmd.name = "STOR";
-	cmd.args = ++args;
+	cmd.args = argc == 2 ? &(args[2]) : &(args[1]);
 	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
 	ftp_cli_pi_send_cmd(cli_ftp, cmd);
 
@@ -113,7 +130,7 @@ void	ftp_cli_builtin_put(t_cli_ftp *cli_ftp, char **args)
 	res = ftp_parse_response(response);
 	if (res.code_res == 150)
 	{
-		if ((fd = ftp_cli_fs_open_file(args[0])) != -1)
+		if ((fd = ftp_cli_fs_open_file(args[1])) != -1)
 		{
 			while ((data = ftp_cli_fs_read_file(fd, &len_data)))
 			{
