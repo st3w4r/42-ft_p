@@ -18,12 +18,9 @@ void		ftp_redirect_fd(int srcfd, int dstfd)
 		ft_error_str("Error redirect fd");
 }
 
-void		ftp_fork_process(char *path, char **av)
+void		ftp_fork_process(char **av)
 {
 	pid_t			pid;
-	// int				options;
-	// int				*status;
-	// struct rusage	*rusage;
 
 	pid = fork();
 	if (pid > 0)

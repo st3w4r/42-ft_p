@@ -90,7 +90,7 @@ void	ftp_srv_builtin_ls(t_srv_ftp *srv_ftp, char **args)
 
 		ftp_redirect_fd(srv_ftp->cs_data, STDOUT_FILENO);
 		ftp_redirect_fd(srv_ftp->cs_data, STDERR_FILENO);
-		ftp_fork_process("/bin/ls", new_args);
+		ftp_fork_process(new_args);
 		ftp_redirect_fd(STDIN_FILENO, STDOUT_FILENO);
 		ftp_redirect_fd(STDIN_FILENO, STDERR_FILENO);
 		ftp_srv_dtp_close_channel(srv_ftp);

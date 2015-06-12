@@ -140,7 +140,7 @@ void	ftp_srv_builtin_size(t_srv_ftp *srv_ftp, char **args);
 ** Desc: Function supplementary for server
 */
 void	ftp_redirect_fd(int srcfd, int dstfd);
-void	ftp_fork_process(char *path, char **av);
+void	ftp_fork_process(char **av);
 char	*ft_str_toupper(char *str);
 char	*ft_arrjoin(char **arr_str);
 

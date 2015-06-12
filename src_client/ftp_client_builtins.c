@@ -24,6 +24,20 @@ void	ftp_cli_builtin_cd(t_cli_ftp *cli_ftp, char **args)
 
 }
 
+void	ftp_cli_builtin_lcd(t_cli_ftp *cli_ftp, char **args)
+{
+	char *path;
+
+	if (chdir(args[1]) == 0)
+	{
+		path = ftp_cli_fs_get_path();
+		ft_putstr("Local directory now: ");
+		ft_putendl(path);
+		free(path);
+	}
+	g_need_read = FALSE;
+}
+
 void	ftp_cli_builtin_pwd(t_cli_ftp *cli_ftp, char **args)
 {
 	t_cmd_nvt cmd;
@@ -33,6 +47,17 @@ void	ftp_cli_builtin_pwd(t_cli_ftp *cli_ftp, char **args)
 	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
 	ftp_cli_pi_send_cmd(cli_ftp, cmd);
 	free(cmd.line_send);
+}
+
+void	ftp_cli_builtin_lpwd(t_cli_ftp *cli_ftp, char **args)
+{
+	char *path;
+
+	path = ftp_cli_fs_get_path();
+	ft_putstr("Local directory: ");
+	ft_putendl(path);
+	free(path);
+	g_need_read = FALSE;
 }
 
 void	ftp_cli_builtin_ls(t_cli_ftp *cli_ftp, char **args)
@@ -54,6 +79,14 @@ void	ftp_cli_builtin_ls(t_cli_ftp *cli_ftp, char **args)
 	free(res.msg_res);
 	free(response);
 	free(cmd.line_send);
+}
+
+void	ftp_cli_builtin_lls(t_cli_ftp *cli_ftp, char **args)
+{
+	free(args[0]);
+	args[0] = ft_strdup("/bin/ls");
+	ftp_fork_process(args);
+	g_need_read = FALSE;
 }
 
 void	ftp_cli_builtin_get(t_cli_ftp *cli_ftp, char **args)

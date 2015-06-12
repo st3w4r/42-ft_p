@@ -109,7 +109,7 @@ int		ftp_cli_fs_open_file(char *name);
 int		ftp_cli_fs_create_file(char *name);
 t_bool	ftp_cli_fs_write_in_file(int fd, char *data, int len);
 char	*ftp_cli_fs_read_file(int fd, int *len);
-
+char	*ftp_cli_fs_get_path(void);
 
 /*
 ** Name: ftp_client_builtins
@@ -117,8 +117,11 @@ char	*ftp_cli_fs_read_file(int fd, int *len);
 ** Desc: All builtins clients
 */
 void	ftp_cli_builtin_cd(t_cli_ftp *cli_ftp, char **args);
+void	ftp_cli_builtin_lcd(t_cli_ftp *cli_ftp, char **args);
 void	ftp_cli_builtin_pwd(t_cli_ftp *cli_ftp, char **args);
+void	ftp_cli_builtin_lpwd(t_cli_ftp *cli_ftp, char **args);
 void	ftp_cli_builtin_ls(t_cli_ftp *cli_ftp, char **args);
+void	ftp_cli_builtin_lls(t_cli_ftp *cli_ftp, char **args);
 void	ftp_cli_builtin_get(t_cli_ftp *cli_ftp, char **args);
 void	ftp_cli_builtin_put(t_cli_ftp *cli_ftp, char **args);
 void	ftp_cli_builtin_quit(t_cli_ftp *cli_ftp, char **args);
@@ -141,7 +144,7 @@ void	ftp_receive_msg(t_bool done);
 t_res	ftp_parse_response(char *response);
 char	*ftp_create_cmd_line(char *name, char **args);
 void	ftp_parse_addr_port(t_cli_ftp *cli_ftp, char *msg);
-
+void	ftp_fork_process(char **av);
 
 /*
 ** Name: Struct of commands user, list in a global array.
@@ -157,8 +160,11 @@ typedef struct	s_cmd_cli
 static t_cmd_cli	g_cmd_cli_list[] =
 {
 	{"ls", ftp_cli_builtin_ls},
+	{"lls", ftp_cli_builtin_lls},
 	{"pwd", ftp_cli_builtin_pwd},
+	{"lpwd", ftp_cli_builtin_lpwd},
 	{"cd", ftp_cli_builtin_cd},
+	{"lcd", ftp_cli_builtin_lcd},
 	{"get", ftp_cli_builtin_get},
 	{"put", ftp_cli_builtin_put},
 	{"quit", ftp_cli_builtin_quit},

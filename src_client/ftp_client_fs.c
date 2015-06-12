@@ -45,3 +45,11 @@ char	*ftp_cli_fs_read_file(int fd, int *len)
 	else
 		return (NULL);
 }
+
+char	*ftp_cli_fs_get_path(void)
+{
+	char *buf;
+
+	buf = NULL;
+	return (getcwd(buf, 0));
+}

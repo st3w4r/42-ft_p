@@ -73,3 +73,20 @@ void	ftp_parse_addr_port(t_cli_ftp *cli_ftp, char *msg)
 	// printf("Addr: %s Port: %d\n", cli_ftp->addr_data, cli_ftp->port_data);
 	FREE_ARR(msg_arr);
 }
+
+void		ftp_fork_process(char **av)
+{
+	pid_t			pid;
+
+	pid = fork();
+	if (pid > 0)
+	{
+		wait4(pid, 0, 0, 0);
+	}
+	else if (pid == 0)
+	{
+		if (execv(av[0], av) == -1)
+			ft_error_str("Exec format error.\n");
+		exit(0);
+	}
+}
