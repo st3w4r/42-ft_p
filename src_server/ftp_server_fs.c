@@ -66,19 +66,43 @@ char	*ftp_srv_fs_get_path(void)
 
 t_bool	ftp_srv_fs_path_allow(t_srv_ftp *srv_ftp, char *path)
 {
-	char *current_path;
-	char *old_path;
+	char	*current_path;
+	char	*old_path;
+	t_bool	allow;
 
 	old_path = ftp_srv_fs_get_path();
 	if (chdir(path) == 0)
 	{
 		current_path = ftp_srv_fs_get_path();
-		if ((ft_strlen(current_path) >= ft_strlen(srv_ftp->config.path_srv)))
-		{
-			chdir(old_path);
-			return (TRUE);
-		}
+		if (ft_strstr(current_path, srv_ftp->config.path_srv))
+			allow = TRUE;
+		else
+			allow = FALSE;
 	}
+	else
+		allow = FALSE;
 	chdir(old_path);
-	return (FALSE);
+	free(old_path);
+	return (allow);
+}
+
+t_bool	ftp_srv_fs_file_allow(t_srv_ftp *srv_ftp, char *file)
+{
+	char		*path_file;
+	char		*old_file;
+	t_bool		allow;
+
+	path_file = ft_strdup(file);
+	old_file = path_file;
+	if ((path_file = ft_strrchr(path_file, '/')) != NULL)
+	{
+		path_file[0] = '\0';
+		path_file = old_file;
+		allow = ftp_srv_fs_path_allow(srv_ftp, path_file);
+	}
+	else
+		allow = TRUE;
+	path_file = old_file;
+	free(path_file);
+	return (allow);
 }

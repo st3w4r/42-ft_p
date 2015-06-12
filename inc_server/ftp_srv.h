@@ -112,7 +112,7 @@ t_bool	ftp_srv_fs_write_in_file(int fd, char *data, int len);
 int		ftp_srv_fs_size_file(int fd);
 char	*ftp_srv_fs_get_path(void);
 t_bool	ftp_srv_fs_path_allow(t_srv_ftp *srv_ftp, char *path);
-
+t_bool	ftp_srv_fs_file_allow(t_srv_ftp *srv_ftp, char *file);
 
 /*
 ** Name: ftp_server_builtins
