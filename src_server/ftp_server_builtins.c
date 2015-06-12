@@ -16,10 +16,10 @@ void	ftp_srv_builtin_cd(t_srv_ftp *srv_ftp, char **args)
 {
 	t_bool allow;
 
-	if (ft_strcmp(args[1], "/") == 0)
+	if (ft_strncmp(args[1], "/", 1) == 0)
 	{
-		free(args[1]);
-		args[1] = ft_strdup(srv_ftp->config.path_srv);
+		args[1] = ft_strjoin_free_lr(ft_strdup(srv_ftp->config.path_srv),
+									args[1]);
 	}
 	if ((ft_arrlen(args) == 2) &&
 		(ftp_srv_fs_path_allow(srv_ftp, args[1]) == TRUE) &&
