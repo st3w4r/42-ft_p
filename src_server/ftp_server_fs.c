@@ -86,13 +86,17 @@ t_bool	ftp_srv_fs_path_allow(t_srv_ftp *srv_ftp, char *path)
 	return (allow);
 }
 
-t_bool	ftp_srv_fs_file_allow(t_srv_ftp *srv_ftp, char *file)
+t_bool	ftp_srv_fs_file_allow(t_srv_ftp *srv_ftp, char **file)
 {
 	char		*path_file;
 	char		*old_file;
 	t_bool		allow;
 
-	path_file = ft_strdup(file);
+	if (ft_strncmp(*file, "/", 1) == 0)
+	{
+		*file = ft_strjoin_free_r(srv_ftp->config.path_srv, *file);
+	}
+	path_file = ft_strdup(*file);
 	old_file = path_file;
 	if ((path_file = ft_strrchr(path_file, '/')) != NULL)
 	{

@@ -18,8 +18,7 @@ void	ftp_srv_builtin_cd(t_srv_ftp *srv_ftp, char **args)
 
 	if (ft_strncmp(args[1], "/", 1) == 0)
 	{
-		args[1] = ft_strjoin_free_lr(ft_strdup(srv_ftp->config.path_srv),
-									args[1]);
+		args[1] = ft_strjoin_free_r(srv_ftp->config.path_srv, args[1]);
 	}
 	if ((ft_arrlen(args) == 2) &&
 		(ftp_srv_fs_path_allow(srv_ftp, args[1]) == TRUE) &&
@@ -143,7 +142,7 @@ void	ftp_srv_builtin_get(t_srv_ftp *srv_ftp, char **args)
 	if (srv_ftp->sock_data != -1)
 	{
 		ftp_srv_dtp_accept_connection(srv_ftp);
-		if ((ftp_srv_fs_file_allow(srv_ftp, args[1]) == TRUE) &&
+		if ((ftp_srv_fs_file_allow(srv_ftp, &args[1]) == TRUE) &&
 			(fd = ftp_srv_fs_open_file(args[1])) != -1)
 		{
 			msg = ft_strdup("Opening BINARY mode data connection for ");
@@ -195,7 +194,8 @@ void	ftp_srv_builtin_put(t_srv_ftp *srv_ftp, char **args)
 		ftp_srv_dtp_accept_connection(srv_ftp);
 		ftp_srv_pi_send_response(srv_ftp, 150,
 			"Opening BINARY mode data connection for");
-		if ((fd_create = ftp_srv_fs_create_file(args[1])) != -1)
+		if (((fd_create = ftp_srv_fs_create_file(args[1])) != -1) &&
+			(ftp_srv_fs_file_allow(srv_ftp, &args[1]) == TRUE))
 		{
 			while ((data_one = ftp_srv_dtp_read_on_channel_one(srv_ftp, &len)))
 			{
@@ -404,7 +404,8 @@ void	ftp_srv_builtin_size(t_srv_ftp *srv_ftp, char **args)
 
 	if(ft_arrlen(args) == 2)
 	{
-		if ((fd = ftp_srv_fs_open_file(args[1])) != -1)
+		if ((ftp_srv_fs_file_allow(srv_ftp, &args[1]) == TRUE) &&
+			(fd = ftp_srv_fs_open_file(args[1])) != -1)
 		{
 			size = ftp_srv_fs_size_file(fd);
 			close(fd);
