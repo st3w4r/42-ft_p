@@ -55,3 +55,30 @@ int		ftp_srv_fs_size_file(int fd)
 		return (-1);
 	return (info.st_size);
 }
+
+char	*ftp_srv_fs_get_path(void)
+{
+	char *buf;
+
+	buf = NULL;
+	return (getcwd(buf, 0));
+}
+
+t_bool	ftp_srv_fs_path_allow(t_srv_ftp *srv_ftp, char *path)
+{
+	char *current_path;
+	char *old_path;
+
+	old_path = ftp_srv_fs_get_path();
+	if (chdir(path) == 0)
+	{
+		current_path = ftp_srv_fs_get_path();
+		if ((ft_strlen(current_path) >= ft_strlen(srv_ftp->config.path_srv)))
+		{
+			chdir(old_path);
+			return (TRUE);
+		}
+	}
+	chdir(old_path);
+	return (FALSE);
+}

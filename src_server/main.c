@@ -35,9 +35,10 @@ int				main(int ac, char **av)
 	signal(SIGCHLD, &ftp_clean_process);
 	srv_ftp.sock_data = -1;
 	srv_ftp.cs_data = -1;
-	srv_ftp.mode_ftp = MODE_FTP_DEFAULT;
-	srv_ftp.type = TYPE_DEFAULT;
 	srv_ftp.port = ft_atoi(av[1]);
+	srv_ftp.config.mode_ftp = MODE_FTP_DEFAULT;
+	srv_ftp.config.type = TYPE_DEFAULT;
+	srv_ftp.config.path_srv = ftp_srv_fs_get_path();
 	ftp_create_socket(&srv_ftp);
 	return (0);
 }

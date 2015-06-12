@@ -61,16 +61,22 @@ typedef enum	e_mode_ftp
 	PASSIVE
 }				t_mode_ftp;
 
-typedef struct	s_srv_ftp
+typedef struct	s_srv_config
 {
-	char		*addr;
-	int			port;
-	int			sock;
-	int			sock_data;
-	int			cs;
-	int			cs_data;
 	t_type		type;
 	t_mode_ftp	mode_ftp;
+	char		*path_srv;
+}				t_srv_config;
+
+typedef struct	s_srv_ftp
+{
+	char			*addr;
+	int				port;
+	int				sock;
+	int				sock_data;
+	int				cs;
+	int				cs_data;
+	t_srv_config	config;
 
 }				t_srv_ftp;
 
@@ -104,6 +110,9 @@ int		ftp_srv_fs_open_file(char *name);
 char	*ftp_srv_fs_read_file(int fd, int *len);
 t_bool	ftp_srv_fs_write_in_file(int fd, char *data, int len);
 int		ftp_srv_fs_size_file(int fd);
+char	*ftp_srv_fs_get_path(void);
+t_bool	ftp_srv_fs_path_allow(t_srv_ftp *srv_ftp, char *path);
+
 
 /*
 ** Name: ftp_server_builtins

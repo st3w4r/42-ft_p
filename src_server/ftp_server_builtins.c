@@ -14,55 +14,37 @@
 
 void	ftp_srv_builtin_cd(t_srv_ftp *srv_ftp, char **args)
 {
-	ft_putstr_fd("\n", 1);
-	while (args && args[0])
+	t_bool allow;
+
+	if ((ft_arrlen(args) == 2) &&
+		(ftp_srv_fs_path_allow(srv_ftp, args[1]) == TRUE) &&
+		(chdir(args[1]) == 0))
 	{
-		ft_putstr_fd(args[0], 1);
-		++args;
+		ftp_srv_pi_send_response(srv_ftp, 250,
+			"Directory successfully changed.");
+		return ;
 	}
-
-
-	// t_cmd_nvt cmd;
-
-	// cmd.name = "CWD";
-	// cmd.args = ++args;
-	// cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
-	// ftp_srv_pi_send_cmd(srv_ftp, cmd);
-	// free(cmd.line_send);
-
+	ftp_srv_pi_send_response(srv_ftp, 550, "Failed to change directory.");
 }
 
 void	ftp_srv_builtin_pwd(t_srv_ftp *srv_ftp, char **args)
 {
-/*
-	free(*args);
-	args[0] = ft_strdup("/bin/pwd");
-	ftp_redirect_fd(srv_ftp->cs, STDOUT_FILENO);
-	ftp_redirect_fd(srv_ftp->cs, STDERR_FILENO);
-	ftp_fork_process("/bin/pwd", args);
-	ftp_redirect_fd(STDIN_FILENO, STDOUT_FILENO);
-	ftp_redirect_fd(STDIN_FILENO, STDERR_FILENO);
-*/
-	ftp_srv_pi_send_response(srv_ftp, 257, "\"/test/ok\"");
+	char	*current_path;
+	char	*offset_path;
+	char	*msg;
 
-	/*
-	ft_putstr_fd("\n", 1);
-	while (args && args[0])
+	current_path = ftp_srv_fs_get_path();
+	if ((offset_path = ft_strstr(current_path, srv_ftp->config.path_srv)) &&
+		(ft_strlen(offset_path) > ft_strlen(srv_ftp->config.path_srv)))
 	{
-		ft_putstr_fd(args[0], 1);
-		++args;
-
+		offset_path = current_path + ft_strlen(srv_ftp->config.path_srv);
 	}
-	*/
-	// send(srv_ftp->cs, "\r\n", 2, 0);
-
-	// t_cmd_nvt cmd;
-
-	// cmd.name = "PWD";
-	// cmd.args = ++args;
-	// cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
-	// ftp_srv_pi_send_cmd(srv_ftp, cmd);
-	// free(cmd.line_send);
+	else
+		offset_path = "/";
+	msg = ft_strjoin_free_l(ft_strjoin("\"", offset_path), "\"");
+	ftp_srv_pi_send_response(srv_ftp, 257, msg);
+	free(current_path);
+	free(msg);
 }
 
 void	ftp_srv_builtin_ls(t_srv_ftp *srv_ftp, char **args)
@@ -73,8 +55,8 @@ void	ftp_srv_builtin_ls(t_srv_ftp *srv_ftp, char **args)
 	if (srv_ftp->sock_data != -1)
 	{
 		ftp_srv_dtp_accept_connection(srv_ftp);
-		ftp_srv_pi_send_response(srv_ftp, 150, "Here comes the directory listing.");
-
+		ftp_srv_pi_send_response(srv_ftp, 150,
+			"Here comes the directory listing.");
 		free(*args);
 		args[0] = ft_strdup("/bin/ls");
 		ftp_redirect_fd(srv_ftp->cs_data, STDOUT_FILENO);
@@ -367,12 +349,12 @@ void	ftp_srv_builtin_type(t_srv_ftp *srv_ftp, char **args)
 	{
 		if (!ft_strcmp(ft_str_toupper(args[1]), "I"))
 		{
-			srv_ftp->type = BINARY;
+			srv_ftp->config.type = BINARY;
 			ftp_srv_pi_send_response(srv_ftp, 200, "Switching to Binary mode.");
 		}
 		else if (!ft_strcmp(ft_str_toupper(args[1]), "A"))
 		{
-			srv_ftp->type = ASCII;
+			srv_ftp->config.type = ASCII;
 			ftp_srv_pi_send_response(srv_ftp, 200, "Switching to ASCII mode.");
 		}
 		else
