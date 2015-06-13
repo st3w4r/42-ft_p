@@ -74,9 +74,9 @@ void	ftp_cli_builtin_ls(t_cli_ftp *cli_ftp, char **args)
 	response = ftp_cli_pi_recive_data(cli_ftp->sock_ctl);
 	res = ftp_parse_response(response);
 	ft_putstr(response);
-	if (res.code_res == 150)
+	if (res.code == 150)
 		ftp_cli_dtp_read_on_channel(cli_ftp);
-	free(res.msg_res);
+	free(res.msg);
 	free(response);
 	free(cmd.line_send);
 }
@@ -116,7 +116,7 @@ void	ftp_cli_builtin_get(t_cli_ftp *cli_ftp, char **args)
 	ft_putstr(response);
 	res = ftp_parse_response(response);
 
-	if (res.code_res == 150)
+	if (res.code == 150)
 	{
 		if ((fd_create = ftp_cli_fs_create_file(args[argc - 1])) != -1)
 		{
@@ -131,7 +131,7 @@ void	ftp_cli_builtin_get(t_cli_ftp *cli_ftp, char **args)
 	else
 		g_need_read = FALSE;
 	free(cmd.line_send);
-	free(res.msg_res);
+	free(res.msg);
 	free(response);
 }
 
@@ -161,7 +161,7 @@ void	ftp_cli_builtin_put(t_cli_ftp *cli_ftp, char **args)
 	response = ftp_cli_pi_recive_data(cli_ftp->sock_ctl);
 	ft_putstr(response);
 	res = ftp_parse_response(response);
-	if (res.code_res == 150)
+	if (res.code == 150)
 	{
 		if ((fd = ftp_cli_fs_open_file(args[1])) != -1)
 		{
@@ -178,7 +178,7 @@ void	ftp_cli_builtin_put(t_cli_ftp *cli_ftp, char **args)
 		g_need_read = FALSE;
 
 	free(cmd.line_send);
-	free(res.msg_res);
+	free(res.msg);
 	free(response);
 }
 

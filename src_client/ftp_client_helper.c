@@ -27,13 +27,13 @@ t_res	ftp_parse_response(char *response)
 
 	if (!response)
 	{
-		res.code_res = -1;
-		res.msg_res = ft_strdup("Error\r\n");
+		res.code = -1;
+		res.msg = ft_strdup("Error\r\n");
 		return (res);
 	}
-	res.code_res = ft_atoi(ft_strncpy(code, response, 3));
+	res.code = ft_atoi(ft_strncpy(code, response, 3));
 	response = ft_strchr(response, ' ');
-	res.msg_res = ft_strdup(++response);
+	res.msg = ft_strdup(response);
 	return (res);
 }
 

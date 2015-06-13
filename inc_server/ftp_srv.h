@@ -38,8 +38,8 @@
 typedef unsigned char	t_bool;
 
 typedef struct	s_res {
-	int			code_res;
-	char		*msg_res;
+	int			code;
+	char		*msg;
 }				t_res;
 
 static t_res	g_res_list[] =

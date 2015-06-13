@@ -89,6 +89,7 @@ char		*ftp_cli_pi_recive_data(int sock)
 void	ftp_cli_pi_open_data_channel(t_cli_ftp *cli_ftp)
 {
 	t_cmd_nvt	cmd;
+	t_res		res;
 	char		*data;
 
 	cmd.name = ft_strdup("PASV");
@@ -96,10 +97,17 @@ void	ftp_cli_pi_open_data_channel(t_cli_ftp *cli_ftp)
 	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
 	ftp_cli_pi_send_cmd(cli_ftp, cmd);
 	data = ftp_cli_pi_recive_data(cli_ftp->sock_ctl);
-	ft_putstr(data);
-	ftp_parse_addr_port(cli_ftp, data);
-	ftp_cli_dtp_create_channel(cli_ftp);
+	res = ftp_parse_response(data);
+	if (res.code == 227)
+	{
+		ft_putstr(data);
+		ftp_parse_addr_port(cli_ftp, data);
+		ftp_cli_dtp_create_channel(cli_ftp);
+	}
+	else
+		g_need_read = FALSE;
 	free(data);
 	free(cmd.name);
 	free(cmd.line_send);
+	free(res.msg);
 }

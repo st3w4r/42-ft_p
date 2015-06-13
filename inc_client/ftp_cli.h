@@ -31,8 +31,8 @@
 typedef unsigned char	t_bool;
 
 typedef struct	s_res {
-	int			code_res;
-	char		*msg_res;
+	int			code;
+	char		*msg;
 }				t_res;
 
 typedef struct	s_cli_ftp
