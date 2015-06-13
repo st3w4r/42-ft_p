@@ -109,20 +109,21 @@ void		ftp_loop(t_cli_ftp *cli_ftp)
 
 int				main(int ac, char **av)
 {
-	t_cli_ftp	cli_ftp;
+	t_cli_ftp		cli_ftp;
+	struct hostent	*host;
+	struct in_addr	*addr;
 	// int			port;
 	// int			sock;
 
 	if (ac != 3)
 		usage(av[0]);
+	if ((host = gethostbyname(av[1])) == NULL)
+		ft_error_str_exit("Error get IP.\n");
+	addr = (struct in_addr*)host->h_addr_list[0];
 	cli_ftp.port_ctl = ft_atoi(av[2]);
-	cli_ftp.addr_ctl = ft_strdup(av[1]);
-
+	cli_ftp.addr_ctl = ft_strdup(inet_ntoa(*addr));
 	cli_ftp.sock_ctl = ftp_cli_pi_create(&cli_ftp);
 	ftp_loop(&cli_ftp);
-	// sock = ftp_create_client(av[1], port);
-
-	// ftp_loop(sock);
 	close(cli_ftp.sock_ctl);
 	return (0);
 }
