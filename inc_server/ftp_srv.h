@@ -70,12 +70,13 @@ typedef struct	s_srv_config
 
 typedef struct	s_srv_ftp
 {
-	char			*addr;
-	int				port;
-	int				sock;
-	int				sock_data;
-	int				cs;
-	int				cs_data;
+	char				*addr;
+	int					port;
+	int					sock;
+	int					sock_data;
+	int					cs;
+	int					cs_data;
+	struct sockaddr_in	csin;
 	t_srv_config	config;
 
 }				t_srv_ftp;
@@ -150,7 +151,7 @@ char	*ft_arrjoin(char **arr_str);
 ** File: ftp_server_helper.c
 ** Desc: Function supplementary for server
 */
-void	ftp_srv_ui_display_cmd(char *cmd);
+void	ftp_srv_ui_display_cmd(t_srv_ftp *srv_ftp, char *cmd);
 
 /*
 ** Name: Struct of commands nvt, list in a global array.

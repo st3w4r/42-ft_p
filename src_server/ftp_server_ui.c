@@ -12,8 +12,12 @@
 
 #include "ftp_srv.h"
 
-void	ftp_srv_ui_display_cmd(char *cmd)
+void	ftp_srv_ui_display_cmd(t_srv_ftp *srv_ftp, char *cmd)
 {
-	ft_putstr("[USER CMD]: ");
+	ft_putstr("[");
+	ft_putstr(inet_ntoa(srv_ftp->csin.sin_addr));
+	ft_putstr(":");
+	ft_putnbr(ntohs(srv_ftp->csin.sin_port));
+	ft_putstr("] ");
 	ft_putendl(cmd);
 }

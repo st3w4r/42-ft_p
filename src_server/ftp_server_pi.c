@@ -99,7 +99,7 @@ static void		ftp_recv_on_socket(t_srv_ftp *srv_ftp)
 	ft_strreplace_char(cmd, '\n', '\0');
 	ft_strreplace_char(cmd, '\r', '\0');
 	args = ft_strsplit(cmd, ' ');
-	ftp_srv_ui_display_cmd(cmd);
+	ftp_srv_ui_display_cmd(srv_ftp, cmd);
 	find = ftp_srv_pi_search_builtins(srv_ftp, args);
 	if (!find)
 		ftp_srv_pi_send_response(srv_ftp, 500, "Unknown command.");
@@ -134,17 +134,17 @@ void			ftp_create_socket(t_srv_ftp *srv_ftp)
 	// int					sock;
 	// int					cs;
 	unsigned int		cslen;
-	struct sockaddr_in	csin;
+	// struct sockaddr_in	csin;
 
 	srv_ftp->sock = ftp_create_server(srv_ftp->port);
 	while (42)
 	{
 		// ftp_redirect_fd(cs, STDOUT_FILENO);
 		// ftp_redirect_fd(cs, STDERR_FILENO);
-		cslen = sizeof(csin);
-		srv_ftp->cs = accept(srv_ftp->sock, (struct sockaddr*)&csin,  &cslen);
-		printf("[%s:%d] Connected\n",
-			inet_ntoa(csin.sin_addr), ntohs(csin.sin_port));
+		cslen = sizeof(srv_ftp->csin);
+		srv_ftp->cs = accept(srv_ftp->sock, (struct sockaddr*)&(srv_ftp->csin),
+							&cslen);
+		ftp_srv_ui_display_cmd(srv_ftp, "[CONNECTED]");
 		ftp_srv_pi_send_response(srv_ftp, 220, "Server ftp by BY");
 		pid = fork();
 		if (pid > 0)
@@ -155,8 +155,7 @@ void			ftp_create_socket(t_srv_ftp *srv_ftp)
 		{
 			ftp_recv_on_socket(srv_ftp);
 			// ftp_read_on_socket(srv_ftp);
-			printf("[%s:%d] Disconnected\n",
-				inet_ntoa(csin.sin_addr), ntohs(csin.sin_port));
+			ftp_srv_ui_display_cmd(srv_ftp, "[DISCONNECTED]");
 			close(srv_ftp->sock);
 			exit(0);
 		}

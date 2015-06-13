@@ -17,10 +17,10 @@ void	ftp_srv_dtp_accept_connection(t_srv_ftp *srv_ftp)
 	unsigned int		cslen;
 	struct sockaddr_in	csin;
 
-	ft_putendl("[CONNECTION LISTEN]");
+	ftp_srv_ui_display_cmd(srv_ftp, "[CONNECTION LISTEN]");
 	cslen = sizeof(csin);
 	srv_ftp->cs_data = accept(srv_ftp->sock_data, (struct sockaddr*)&csin, &cslen);
-	ft_putendl("[CONNECTION ACCEPT]");
+	ftp_srv_ui_display_cmd(srv_ftp, "[CONNECTION ACCEPT]");
 }
 
 int		ftp_srv_dtp_create_channel(t_srv_ftp *srv_ftp)
