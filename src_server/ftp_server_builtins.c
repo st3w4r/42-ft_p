@@ -351,23 +351,12 @@ void	ftp_srv_builtin_pasv(t_srv_ftp *srv_ftp, char **args)
 	addr[3] = ft_itoa(s_addr >> 24 & 0xff);
 	port[0] = ft_itoa(sin.sin_port >> 0 & 0xff);
 	port[1] = ft_itoa(sin.sin_port >> 8 & 0xff);
-
-	msg = ft_strdup("Entering Passive Mode (");
-	msg = ft_strjoin_free_lr(msg, addr[0]);
-	msg = ft_strjoin_free_l(msg, ",");
-	msg = ft_strjoin_free_lr(msg, addr[1]);
-	msg = ft_strjoin_free_l(msg, ",");
-	msg = ft_strjoin_free_lr(msg, addr[2]);
-	msg = ft_strjoin_free_l(msg, ",");
-	msg = ft_strjoin_free_lr(msg, addr[3]);
-	msg = ft_strjoin_free_l(msg, ",");
-	msg = ft_strjoin_free_lr(msg, port[0]);
-	msg = ft_strjoin_free_l(msg, ",");
-	msg = ft_strjoin_free_lr(msg, port[1]);
-	msg = ft_strjoin_free_l(msg, ")");
-
+	msg = ft_str_arrjoin((char *[]){"Entering Passive Mode (", addr[0], ",",
+		addr[1], ",", addr[2], ",", addr[3], ",", port[0], ",", port[1], ")",
+		NULL});
 	ftp_srv_pi_send_response(srv_ftp, 227, msg);
-	// ftp_srv_dtp_accept_connection(srv_ftp);
+	ft_str_arrfree((char *[]){msg, addr[0], addr[1], addr[2], addr[3], port[0],
+					port[1], NULL});
 }
 
 void	ftp_srv_builtin_port(t_srv_ftp *srv_ftp, char **args)

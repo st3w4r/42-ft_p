@@ -142,8 +142,11 @@ void	ftp_srv_builtin_size(t_srv_ftp *srv_ftp, char **args);
 */
 void	ftp_redirect_fd(int srcfd, int dstfd);
 void	ftp_fork_process(char **av);
+/*
 char	*ft_str_toupper(char *str);
-char	*ft_arrjoin(char **arr_str);
+char	*ft_str_arrjoin(char **str);
+void	ft_str_arrfree(char **arr_str);
+*/
 
 
 /*
