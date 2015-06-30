@@ -130,6 +130,7 @@ void	ftp_cli_builtin_pass(t_cli_ftp *cli_ftp, char **args);
 void	ftp_cli_builtin_binary(t_cli_ftp *cli_ftp, char **args);
 void	ftp_cli_builtin_ascii(t_cli_ftp *cli_ftp, char **args);
 void	ftp_cli_builtin_size(t_cli_ftp *cli_ftp, char **args);
+void	ftp_cli_builtin_mkdir(t_cli_ftp *cli_ftp, char **args);
 
 
 
@@ -173,6 +174,8 @@ static t_cmd_cli	g_cmd_cli_list[] =
 	{"binary", ftp_cli_builtin_binary},
 	{"ascii", ftp_cli_builtin_ascii},
 	{"size", ftp_cli_builtin_size},
+	{"mkdir", ftp_cli_builtin_mkdir},
+	{"rmdir", ftp_cli_builtin_rmdir},
 	{0}
 };
 
