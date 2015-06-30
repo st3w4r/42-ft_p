@@ -76,7 +76,8 @@ static void		ftp_recv_on_socket(t_srv_ftp *srv_ftp)
 	ftp_srv_ui_display_cmd(srv_ftp, cmd);
 	if ((srv_ftp->config.is_logged == FALSE) &&
 		(ft_strcmp(ft_str_toupper(args[0]), "USER") != 0) &&
-		(ft_strcmp(ft_str_toupper(args[0]), "PASS") != 0))
+		(ft_strcmp(ft_str_toupper(args[0]), "PASS") != 0) &&
+		(ft_strcmp(ft_str_toupper(args[0]), "QUIT") != 0))
 		ftp_srv_pi_send_response(srv_ftp, 503, "Login with USER first.");
 	else
 	{

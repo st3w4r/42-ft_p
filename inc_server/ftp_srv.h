@@ -57,6 +57,7 @@ typedef struct	s_account {
 static t_account	g_account[] =
 {
 	{"anonymous", "1234"},
+	{"yana", "test"},
 	{0}
 };
 
