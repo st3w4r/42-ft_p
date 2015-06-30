@@ -262,14 +262,17 @@ void	ftp_srv_builtin_user(t_srv_ftp *srv_ftp, char **args)
 		if (ft_strcmp(args[1], g_account[i].username) == 0)
 		{
 			// g_cmd_cli_list[i].builtin(cli_ftp, args);
-			g_login = args[1];
+			// g_login = args[1];
+			srv_ftp->config.login = args[1];
 			ftp_srv_pi_send_response(srv_ftp, 331, "Please pawword.");
 			// state = TRUE;
 			return;
 		}
 		++i;
 	}
-	g_login = NULL;
+	srv_ftp->config.login = NULL;
+
+	// g_login = NULL;
 	ftp_srv_pi_send_response(srv_ftp, 530, "Login incorrect.");
 
 	/*
@@ -298,27 +301,32 @@ void	ftp_srv_builtin_pass(t_srv_ftp *srv_ftp, char **args)
 
 	i = 0;
 	// state = FALSE;
-	if (g_login == NULL)
+	if (srv_ftp->config.login == NULL)
 	{
 		ftp_srv_pi_send_response(srv_ftp, 503, "Login with USER first.");
-		return;
+		return ;
 	}
 	while (args && args[1] && g_account[i].password)
 	{
-		if (ft_strcmp(g_login, g_account[i].username) == 0 &&
+		if (ft_strcmp(srv_ftp->config.login, g_account[i].username) == 0 &&
 			ft_strcmp(args[1], g_account[i].password) == 0)
 		{
 			// g_cmd_cli_list[i].builtin(cli_ftp, args);
-			g_login = args[1];
+			// g_login = args[1];
+			srv_ftp->config.is_logged = TRUE;
 			ftp_srv_pi_send_response(srv_ftp, 230, "Login successful.");
-			g_is_logged = TRUE;
+			// g_is_logged = TRUE;
+
 			// ftp_srv_pi_send_response(srv_ftp, 331, "Please pawword.");
 			// state = TRUE;
 			return;
 		}
 		++i;
 	}
-	g_login = NULL;
+	// g_login = NULL;
+// puts(srv_ftp->config.login);
+
+	srv_ftp->config.login = NULL;
 	ftp_srv_pi_send_response(srv_ftp, 530, "Password incorrect.");
 
 	/*

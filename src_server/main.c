@@ -39,6 +39,8 @@ int				main(int ac, char **av)
 	srv_ftp.config.mode_ftp = MODE_FTP_DEFAULT;
 	srv_ftp.config.type = TYPE_DEFAULT;
 	srv_ftp.config.path_srv = ftp_srv_fs_get_path();
+	srv_ftp.config.login = NULL;
+	srv_ftp.config.is_logged = FALSE;
 	ftp_create_socket(&srv_ftp);
 	return (0);
 }

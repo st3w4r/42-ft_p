@@ -60,8 +60,8 @@ static t_account	g_account[] =
 	{0}
 };
 
-static char*	g_login = NULL;
-static t_bool	g_is_logged = FALSE;
+// static char*		g_login = NULL;
+// static t_bool		g_is_logged = FALSE;
 
 typedef enum	e_type
 {
@@ -80,6 +80,8 @@ typedef struct	s_srv_config
 	t_type		type;
 	t_mode_ftp	mode_ftp;
 	char		*path_srv;
+	char		*login;
+	t_bool		is_logged;
 }				t_srv_config;
 
 typedef struct	s_srv_ftp
