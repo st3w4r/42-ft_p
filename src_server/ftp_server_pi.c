@@ -42,32 +42,6 @@ static t_bool	ftp_srv_pi_search_builtins(t_srv_ftp *srv_ftp, char **args)
 	return (state);
 }
 
-static void		ftp_read_on_socket(t_srv_ftp *srv_ftp)
-{
-	char	*path;
-	char	**args;
-	char	buf[1024];
-	int		r;
-
-	while ((r = read(srv_ftp->cs, buf, 1023)) > 0)
-	{
-		buf[r] = '\0';
-		// puts("EOL");
-		// ft_putnbr(r);
-
-		ft_strreplace_char(buf, '\n', '\0');
-		ft_strreplace_char(buf, '\r', '\0');
-		// ft_strreplace_char(buf, '\n', '\0');
-		args = ft_strsplit(buf, ' ');
-		// puts(args[0]);
-		ftp_srv_pi_search_builtins(srv_ftp, args);
-		send(srv_ftp->cs, "\r\n", 2, 0);
-		// ftp_fork_process(args[0], args);
-		ft_arrfree(&args);
-		// send(srv_ftp->cs, NULL, r, 0);
-	}
-}
-
 static void		ftp_recv_on_socket(t_srv_ftp *srv_ftp)
 {
 	int		r;
@@ -154,7 +128,6 @@ void			ftp_create_socket(t_srv_ftp *srv_ftp)
 		else if (pid == 0)
 		{
 			ftp_recv_on_socket(srv_ftp);
-			// ftp_read_on_socket(srv_ftp);
 			ftp_srv_ui_display_cmd(srv_ftp, "[DISCONNECTED]");
 			close(srv_ftp->sock);
 			exit(0);

@@ -85,7 +85,8 @@ void		ftp_loop(t_cli_ftp *cli_ftp)
 		if (sended && g_need_read)
 		{
 			msg = ftp_cli_pi_recive_data(cli_ftp->sock_ctl);
-			ft_putstr(msg);
+			// ft_putstr(msg);
+			ftp_receive_msg(msg);
 			free(msg);
 		}
 		sended = FALSE;

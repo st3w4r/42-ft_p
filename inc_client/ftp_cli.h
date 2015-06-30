@@ -140,7 +140,7 @@ void	ftp_cli_builtin_size(t_cli_ftp *cli_ftp, char **args);
 ** Desc: Fucntions helpers
 */
 // void	ftp_display_prompt(void);
-void	ftp_receive_msg(t_bool done);
+void	ftp_receive_msg(char *msg);
 t_res	ftp_parse_response(char *response);
 char	*ftp_create_cmd_line(char *name, char **args);
 void	ftp_parse_addr_port(t_cli_ftp *cli_ftp, char *msg);

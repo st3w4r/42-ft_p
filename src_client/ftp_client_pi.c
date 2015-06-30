@@ -100,7 +100,7 @@ void	ftp_cli_pi_open_data_channel(t_cli_ftp *cli_ftp)
 	res = ftp_parse_response(data);
 	if (res.code == 227)
 	{
-		ft_putstr(data);
+		ftp_receive_msg(data);
 		ftp_parse_addr_port(cli_ftp, data);
 		ftp_cli_dtp_create_channel(cli_ftp);
 	}

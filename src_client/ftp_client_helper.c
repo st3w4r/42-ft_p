@@ -12,12 +12,26 @@
 
 #include "ftp_cli.h"
 
-void	ftp_receive_msg(t_bool done)
+void	ftp_receive_msg(char *msg)
 {
-	if (done)
-		ft_putstr_fd("\033[1;34mSUCCESS\n\033[0m", 1);
+	t_res res;
+
+	res = ftp_parse_response(msg);
+	if (res.code >= 100 && res.code < 300)
+	{
+		ft_putstr_fd("\033[1;34m", 1);
+		ft_putstr_fd(msg, 1);
+		ft_putstr_fd("\033[0m", 1);
+	}
+	else if (res.code >= 300 && res.code < 600)
+	{
+		ft_putstr_fd("\033[1;31m", 2);
+		ft_putstr_fd(msg, 2);
+		ft_putstr_fd("\033[0m", 2);
+	}
 	else
-		ft_putstr_fd("\033[1;31mERROR\n\033[0m", 2);
+		ft_putstr_fd(msg, 1);
+	free(res.msg);
 }
 
 t_res	ftp_parse_response(char *response)
