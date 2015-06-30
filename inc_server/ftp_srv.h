@@ -203,6 +203,7 @@ static t_cmd_nvt	g_cmd_nvt_list[] =
 	{ "TYPE",	NULL, ftp_srv_builtin_type},
 	{ "SIZE",	NULL, ftp_srv_builtin_size},
 	{ "MKD",	NULL, ftp_srv_builtin_mkdir},
+	{ "RMD",	NULL, ftp_srv_builtin_rmdir},
 	{ 0 }
 };
 

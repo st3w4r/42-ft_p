@@ -461,6 +461,30 @@ void	ftp_srv_builtin_size(t_srv_ftp *srv_ftp, char **args)
 
 void	ftp_srv_builtin_mkdir(t_srv_ftp *srv_ftp, char **args)
 {
+	// struct stat	info;
+	int		fd;
+	char	*file;
+
+	file = ft_strdup(args[1]);
+	if (ft_arrlen(args) == 2 &&
+		ftp_srv_fs_file_allow(srv_ftp, &file) == TRUE)
+	{
+		if ((fd = opendir(file)) == -1)
+		{
+			if (mkdir(args[1], 0700) == 0)
+				ftp_srv_pi_send_response(srv_ftp, 257, "Directory created.");
+			close(fd);
+		}
+		else
+			ftp_srv_pi_send_response(srv_ftp, 550, "Directory exist.");
+	}
+	else
+		ftp_srv_pi_send_response(srv_ftp, 550, "Error");
+	free(file);
+}
+
+void	ftp_srv_builtin_rmdir(t_srv_ftp *srv_ftp, char **args)
+{
 	struct stat	info;
 	char *file;
 
