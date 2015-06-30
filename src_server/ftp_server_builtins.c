@@ -252,7 +252,25 @@ void	ftp_srv_builtin_quit(t_srv_ftp *srv_ftp, char **args)
 
 void	ftp_srv_builtin_user(t_srv_ftp *srv_ftp, char **args)
 {
-	ftp_srv_pi_send_response(srv_ftp, 331, "Please pawword.");
+	// t_bool	state;
+	int		i;
+
+	i = 0;
+	// state = FALSE;
+	while (args && args[1] && g_account[i].username)
+	{
+		if (ft_strcmp(args[1], g_account[i].username) == 0)
+		{
+			// g_cmd_cli_list[i].builtin(cli_ftp, args);
+			g_login = args[1];
+			ftp_srv_pi_send_response(srv_ftp, 331, "Please pawword.");
+			// state = TRUE;
+			return;
+		}
+		++i;
+	}
+	g_login = NULL;
+	ftp_srv_pi_send_response(srv_ftp, 530, "Login incorrect.");
 
 	/*
 	ft_putstr_fd("\n", 1);
@@ -273,7 +291,35 @@ void	ftp_srv_builtin_user(t_srv_ftp *srv_ftp, char **args)
 
 void	ftp_srv_builtin_pass(t_srv_ftp *srv_ftp, char **args)
 {
-	ftp_srv_pi_send_response(srv_ftp, 230, "Login successful.");
+	// ftp_srv_pi_send_response(srv_ftp, 230, "Login successful.");
+
+
+	int		i;
+
+	i = 0;
+	// state = FALSE;
+	if (g_login == NULL)
+	{
+		ftp_srv_pi_send_response(srv_ftp, 503, "Login with USER first.");
+		return;
+	}
+	while (args && args[1] && g_account[i].password)
+	{
+		if (ft_strcmp(g_login, g_account[i].username) == 0 &&
+			ft_strcmp(args[1], g_account[i].password) == 0)
+		{
+			// g_cmd_cli_list[i].builtin(cli_ftp, args);
+			g_login = args[1];
+			ftp_srv_pi_send_response(srv_ftp, 230, "Login successful.");
+			g_is_logged = TRUE;
+			// ftp_srv_pi_send_response(srv_ftp, 331, "Please pawword.");
+			// state = TRUE;
+			return;
+		}
+		++i;
+	}
+	g_login = NULL;
+	ftp_srv_pi_send_response(srv_ftp, 530, "Password incorrect.");
 
 	/*
 	ft_putstr_fd("\n", 1);

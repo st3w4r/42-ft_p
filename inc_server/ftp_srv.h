@@ -49,6 +49,20 @@ static t_res	g_res_list[] =
 	{0}
 };
 
+typedef struct	s_account {
+	char*	username;
+	char*	password;
+}				t_account;
+
+static t_account	g_account[] =
+{
+	{"anonymous", "1234"},
+	{0}
+};
+
+static char*	g_login = NULL;
+static t_bool	g_is_logged = FALSE;
+
 typedef enum	e_type
 {
 	ASCII = 0,
