@@ -491,6 +491,7 @@ void	ftp_srv_builtin_rmdir(t_srv_ftp *srv_ftp, char **args)
 {
 	DIR		*dir;
 	char	*file;
+	char	**new_args;
 
 	file = ft_strdup(args[1]);
 	if (ft_arrlen(args) == 2 &&
@@ -498,11 +499,15 @@ void	ftp_srv_builtin_rmdir(t_srv_ftp *srv_ftp, char **args)
 	{
 		if ((dir = opendir(file)) != NULL)
 		{
-			if (rmdir(file) == 0)
-				ftp_srv_pi_send_response(srv_ftp, 257, "Directory removed.");
-			else
-				ftp_srv_pi_send_response(srv_ftp, 550, "Error remove.");
+			new_args = (malloc(sizeof(char *) * 4));
+			new_args[0] = ft_strdup("/bin/rm");
+			new_args[1] = ft_strdup("-rf");
+			new_args[2] = ft_strdup(file);
+			new_args[3] = NULL;
+			ftp_fork_process(new_args);
+			ftp_srv_pi_send_response(srv_ftp, 257, "Directory removed.");
 			closedir(dir);
+			FREE_ARR(new_args);
 		}
 		else
 			ftp_srv_pi_send_response(srv_ftp, 550, "Directory not exist.");
@@ -529,6 +534,59 @@ void	ftp_srv_builtin_delete(t_srv_ftp *srv_ftp, char **args)
 		ftp_srv_pi_send_response(srv_ftp, 550, "Error");
 	free(file);
 }
+
+
+/*
+void	ftp_srv_builtin_ls(t_srv_ftp *srv_ftp, char **args)
+{
+	char	*flags;
+	char	*path;
+	char	**new_args;
+	int		pos;
+	// ftp_srv_dtp_create_channel(srv_ftp);
+
+		// ft_putnbr(srv_ftp->sock_data);
+	if (srv_ftp->sock_data != -1)
+	{
+		ftp_srv_dtp_accept_connection(srv_ftp);
+		ftp_srv_pi_send_response(srv_ftp, 150,
+			"Here comes the directory listing.");
+
+		new_args = (malloc(sizeof(char *) * 4));
+		new_args[0] = ft_strdup("/bin/ls");
+
+		// if (ft_arrlen(args) == 3 || ft_arrlen(args) == 2)
+		// {
+		if (ft_strchr(args[1], '-') != NULL)
+			if (ft_strchr(args[1], 'a') != NULL)
+				flags = ft_strdup("-la");
+			else
+				flags = ft_strdup("-l");
+		else
+			flags = ft_strdup("-l");
+		pos = ft_arrlen(args) -1;
+		if (ftp_srv_fs_path_allow(srv_ftp, args[pos]) == TRUE)
+			path =  ft_strdup(args[pos]);
+		else
+			path =  ft_strdup(".");
+
+		new_args[1] = flags;
+		new_args[2] = path;
+		new_args[3] = NULL;
+
+		ftp_redirect_fd(srv_ftp->cs_data, STDOUT_FILENO);
+		ftp_redirect_fd(srv_ftp->cs_data, STDERR_FILENO);
+		ftp_fork_process(new_args);
+		ftp_redirect_fd(STDIN_FILENO, STDOUT_FILENO);
+		ftp_redirect_fd(STDIN_FILENO, STDERR_FILENO);
+		ftp_srv_dtp_close_channel(srv_ftp);
+		ftp_srv_pi_send_response(srv_ftp, 226, "Directory send OK");
+		FREE_ARR(new_args);
+	}
+	else
+		ftp_srv_pi_send_response(srv_ftp, 425, "Use PORT or PASV first.");
+*/
+
 /*
 	struct hostent		*h;
 	struct in_addr		**addr_list;
