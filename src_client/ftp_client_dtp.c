@@ -55,7 +55,6 @@ void	ftp_cli_dtp_create_channel(t_cli_ftp *cli_ftp)
 	proto = getprotobyname("tcp");
 	if (proto == 0)
 		ft_error_str_exit("Proto error\n");
-
 	sock = socket(PF_INET, SOCK_STREAM, proto->p_proto);
 	sin.sin_family = AF_INET;
 	sin.sin_port = htons(cli_ftp->port_data);

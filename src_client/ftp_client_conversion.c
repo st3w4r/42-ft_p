@@ -12,7 +12,7 @@
 
 #include "ftp_cli.h"
 
-char*	ftp_cli_unix_to_dos(char *buf)
+char	*ftp_cli_unix_to_dos(char *buf)
 {
 	size_t	i;
 	size_t	j;
@@ -39,7 +39,7 @@ char*	ftp_cli_unix_to_dos(char *buf)
 	return (new_str);
 }
 
-char*	ftp_cli_dos_to_unix(char *buf)
+char	*ftp_cli_dos_to_unix(char *buf)
 {
 	size_t	i;
 	size_t	j;
@@ -68,7 +68,7 @@ char*	ftp_cli_dos_to_unix(char *buf)
 	return (new_str);
 }
 
-char*	ftp_cli_crlf(char *data, int from, int to)
+char	*ftp_cli_crlf(char *data, int from, int to)
 {
 	if (from == UNIX && to == DOS)
 		return (ftp_cli_unix_to_dos(data));

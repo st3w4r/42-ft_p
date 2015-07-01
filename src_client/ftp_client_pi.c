@@ -60,33 +60,31 @@ char		*ftp_cli_pi_recive_data(int sock)
 	char	buf[2];
 	char	*data;
 	int		r;
-	int		i;
-	t_bool	eol;
-	t_bool	cr;
+	t_bool	eol_cr[2];
 
-	eol = FALSE;
-	cr = FALSE;
+	eol_cr[0] = FALSE;
+	eol_cr[1] = FALSE;
 	data = ft_strdup("");
-	while (!eol)
+	while (!eol_cr[0])
 	{
 		if ((r = recv(sock, buf, 1, 0)) < 0)
 		{
 			ft_error_str("Receive error\n");
-			break;
+			break ;
 		}
 		buf[r] = '\0';
 		if (buf[0] == '\r')
-			cr = TRUE;
-		else if (cr && buf[0] == '\n')
-			eol = TRUE;
-		else if (cr && buf[0] != '\n')
-			cr = FALSE;
+			eol_cr[1] = TRUE;
+		else if (eol_cr[1] && buf[0] == '\n')
+			eol_cr[0] = TRUE;
+		else if (eol_cr[1] && buf[0] != '\n')
+			eol_cr[1] = FALSE;
 		data = ft_strjoin_free_l(data, buf);
 	}
 	return (data);
 }
 
-void	ftp_cli_pi_open_data_channel(t_cli_ftp *cli_ftp)
+void		ftp_cli_pi_open_data_channel(t_cli_ftp *cli_ftp)
 {
 	t_cmd_nvt	cmd;
 	t_res		res;

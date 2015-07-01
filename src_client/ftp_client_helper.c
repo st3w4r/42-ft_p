@@ -84,11 +84,10 @@ void	ftp_parse_addr_port(t_cli_ftp *cli_ftp, char *msg)
 	port = 256 * ft_atoi(msg_arr[4]) + ft_atoi(msg_arr[5]);
 	cli_ftp->addr_data = addr;
 	cli_ftp->port_data = port;
-	// printf("Addr: %s Port: %d\n", cli_ftp->addr_data, cli_ftp->port_data);
 	FREE_ARR(msg_arr);
 }
 
-void		ftp_fork_process(char **av)
+void	ftp_fork_process(char **av)
 {
 	pid_t			pid;
 

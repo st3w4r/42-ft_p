@@ -362,8 +362,7 @@ void	ftp_srv_builtin_rmdir(t_srv_ftp *srv_ftp, char **args)
 	char	**new_args;
 
 	file = ft_strdup(args[1]);
-	if (ft_arrlen(args) == 2 &&
-		ftp_srv_fs_file_allow(srv_ftp, &file) == TRUE)
+	if (ft_arrlen(args) == 2 && ftp_srv_fs_file_allow(srv_ftp, &file) == TRUE)
 	{
 		if ((dir = opendir(file)) != NULL)
 		{
@@ -374,7 +373,8 @@ void	ftp_srv_builtin_rmdir(t_srv_ftp *srv_ftp, char **args)
 			new_args[3] = NULL;
 			ftp_fork_process(new_args);
 			ftp_srv_pi_send_response(srv_ftp, 257, "Directory removed.");
-			closedir(dir), FREE_ARR(new_args);
+			closedir(dir);
+			FREE_ARR(new_args);
 		}
 		else
 			ftp_srv_pi_send_response(srv_ftp, 550, "Directory not exist.");

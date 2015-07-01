@@ -16,7 +16,7 @@ void			ftp_srv_pi_send_response(t_srv_ftp *srv_ftp, int co, char *msg)
 {
 	char *res;
 
-	res = ft_itoa(code);
+	res = ft_itoa(co);
 	res = ft_strjoin_free_l(res, " ");
 	res = ft_strjoin_free_l(res, msg);
 	res = ft_strjoin_free_l(res, "\r\n");

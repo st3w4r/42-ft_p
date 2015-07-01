@@ -26,51 +26,8 @@ static void		ftp_display_prompt(void)
 	ft_putstr("FTP $> ");
 	ft_putstr("\033[0m");
 }
-/*
-static void		ftp_loop_write(int sock)
-{
-	char	buf[2];
-	int		r;
-	int i;
-	t_bool	eol;
-	t_bool	cr;
 
-	eol = FALSE;
-	cr = FALSE;
-	while (!eol)
-	{
-		if ((r = recv(sock, buf, 1, 0)) < 0)
-		{
-			ft_error_str("Receive error\n");
-			break;
-		}
-		// ft_putnbr(recv(sock, buf, 1023, 0));
-
-		// ft_putnbr(r);
-		// ft_bzero(buf, 2);
-		buf[r] = '\0';
-		if (buf[0] == '\r')
-			cr = TRUE;
-		else if (cr && buf[0] == '\n')
-			eol = TRUE;
-		else if (cr && buf[0] != '\n')
-			cr = FALSE;
-		ft_putstr(buf);
-
-		// i = 0;
-		// while (buf[i])
-		// {
-		// 	write(1, buf, 1024);
-		// 	i += 100;
-		// }
-	}
-
-	// r = read(sock, buf, 1024);
-		// read = FALSE;
-	// write(1, buf, r);
-}*/
-
-void		ftp_loop(t_cli_ftp *cli_ftp)
+void			ftp_loop(t_cli_ftp *cli_ftp)
 {
 	char	*msg;
 	char	*line;
@@ -85,7 +42,6 @@ void		ftp_loop(t_cli_ftp *cli_ftp)
 		if (sended && g_need_read)
 		{
 			msg = ftp_cli_pi_recive_data(cli_ftp->sock_ctl);
-			// ft_putstr(msg);
 			ftp_receive_msg(msg);
 			free(msg);
 		}
@@ -98,12 +54,9 @@ void		ftp_loop(t_cli_ftp *cli_ftp)
 			ftp_cli_builtin_quit(cli_ftp, NULL);
 			break ;
 		}
-		// ftp_cli_pi_cmd(cli_ftp, line);
 		args = ft_strsplit(line, ' ');
 		sended = ftp_cli_pi_search_builtins(cli_ftp, args);
 		FREE_ARR(args);
-		// ftp_cli_pi_write(cli_ftp, line);
-		// write(sock, line, ft_strlen(line));
 		free(line);
 	}
 }
@@ -113,8 +66,6 @@ int				main(int ac, char **av)
 	t_cli_ftp		cli_ftp;
 	struct hostent	*host;
 	struct in_addr	*addr;
-	// int			port;
-	// int			sock;
 
 	if (ac != 3)
 		usage(av[0]);

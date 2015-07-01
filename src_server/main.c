@@ -27,11 +27,11 @@ static void		ftp_clean_process(int sig_number)
 
 static void		ftp_init_config(t_srv_ftp *srv_ftp)
 {
-	srv_ftp.config.mode_ftp = MODE_FTP_DEFAULT;
-	srv_ftp.config.type = TYPE_DEFAULT;
-	srv_ftp.config.path_srv = ftp_srv_fs_get_path();
-	srv_ftp.config.login = NULL;
-	srv_ftp.config.is_logged = FALSE;
+	srv_ftp->config.mode_ftp = MODE_FTP_DEFAULT;
+	srv_ftp->config.type = TYPE_DEFAULT;
+	srv_ftp->config.path_srv = ftp_srv_fs_get_path();
+	srv_ftp->config.login = NULL;
+	srv_ftp->config.is_logged = FALSE;
 }
 
 int				main(int ac, char **av)

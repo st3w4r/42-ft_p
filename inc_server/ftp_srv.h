@@ -27,7 +27,6 @@
 # include <signal.h>
 # include <dirent.h>
 
-
 # define TRUE 1
 # define FALSE 0
 
@@ -57,8 +56,8 @@ static t_res	g_res_list[] =
 };
 
 typedef struct	s_account {
-	char*	username;
-	char*	password;
+	char	*username;
+	char	*password;
 }				t_account;
 
 static t_account	g_account[] =
@@ -67,9 +66,6 @@ static t_account	g_account[] =
 	{"yana", "test"},
 	{0}
 };
-
-// static char*		g_login = NULL;
-// static t_bool		g_is_logged = FALSE;
 
 typedef enum	e_type
 {
@@ -101,96 +97,89 @@ typedef struct	s_srv_ftp
 	int					cs;
 	int					cs_data;
 	struct sockaddr_in	csin;
-	t_srv_config	config;
+	t_srv_config		config;
 
 }				t_srv_ftp;
-
 
 /*
 ** Name: ftp_server_pi
 ** File: ftp_server_pi.c
 ** Desc: Fucntions start server
 */
-void	ftp_srv_pi_send_response(t_srv_ftp *srv_ftp, int co, char *msg);
-void	ftp_create_socket(t_srv_ftp *srv_ftp);
+void			ftp_srv_pi_send_response(t_srv_ftp *srv_ftp, int co, char *msg);
+void			ftp_create_socket(t_srv_ftp *srv_ftp);
 
 /*
 ** Name: ftp_server_dtp
 ** File: ftp_server_dtp.c
 ** Desc: Function of server Data Channel
 */
-void	ftp_srv_dtp_accept_connection(t_srv_ftp *srv_ftp);
-int		ftp_srv_dtp_create_channel(t_srv_ftp *srv_ftp);
-void	ftp_srv_dtp_close_channel(t_srv_ftp *srv_ftp);
-void	ftp_srv_dtp_send_data(t_srv_ftp *srv_ftp, char *data, int len);
-char	*ftp_srv_dtp_read_on_channel_one(t_srv_ftp *srv_ftp, int *len);
+void			ftp_srv_dtp_accept_connection(t_srv_ftp *srv_ftp);
+int				ftp_srv_dtp_create_channel(t_srv_ftp *srv_ftp);
+void			ftp_srv_dtp_close_channel(t_srv_ftp *srv_ftp);
+void			ftp_srv_dtp_send_data(t_srv_ftp *srv_ftp, char *data, int len);
+char			*ftp_srv_dtp_read_on_channel_one(t_srv_ftp *srv_ftp, int *len);
 
 /*
 ** Name: ftp_server_file
 ** File: ftp_server_file.c
 ** Desc: Function of File System
 */
-int		ftp_srv_fs_create_file(char *name);
-int		ftp_srv_fs_open_file(char *name);
-char	*ftp_srv_fs_read_file(int fd, int *len);
-t_bool	ftp_srv_fs_write_in_file(int fd, char *data, int len);
-int		ftp_srv_fs_size_file(int fd);
-char	*ftp_srv_fs_get_path(void);
-t_bool	ftp_srv_fs_path_allow(t_srv_ftp *srv_ftp, char *path);
-t_bool	ftp_srv_fs_file_allow(t_srv_ftp *srv_ftp, char **file);
+int				ftp_srv_fs_create_file(char *name);
+int				ftp_srv_fs_open_file(char *name);
+char			*ftp_srv_fs_read_file(int fd, int *len);
+t_bool			ftp_srv_fs_write_in_file(int fd, char *data, int len);
+int				ftp_srv_fs_size_file(int fd);
+char			*ftp_srv_fs_get_path(void);
+t_bool			ftp_srv_fs_path_allow(t_srv_ftp *srv_ftp, char *path);
+t_bool			ftp_srv_fs_file_allow(t_srv_ftp *srv_ftp, char **file);
 
 /*
 ** Name: ftp_server_builtins
 ** File: ftp_server_builtins.c
 ** Desc: All builtins servers
 */
-void	ftp_srv_builtin_ls(t_srv_ftp *srv_ftp, char **args);
-void	ftp_srv_builtin_cd(t_srv_ftp *srv_ftp, char **args);
-void	ftp_srv_builtin_pwd(t_srv_ftp *srv_ftp, char **args);
-void	ftp_srv_builtin_get(t_srv_ftp *srv_ftp, char **args);
-void	ftp_srv_builtin_put(t_srv_ftp *srv_ftp, char **args);
-void	ftp_srv_builtin_quit(t_srv_ftp *srv_ftp, char **args);
-void	ftp_srv_builtin_user(t_srv_ftp *srv_ftp, char **args);
-void	ftp_srv_builtin_pass(t_srv_ftp *srv_ftp, char **args);
-void	ftp_srv_builtin_noop(t_srv_ftp *srv_ftp, char **args);
+void			ftp_srv_builtin_ls(t_srv_ftp *srv_ftp, char **args);
+void			ftp_srv_builtin_cd(t_srv_ftp *srv_ftp, char **args);
+void			ftp_srv_builtin_pwd(t_srv_ftp *srv_ftp, char **args);
+void			ftp_srv_builtin_get(t_srv_ftp *srv_ftp, char **args);
+void			ftp_srv_builtin_put(t_srv_ftp *srv_ftp, char **args);
+void			ftp_srv_builtin_quit(t_srv_ftp *srv_ftp, char **args);
+void			ftp_srv_builtin_user(t_srv_ftp *srv_ftp, char **args);
+void			ftp_srv_builtin_pass(t_srv_ftp *srv_ftp, char **args);
+void			ftp_srv_builtin_noop(t_srv_ftp *srv_ftp, char **args);
 
-void	ftp_srv_builtin_pasv(t_srv_ftp *srv_ftp, char **args);
-void	ftp_srv_builtin_port(t_srv_ftp *srv_ftp, char **args);
-void	ftp_srv_builtin_type(t_srv_ftp *srv_ftp, char **args);
-void	ftp_srv_builtin_size(t_srv_ftp *srv_ftp, char **args);
-void	ftp_srv_builtin_mkdir(t_srv_ftp *srv_ftp, char **args);
-void	ftp_srv_builtin_rmdir(t_srv_ftp *srv_ftp, char **args);
-void	ftp_srv_builtin_delete(t_srv_ftp *srv_ftp, char **args);
+void			ftp_srv_builtin_pasv(t_srv_ftp *srv_ftp, char **args);
+void			ftp_srv_builtin_port(t_srv_ftp *srv_ftp, char **args);
+void			ftp_srv_builtin_type(t_srv_ftp *srv_ftp, char **args);
+void			ftp_srv_builtin_size(t_srv_ftp *srv_ftp, char **args);
+void			ftp_srv_builtin_mkdir(t_srv_ftp *srv_ftp, char **args);
+void			ftp_srv_builtin_rmdir(t_srv_ftp *srv_ftp, char **args);
+void			ftp_srv_builtin_delete(t_srv_ftp *srv_ftp, char **args);
 
 /*
 ** Name: ftp_server_helper
 ** File: ftp_server_helper.c
 ** Desc: Function supplementary for server
 */
-void	ftp_redirect_fd(int srcfd, int dstfd);
-void	ftp_fork_process(char **av);
-/*
-char	*ft_str_toupper(char *str);
-char	*ft_str_arrjoin(char **str);
-void	ft_str_arrfree(char **arr_str);
-*/
+void			ftp_redirect_fd(int srcfd, int dstfd);
+void			ftp_fork_process(char **av);
 
 /*
 ** Name: ftp_server_conversion
 ** File: ftp_server_conversion.c
 ** Desc: Function conversion unix dos
 */
-char*	ftp_srv_dos_to_unix(char *buf);
-char*	ftp_srv_unix_to_dos(char *buf);
-char*	ftp_srv_crlf(char *data, int from, int to);
-
+char			*ftp_srv_dos_to_unix(char *buf);
+char			*ftp_srv_unix_to_dos(char *buf);
+char			*ftp_srv_crlf(char *data, int from, int to);
 
 /*
 ** Name: ftp_server_helper
 ** File: ftp_server_helper.c
 ** Desc: Function supplementary for server
 */
-void	ftp_srv_ui_display_cmd(t_srv_ftp *srv_ftp, char *cmd);
+void			ftp_srv_ui_display_cmd(t_srv_ftp *srv_ftp, char *cmd);
 
 /*
 ** Name: Struct of commands nvt, list in a global array.
@@ -201,31 +190,28 @@ typedef struct	s_cmd_nvt
 {
 	char			*name;
 	char			**args;
-	// char			*line_send;
 	t_builtin_func	builtin;
 }				t_cmd_nvt;
 
 static t_cmd_nvt	g_cmd_nvt_list[] =
 {
-	{ "LIST",	NULL, ftp_srv_builtin_ls},
-	{ "CWD",	NULL, ftp_srv_builtin_cd},
-	{ "PWD",	NULL, ftp_srv_builtin_pwd},
-	{ "RETR",	NULL, ftp_srv_builtin_get},
-	{ "STOR",	NULL, ftp_srv_builtin_put},
-	{ "QUIT",	NULL, ftp_srv_builtin_quit},
-	{ "USER",	NULL, ftp_srv_builtin_user},
-	{ "PASS",	NULL, ftp_srv_builtin_pass},
-	{ "NOOP",	NULL, ftp_srv_builtin_noop},
-	{ "PASV",	NULL, ftp_srv_builtin_pasv},
-	{ "PORT",	NULL, ftp_srv_builtin_port},
-	{ "TYPE",	NULL, ftp_srv_builtin_type},
-	{ "SIZE",	NULL, ftp_srv_builtin_size},
-	{ "MKD",	NULL, ftp_srv_builtin_mkdir},
-	{ "RMD",	NULL, ftp_srv_builtin_rmdir},
-	{ "DELE",	NULL, ftp_srv_builtin_delete},
+	{ "LIST", NULL, ftp_srv_builtin_ls},
+	{ "CWD", NULL, ftp_srv_builtin_cd},
+	{ "PWD", NULL, ftp_srv_builtin_pwd},
+	{ "RETR", NULL, ftp_srv_builtin_get},
+	{ "STOR", NULL, ftp_srv_builtin_put},
+	{ "QUIT", NULL, ftp_srv_builtin_quit},
+	{ "USER", NULL, ftp_srv_builtin_user},
+	{ "PASS", NULL, ftp_srv_builtin_pass},
+	{ "NOOP", NULL, ftp_srv_builtin_noop},
+	{ "PASV", NULL, ftp_srv_builtin_pasv},
+	{ "PORT", NULL, ftp_srv_builtin_port},
+	{ "TYPE", NULL, ftp_srv_builtin_type},
+	{ "SIZE", NULL, ftp_srv_builtin_size},
+	{ "MKD", NULL, ftp_srv_builtin_mkdir},
+	{ "RMD", NULL, ftp_srv_builtin_rmdir},
+	{ "DELE", NULL, ftp_srv_builtin_delete},
 	{ 0 }
 };
-
-
 
 #endif
