@@ -126,7 +126,7 @@ void			ftp_cli_builtin_delete(t_cli_ftp *cli_ftp, char **args);
 ** File: ftp_server_conversion.c
 ** Desc: Function conversion unix dos
 */
-char			*ftp_cli_crlf(char *data, int len, int from, int to);
+char			*ftp_cli_crlf(char *data, int from, int to);
 
 /*
 ** Name: ftp_client_helper
