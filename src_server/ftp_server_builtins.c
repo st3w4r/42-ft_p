@@ -138,6 +138,7 @@ void	ftp_srv_builtin_get(t_srv_ftp *srv_ftp, char **args)
 	int		len_data;
 	char	*data;
 	char	*msg;
+	char	*new_data;
 
 	if (srv_ftp->sock_data != -1)
 	{
@@ -154,7 +155,14 @@ void	ftp_srv_builtin_get(t_srv_ftp *srv_ftp, char **args)
 			free(msg);
 			while ((data = ftp_srv_fs_read_file(fd, &len_data)))
 			{
-				ftp_srv_dtp_send_data(srv_ftp, data, len_data);
+				if (srv_ftp->config.type == ASCII)
+				{
+					new_data = ftp_srv_crlf(data, SRV_CONF, CLI_CONF);
+					ftp_srv_dtp_send_data(srv_ftp, new_data, len_data);
+					free(new_data);
+				}
+				else
+					ftp_srv_dtp_send_data(srv_ftp, data, len_data);
 				free(data);
 			}
 			ftp_srv_dtp_close_channel(srv_ftp);
@@ -188,6 +196,7 @@ void	ftp_srv_builtin_put(t_srv_ftp *srv_ftp, char **args)
 	int		fd_create;
 	int		len;
 	char	*data_one;
+	char	*new_data;
 
 	if (srv_ftp->sock_data != -1)
 	{
@@ -201,9 +210,9 @@ void	ftp_srv_builtin_put(t_srv_ftp *srv_ftp, char **args)
 			{
 				if (srv_ftp->config.type == ASCII)
 				{
-				puts("In");
-					ftp_srv_fs_write_in_file(fd_create,
-						ftp_srv_crlf(data_one, CLI_CONF, SRV_CONF), len);
+					new_data = ftp_srv_crlf(data_one, CLI_CONF, SRV_CONF);
+					ftp_srv_fs_write_in_file(fd_create, new_data,len);
+					free(new_data);
 				}
 				else
 					ftp_srv_fs_write_in_file(fd_create, data_one, len);
