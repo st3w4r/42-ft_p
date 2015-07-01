@@ -131,6 +131,8 @@ void	ftp_cli_builtin_binary(t_cli_ftp *cli_ftp, char **args);
 void	ftp_cli_builtin_ascii(t_cli_ftp *cli_ftp, char **args);
 void	ftp_cli_builtin_size(t_cli_ftp *cli_ftp, char **args);
 void	ftp_cli_builtin_mkdir(t_cli_ftp *cli_ftp, char **args);
+void	ftp_cli_builtin_rmdir(t_cli_ftp *cli_ftp, char **args);
+void	ftp_cli_builtin_delete(t_cli_ftp *cli_ftp, char **args);
 
 
 
@@ -176,6 +178,7 @@ static t_cmd_cli	g_cmd_cli_list[] =
 	{"size", ftp_cli_builtin_size},
 	{"mkdir", ftp_cli_builtin_mkdir},
 	{"rmdir", ftp_cli_builtin_rmdir},
+	{"delete", ftp_cli_builtin_delete},
 	{0}
 };
 

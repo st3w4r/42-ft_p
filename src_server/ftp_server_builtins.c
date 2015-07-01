@@ -462,21 +462,25 @@ void	ftp_srv_builtin_size(t_srv_ftp *srv_ftp, char **args)
 void	ftp_srv_builtin_mkdir(t_srv_ftp *srv_ftp, char **args)
 {
 	// struct stat	info;
-	int		fd;
+	DIR		*dir;
 	char	*file;
 
 	file = ft_strdup(args[1]);
 	if (ft_arrlen(args) == 2 &&
 		ftp_srv_fs_file_allow(srv_ftp, &file) == TRUE)
 	{
-		if ((fd = opendir(file)) == -1)
+		if ((dir = opendir(file)) == NULL)
 		{
 			if (mkdir(args[1], 0700) == 0)
 				ftp_srv_pi_send_response(srv_ftp, 257, "Directory created.");
-			close(fd);
+			else
+				ftp_srv_pi_send_response(srv_ftp, 257, "Error create.");
 		}
 		else
+		{
+			closedir(dir);
 			ftp_srv_pi_send_response(srv_ftp, 550, "Directory exist.");
+		}
 	}
 	else
 		ftp_srv_pi_send_response(srv_ftp, 550, "Error");
@@ -485,20 +489,41 @@ void	ftp_srv_builtin_mkdir(t_srv_ftp *srv_ftp, char **args)
 
 void	ftp_srv_builtin_rmdir(t_srv_ftp *srv_ftp, char **args)
 {
-	struct stat	info;
-	char *file;
+	DIR		*dir;
+	char	*file;
 
 	file = ft_strdup(args[1]);
 	if (ft_arrlen(args) == 2 &&
 		ftp_srv_fs_file_allow(srv_ftp, &file) == TRUE)
 	{
-		if (stat(args[1], &info) == -1)
+		if ((dir = opendir(file)) != NULL)
 		{
-			if (mkdir(args[1], 0700) == 0)
-				ftp_srv_pi_send_response(srv_ftp, 257, "Directory created.");
+			if (rmdir(file) == 0)
+				ftp_srv_pi_send_response(srv_ftp, 257, "Directory removed.");
+			else
+				ftp_srv_pi_send_response(srv_ftp, 550, "Error remove.");
+			closedir(dir);
 		}
 		else
-			ftp_srv_pi_send_response(srv_ftp, 550, "Directory exist.");
+			ftp_srv_pi_send_response(srv_ftp, 550, "Directory not exist.");
+	}
+	else
+		ftp_srv_pi_send_response(srv_ftp, 550, "Error");
+	free(file);
+}
+
+void	ftp_srv_builtin_delete(t_srv_ftp *srv_ftp, char **args)
+{
+	char	*file;
+
+	file = ft_strdup(args[1]);
+	if (ft_arrlen(args) == 2 &&
+		ftp_srv_fs_file_allow(srv_ftp, &file) == TRUE)
+	{
+		if (unlink(file) == 0)
+			ftp_srv_pi_send_response(srv_ftp, 257, "File removed.");
+		else
+			ftp_srv_pi_send_response(srv_ftp, 550, "Error remove.");
 	}
 	else
 		ftp_srv_pi_send_response(srv_ftp, 550, "Error");

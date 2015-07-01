@@ -25,6 +25,7 @@
 # include <arpa/inet.h>
 # include <ifaddrs.h>
 # include <signal.h>
+# include <dirent.h>
 
 
 # define TRUE 1
@@ -152,6 +153,8 @@ void	ftp_srv_builtin_port(t_srv_ftp *srv_ftp, char **args);
 void	ftp_srv_builtin_type(t_srv_ftp *srv_ftp, char **args);
 void	ftp_srv_builtin_size(t_srv_ftp *srv_ftp, char **args);
 void	ftp_srv_builtin_mkdir(t_srv_ftp *srv_ftp, char **args);
+void	ftp_srv_builtin_rmdir(t_srv_ftp *srv_ftp, char **args);
+void	ftp_srv_builtin_delete(t_srv_ftp *srv_ftp, char **args);
 
 /*
 ** Name: ftp_server_helper
@@ -204,6 +207,7 @@ static t_cmd_nvt	g_cmd_nvt_list[] =
 	{ "SIZE",	NULL, ftp_srv_builtin_size},
 	{ "MKD",	NULL, ftp_srv_builtin_mkdir},
 	{ "RMD",	NULL, ftp_srv_builtin_rmdir},
+	{ "DELE",	NULL, ftp_srv_builtin_delete},
 	{ 0 }
 };
 
