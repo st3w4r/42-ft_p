@@ -27,6 +27,12 @@
 
 # define FREE_ARR(x) { if (x) ft_arrfree(&x); }
 
+# define UNIX 1
+# define DOS 2
+
+# define SRV_CONF DOS
+# define CLI_CONF UNIX
+
 typedef unsigned char	t_bool;
 
 typedef struct	s_res {

@@ -27,9 +27,17 @@ static void		ftp_display_prompt(void)
 	ft_putstr("\033[0m");
 }
 
-void			ftp_loop(t_cli_ftp *cli_ftp)
+static void		ftp_need_read(t_cli_ftp *cli_ftp)
 {
 	char	*msg;
+
+	msg = ftp_cli_pi_recive_data(cli_ftp->sock_ctl);
+	ftp_receive_msg(msg);
+	free(msg);
+}
+
+void			ftp_loop(t_cli_ftp *cli_ftp)
+{
 	char	*line;
 	char	**args;
 	int		r;
@@ -40,11 +48,7 @@ void			ftp_loop(t_cli_ftp *cli_ftp)
 	while (42)
 	{
 		if (sended && g_need_read)
-		{
-			msg = ftp_cli_pi_recive_data(cli_ftp->sock_ctl);
-			ftp_receive_msg(msg);
-			free(msg);
-		}
+			ftp_need_read(cli_ftp);
 		sended = FALSE;
 		g_need_read = TRUE;
 		ftp_display_prompt();
