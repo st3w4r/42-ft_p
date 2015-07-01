@@ -36,6 +36,12 @@
 # define TYPE_DEFAULT BINARY
 # define MODE_FTP_DEFAULT PASSIVE
 
+# define UNIX 1
+# define DOS 2
+
+# define SRV_CONF DOS
+# define CLI_CONF UNIX
+
 typedef unsigned char	t_bool;
 
 typedef struct	s_res {
@@ -168,6 +174,15 @@ char	*ft_str_toupper(char *str);
 char	*ft_str_arrjoin(char **str);
 void	ft_str_arrfree(char **arr_str);
 */
+
+/*
+** Name: ftp_server_conversion
+** File: ftp_server_conversion.c
+** Desc: Function conversion unix dos
+*/
+char*	ftp_srv_dos_to_unix(char *buf);
+char*	ftp_srv_unix_to_dos(char *buf);
+char*	ftp_srv_crlf(char *data, int from, int to);
 
 
 /*
