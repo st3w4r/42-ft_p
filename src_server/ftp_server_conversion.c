@@ -12,15 +12,6 @@
 
 #include "ftp_srv.h"
 
-// Mac2dos \r -> \r\n
-// dos2Mac \r\n -> \r
-//
-// Unix2dos \n -> \r\n
-// dos2Unix \n\r -> \n
-//
-// serveur convertit en dos
-
-// \n -> \r\n
 char*	ftp_srv_unix_to_dos(char *buf)
 {
 	size_t	i;
@@ -32,12 +23,12 @@ char*	ftp_srv_unix_to_dos(char *buf)
 	new_str = ft_strnew(ft_strlen(buf) + nb + 1);
 	i = 0;
 	j = 0;
-	while (buf && buf[i])
+	while (buf && buf[i] && i < ft_strlen(buf))
 	{
 		if (buf[i] == '\n')
 		{
-			new_str[j++] = '\n';
-			new_str[j] = '\r';
+			new_str[j++] = '\r';
+			new_str[j] = '\n';
 		}
 		else
 			new_str[j] = buf[i];
@@ -48,7 +39,6 @@ char*	ftp_srv_unix_to_dos(char *buf)
 	return (new_str);
 }
 
-// \r\n - > \n
 char*	ftp_srv_dos_to_unix(char *buf)
 {
 	size_t	i;

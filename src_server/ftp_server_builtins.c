@@ -199,7 +199,14 @@ void	ftp_srv_builtin_put(t_srv_ftp *srv_ftp, char **args)
 		{
 			while ((data_one = ftp_srv_dtp_read_on_channel_one(srv_ftp, &len)))
 			{
-				ftp_srv_fs_write_in_file(fd_create, data_one, len);
+				if (srv_ftp->config.type == ASCII)
+				{
+				puts("In");
+					ftp_srv_fs_write_in_file(fd_create,
+						ftp_srv_crlf(data_one, CLI_CONF, SRV_CONF), len);
+				}
+				else
+					ftp_srv_fs_write_in_file(fd_create, data_one, len);
 				free(data_one);
 			}
 			ftp_srv_dtp_close_channel(srv_ftp);

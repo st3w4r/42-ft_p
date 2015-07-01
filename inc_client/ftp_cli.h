@@ -134,8 +134,14 @@ void	ftp_cli_builtin_mkdir(t_cli_ftp *cli_ftp, char **args);
 void	ftp_cli_builtin_rmdir(t_cli_ftp *cli_ftp, char **args);
 void	ftp_cli_builtin_delete(t_cli_ftp *cli_ftp, char **args);
 
-
-
+/*
+** Name: ftp_server_conversion
+** File: ftp_server_conversion.c
+** Desc: Function conversion unix dos
+*/
+char*	ftp_srv_dos_to_unix(char *buf);
+char*	ftp_srv_unix_to_dos(char *buf);
+char*	ftp_srv_crlf(char *data, int from, int to);
 
 /*
 ** Name: ftp_client_helper

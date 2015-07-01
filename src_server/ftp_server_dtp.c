@@ -61,8 +61,6 @@ void	ftp_srv_dtp_send_data(t_srv_ftp *srv_ftp, char *data, int len)
 	if (srv_ftp->config.type == ASCII)
 	{
 		new_data = ftp_srv_crlf(data, SRV_CONF, CLI_CONF);
-		// new_data = ftp_srv_unix_to_dos(data);
-		// new_data = ftp_srv_dos_to_unix(data);
 		send(srv_ftp->cs_data, new_data, ft_strlen(new_data), 0);
 		free(new_data);
 	}
