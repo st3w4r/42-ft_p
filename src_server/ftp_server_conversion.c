@@ -54,15 +54,15 @@ char	*ftp_srv_dos_to_unix(char *buf)
 		if (buf[i] == '\r' && buf[i + 1] == '\n')
 		{
 			new_str[j] = '\n';
-			new_str[j + 1] = '\0';
 			i += 2;
+			j++;
 		}
 		else
 		{
 			new_str[j] = buf[i];
 			i++;
+			j++;
 		}
-		j++;
 	}
 	new_str[j] = '\0';
 	return (new_str);

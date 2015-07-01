@@ -99,7 +99,7 @@ void	ftp_srv_builtin_get(t_srv_ftp *srv_ftp, char **args)
 	int		len_data;
 	char	*data;
 	char	*msg;
-	char	*new_data;
+	char	*n_data;
 
 	if (srv_ftp->sock_data != -1)
 	{
@@ -118,9 +118,9 @@ void	ftp_srv_builtin_get(t_srv_ftp *srv_ftp, char **args)
 			{
 				if (srv_ftp->config.type == ASCII)
 				{
-					new_data = ftp_srv_crlf(data, SRV_CONF, CLI_CONF);
-					ftp_srv_dtp_send_data(srv_ftp, new_data, len_data);
-					free(new_data);
+					n_data = ftp_srv_crlf(data, SRV_CONF, CLI_CONF);
+					ftp_srv_dtp_send_data(srv_ftp, n_data, ft_strlen(n_data));
+					free(n_data);
 				}
 				else
 					ftp_srv_dtp_send_data(srv_ftp, data, len_data);
@@ -139,34 +139,34 @@ void	ftp_srv_builtin_get(t_srv_ftp *srv_ftp, char **args)
 
 void	ftp_srv_builtin_put(t_srv_ftp *srv_ftp, char **args)
 {
-	int		fd_create;
+	int		n_fd;
 	int		len;
 	char	*data_one;
-	char	*new_data;
+	char	*n_data;
 
 	if (srv_ftp->sock_data != -1)
 	{
 		ftp_srv_dtp_accept_connection(srv_ftp);
 		ftp_srv_pi_send_response(srv_ftp, 150,
 			"Opening BINARY mode data connection for");
-		if (((fd_create = ftp_srv_fs_create_file(args[1])) != -1) &&
+		if (((n_fd = ftp_srv_fs_create_file(args[1])) != -1) &&
 			(ftp_srv_fs_file_allow(srv_ftp, &args[1]) == TRUE))
 		{
 			while ((data_one = ftp_srv_dtp_read_on_channel_one(srv_ftp, &len)))
 			{
 				if (srv_ftp->config.type == ASCII)
 				{
-					new_data = ftp_srv_crlf(data_one, CLI_CONF, SRV_CONF);
-					ftp_srv_fs_write_in_file(fd_create, new_data, len);
-					free(new_data);
+					n_data = ftp_srv_crlf(data_one, CLI_CONF, SRV_CONF);
+					ftp_srv_fs_write_in_file(n_fd, n_data, ft_strlen(n_data));
+					free(n_data);
 				}
 				else
-					ftp_srv_fs_write_in_file(fd_create, data_one, len);
+					ftp_srv_fs_write_in_file(n_fd, data_one, len);
 				free(data_one);
 			}
 			ftp_srv_dtp_close_channel(srv_ftp);
 			ftp_srv_pi_send_response(srv_ftp, 226, "SUCCESS");
-			close(fd_create);
+			close(n_fd);
 		}
 		else
 			ftp_srv_pi_send_response(srv_ftp, 550, "Failed to create file.");
@@ -362,7 +362,8 @@ void	ftp_srv_builtin_rmdir(t_srv_ftp *srv_ftp, char **args)
 	char	**new_args;
 
 	file = ft_strdup(args[1]);
-	if (ft_arrlen(args) == 2 && ftp_srv_fs_file_allow(srv_ftp, &file) == TRUE)
+	if (ft_arrlen(args) == 2 &&
+		ftp_srv_fs_file_allow(srv_ftp, &file) == TRUE)
 	{
 		if ((dir = opendir(file)) != NULL)
 		{

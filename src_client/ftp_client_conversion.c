@@ -68,7 +68,7 @@ char	*ftp_cli_dos_to_unix(char *buf)
 	return (new_str);
 }
 
-char	*ftp_cli_crlf(char *data, int from, int to)
+char	*ftp_cli_crlf(char *data, int len, int from, int to)
 {
 	if (from == UNIX && to == DOS)
 		return (ftp_cli_unix_to_dos(data));
