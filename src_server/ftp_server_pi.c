@@ -12,7 +12,7 @@
 
 #include "ftp_srv.h"
 
-void	ftp_srv_pi_send_response(t_srv_ftp *srv_ftp, int code, char *msg)
+void			ftp_srv_pi_send_response(t_srv_ftp *srv_ftp, int co, char *msg)
 {
 	char *res;
 
@@ -70,22 +70,21 @@ static void		ftp_recv_on_socket(t_srv_ftp *srv_ftp)
 				eol = TRUE;
 			cmd = ft_strjoin_free_l(cmd, buf);
 		}
-	ft_strreplace_char(cmd, '\n', '\0');
-	ft_strreplace_char(cmd, '\r', '\0');
-	args = ft_strsplit(cmd, ' ');
-	ftp_srv_ui_display_cmd(srv_ftp, cmd);
-	if ((srv_ftp->config.is_logged == FALSE) &&
-		(ft_strcmp(ft_str_toupper(args[0]), "USER") != 0) &&
-		(ft_strcmp(ft_str_toupper(args[0]), "PASS") != 0) &&
-		(ft_strcmp(ft_str_toupper(args[0]), "QUIT") != 0))
-		ftp_srv_pi_send_response(srv_ftp, 503, "Login with USER first.");
-	else
-	{
-		find = ftp_srv_pi_search_builtins(srv_ftp, args);
-		if (!find)
-			ftp_srv_pi_send_response(srv_ftp, 500, "Unknown command.");
-		// send(srv_ftp->cs, "\r\n", 2, 0);
-	}
+		ft_strreplace_char(cmd, '\n', '\0');
+		ft_strreplace_char(cmd, '\r', '\0');
+		args = ft_strsplit(cmd, ' ');
+		ftp_srv_ui_display_cmd(srv_ftp, cmd);
+		if ((srv_ftp->config.is_logged == FALSE) &&
+			(ft_strcmp(ft_str_toupper(args[0]), "USER") != 0) &&
+			(ft_strcmp(ft_str_toupper(args[0]), "PASS") != 0) &&
+			(ft_strcmp(ft_str_toupper(args[0]), "QUIT") != 0))
+			ftp_srv_pi_send_response(srv_ftp, 503, "Login with USER first.");
+		else
+		{
+			find = ftp_srv_pi_search_builtins(srv_ftp, args);
+			if (!find)
+				ftp_srv_pi_send_response(srv_ftp, 500, "Unknown command.");
+		}
 	}
 }
 
@@ -98,7 +97,6 @@ static int		ftp_create_server(int port)
 	proto = getprotobyname("tcp");
 	if (proto == 0)
 		return (-1);
-
 	sock = socket(PF_INET, SOCK_STREAM, proto->p_proto);
 	sin.sin_family = AF_INET;
 	sin.sin_port = htons(port);
@@ -107,22 +105,17 @@ static int		ftp_create_server(int port)
 		ft_error_str_exit("Bind error\n");
 	if (listen(sock, 42) == -1)
 		ft_error_str_exit("Listen error\n");
-	return(sock);
+	return (sock);
 }
 
 void			ftp_create_socket(t_srv_ftp *srv_ftp)
 {
 	pid_t				pid;
-	// int					sock;
-	// int					cs;
 	unsigned int		cslen;
-	// struct sockaddr_in	csin;
 
 	srv_ftp->sock = ftp_create_server(srv_ftp->port);
 	while (42)
 	{
-		// ftp_redirect_fd(cs, STDOUT_FILENO);
-		// ftp_redirect_fd(cs, STDERR_FILENO);
 		cslen = sizeof(srv_ftp->csin);
 		srv_ftp->cs = accept(srv_ftp->sock, (struct sockaddr*)&(srv_ftp->csin),
 							&cslen);
@@ -140,7 +133,5 @@ void			ftp_create_socket(t_srv_ftp *srv_ftp)
 			close(srv_ftp->sock);
 			exit(0);
 		}
-
-		// send(cs, "ok1234567890", 7, 0);
 	}
 }

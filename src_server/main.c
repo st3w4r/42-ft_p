@@ -20,15 +20,24 @@ static void		usage(char *str)
 	exit(1);
 }
 
-static void	ftp_clean_process(int sig_number)
+static void		ftp_clean_process(int sig_number)
 {
 	wait4(-1, 0, WNOHANG, 0);
 }
 
+static void		ftp_init_config(t_srv_ftp *srv_ftp)
+{
+	srv_ftp.config.mode_ftp = MODE_FTP_DEFAULT;
+	srv_ftp.config.type = TYPE_DEFAULT;
+	srv_ftp.config.path_srv = ftp_srv_fs_get_path();
+	srv_ftp.config.login = NULL;
+	srv_ftp.config.is_logged = FALSE;
+}
+
 int				main(int ac, char **av)
 {
-	t_srv_ftp srv_ftp;
-	int		port;
+	t_srv_ftp	srv_ftp;
+	int			port;
 
 	if (ac != 2)
 		usage(av[0]);
@@ -36,11 +45,7 @@ int				main(int ac, char **av)
 	srv_ftp.sock_data = -1;
 	srv_ftp.cs_data = -1;
 	srv_ftp.port = ft_atoi(av[1]);
-	srv_ftp.config.mode_ftp = MODE_FTP_DEFAULT;
-	srv_ftp.config.type = TYPE_DEFAULT;
-	srv_ftp.config.path_srv = ftp_srv_fs_get_path();
-	srv_ftp.config.login = NULL;
-	srv_ftp.config.is_logged = FALSE;
+	ftp_init_config(&srv_ftp);
 	ftp_create_socket(&srv_ftp);
 	return (0);
 }

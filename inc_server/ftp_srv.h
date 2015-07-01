@@ -111,7 +111,7 @@ typedef struct	s_srv_ftp
 ** File: ftp_server_pi.c
 ** Desc: Fucntions start server
 */
-void	ftp_srv_pi_send_response(t_srv_ftp *srv_ftp, int code, char *msg);
+void	ftp_srv_pi_send_response(t_srv_ftp *srv_ftp, int co, char *msg);
 void	ftp_create_socket(t_srv_ftp *srv_ftp);
 
 /*

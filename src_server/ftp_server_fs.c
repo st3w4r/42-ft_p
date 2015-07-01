@@ -15,7 +15,7 @@
 int		ftp_srv_fs_create_file(char *name)
 {
 	return (open(name, O_CREAT | O_RDWR | O_TRUNC, S_IRUSR | S_IWUSR
-		 		| S_IRGRP | S_IROTH));
+	| S_IRGRP | S_IROTH));
 }
 
 int		ftp_srv_fs_open_file(char *name)
@@ -42,10 +42,9 @@ char	*ftp_srv_fs_read_file(int fd, int *len)
 t_bool	ftp_srv_fs_write_in_file(int fd, char *data, int len)
 {
 	if (write(fd, data, len) != -1)
-		return TRUE;
-	return FALSE;
+		return (TRUE);
+	return (FALSE);
 }
-
 
 int		ftp_srv_fs_size_file(int fd)
 {

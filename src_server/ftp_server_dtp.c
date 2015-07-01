@@ -33,17 +33,15 @@ int		ftp_srv_dtp_create_channel(t_srv_ftp *srv_ftp)
 	proto = getprotobyname("tcp");
 	if (proto == 0)
 		ft_error_str_exit("Proto error\n");
-
 	sock = socket(PF_INET, SOCK_STREAM, proto->p_proto);
 	sin.sin_family = AF_INET;
 	sin.sin_port = 0;
 	sin.sin_addr.s_addr = htonl(INADDR_ANY);
-
 	if (bind(sock, (const struct sockaddr *)&sin, sizeof(sin)) == -1)
 		ft_error_str_exit("Bind error\n");
 	if (listen(sock, 42) == -1)
 		ft_error_str_exit("Listen error\n");
-	return(sock);
+	return (sock);
 }
 
 void	ftp_srv_dtp_close_channel(t_srv_ftp *srv_ftp)
@@ -56,16 +54,7 @@ void	ftp_srv_dtp_close_channel(t_srv_ftp *srv_ftp)
 
 void	ftp_srv_dtp_send_data(t_srv_ftp *srv_ftp, char *data, int len)
 {
-	// char	*new_data;
-	//
-	// if (srv_ftp->config.type == ASCII)
-	// {
-	// 	new_data = ftp_srv_crlf(data, SRV_CONF, CLI_CONF);
-	// 	send(srv_ftp->cs_data, new_data, ft_strlen(new_data), 0);
-	// 	free(new_data);
-	// }
-	// else
-		send(srv_ftp->cs_data, data, len, 0);
+	send(srv_ftp->cs_data, data, len, 0);
 }
 
 char	*ftp_srv_dtp_read_on_channel_one(t_srv_ftp *srv_ftp, int *len)
