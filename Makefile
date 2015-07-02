@@ -49,7 +49,8 @@ SRC_SRV =	ftp_server_pi.c \
 			ftp_server_builtins_service_3.c \
 			ftp_server_helper.c \
 			ftp_server_ui.c \
-			ftp_server_fs.c \
+			ftp_server_fs_1.c \
+			ftp_server_fs_2.c \
 			ftp_server_conversion.c \
 			main.c
 
