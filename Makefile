@@ -40,7 +40,8 @@ SRC_CLI =	ftp_client_ui.c \
 			ftp_client_fs.c \
 			ftp_client_conversion.c
 
-SRC_SRV =	ftp_server_pi.c \
+SRC_SRV =	ftp_server_pi_1.c \
+			ftp_server_pi_2.c \
 			ftp_server_dtp.c \
 			ftp_server_builtins_transfert.c \
 			ftp_server_builtins_control.c \

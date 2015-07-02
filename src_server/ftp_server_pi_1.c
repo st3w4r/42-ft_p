@@ -12,17 +12,6 @@
 
 #include "ftp_srv.h"
 
-void			ftp_srv_pi_send_response(t_srv_ftp *srv_ftp, int co, char *msg)
-{
-	char *res;
-
-	res = ft_itoa(co);
-	res = ft_strjoin_free_l(res, " ");
-	res = ft_strjoin_free_l(res, msg);
-	res = ft_strjoin_free_l(res, "\r\n");
-	send(srv_ftp->cs, res, ft_strlen(res), 0);
-}
-
 static t_bool	ftp_srv_pi_search_builtins(t_srv_ftp *srv_ftp, char **args)
 {
 	t_bool	state;
@@ -42,34 +31,43 @@ static t_bool	ftp_srv_pi_search_builtins(t_srv_ftp *srv_ftp, char **args)
 	return (state);
 }
 
-static void		ftp_recv_on_socket(t_srv_ftp *srv_ftp)
+static char		*ftp_recv_on_socket_eol(t_srv_ftp *srv_ftp)
 {
 	int		r;
 	char	buf[2];
 	char	*cmd;
-	char	**args;
 	t_bool	eol;
+
+	eol = FALSE;
+	cmd = ft_strdup("");
+	while (!eol)
+	{
+		if ((r = recv(srv_ftp->cs, buf, 1, 0)) < 0)
+		{
+			ft_error_str("[ERROR RECEIVE]\n");
+			return (NULL);
+		}
+		buf[r] = '\0';
+		if (buf[0] == '\0')
+			return (NULL);
+		if (buf[0] == '\n')
+			eol = TRUE;
+		cmd = ft_strjoin_free_l(cmd, buf);
+	}
+	return (cmd);
+}
+
+static void		ftp_recv_on_socket(t_srv_ftp *srv_ftp)
+{
+	char	*cmd;
+	char	**args;
 	t_bool	find;
 
 	find = FALSE;
 	while (42)
 	{
-		eol = FALSE;
-		cmd = ft_strdup("");
-		while (!eol)
-		{
-			if ((r = recv(srv_ftp->cs, buf, 1, 0)) < 0)
-			{
-				ft_error_str("[ERROR RECEIVE]\n");
-				return ;
-			}
-			buf[r] = '\0';
-			if (buf[0] == '\0')
-				return ;
-			if (buf[0] == '\n')
-				eol = TRUE;
-			cmd = ft_strjoin_free_l(cmd, buf);
-		}
+		if (!(cmd = ftp_recv_on_socket_eol(srv_ftp)))
+			return ;
 		ft_strreplace_char(cmd, '\n', '\0');
 		ft_strreplace_char(cmd, '\r', '\0');
 		args = ft_strsplit(cmd, ' ');
