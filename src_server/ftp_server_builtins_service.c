@@ -61,3 +61,8 @@ void		ftp_srv_builtin_ls(t_srv_ftp *srv_ftp, char **args)
 	else
 		ftp_srv_pi_send_response(srv_ftp, 425, "Use PORT or PASV first.");
 }
+
+void		ftp_srv_builtin_noop(t_srv_ftp *srv_ftp, char **args)
+{
+	ftp_srv_pi_send_response(srv_ftp, 200, "NOOP ok.");
+}
