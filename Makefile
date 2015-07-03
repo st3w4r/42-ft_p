@@ -35,7 +35,11 @@ LIBS = -L libft/ -lft
 SRC_CLI =	ftp_client_ui.c \
 			ftp_client_pi.c \
 			ftp_client_dtp.c \
-			ftp_client_builtins.c \
+			ftp_client_builtins_local.c \
+			ftp_client_builtins_control.c \
+			ftp_client_builtins_transfert.c \
+			ftp_client_builtins_service_1.c \
+			ftp_client_builtins_service_2.c \
 			ftp_client_helper.c \
 			ftp_client_fs.c \
 			ftp_client_conversion.c
