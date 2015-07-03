@@ -22,6 +22,7 @@ static void		usage(char *str)
 
 static void		ftp_clean_process(int sig_number)
 {
+	(void)sig_number;
 	wait4(-1, 0, WNOHANG, 0);
 }
 
@@ -37,7 +38,6 @@ static void		ftp_init_config(t_srv_ftp *srv_ftp)
 int				main(int ac, char **av)
 {
 	t_srv_ftp	srv_ftp;
-	int			port;
 
 	if (ac != 2)
 		usage(av[0]);

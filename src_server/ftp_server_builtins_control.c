@@ -58,8 +58,6 @@ void	ftp_srv_builtin_pass(t_srv_ftp *srv_ftp, char **args)
 
 void	ftp_srv_builtin_cd(t_srv_ftp *srv_ftp, char **args)
 {
-	t_bool allow;
-
 	if (ft_strncmp(args[1], "/", 1) == 0)
 	{
 		args[1] = ft_strjoin_free_r(srv_ftp->config.path_srv, args[1]);
@@ -77,6 +75,7 @@ void	ftp_srv_builtin_cd(t_srv_ftp *srv_ftp, char **args)
 
 void	ftp_srv_builtin_quit(t_srv_ftp *srv_ftp, char **args)
 {
+	(void)args;
 	ftp_srv_pi_send_response(srv_ftp, 221, "Goodbye.");
 	close(srv_ftp->cs);
 	close(srv_ftp->sock);

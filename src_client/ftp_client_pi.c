@@ -38,7 +38,6 @@ t_bool		ftp_cli_pi_search_builtins(t_cli_ftp *cli_ftp, char **args)
 
 int			ftp_cli_pi_create(t_cli_ftp *cli_ftp)
 {
-	int					r;
 	int					sock;
 	struct protoent		*proto;
 	struct sockaddr_in	sin;

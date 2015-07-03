@@ -30,6 +30,7 @@ int		ftp_srv_dtp_create_channel(t_srv_ftp *srv_ftp)
 	struct protoent		*proto;
 	struct sockaddr_in	sin;
 
+	(void)srv_ftp;
 	proto = getprotobyname("tcp");
 	if (proto == 0)
 		ft_error_str_exit("Proto error\n");

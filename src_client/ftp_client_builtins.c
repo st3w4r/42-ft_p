@@ -27,6 +27,7 @@ void	ftp_cli_builtin_lcd(t_cli_ftp *cli_ftp, char **args)
 {
 	char *path;
 
+	(void)cli_ftp;
 	if (chdir(args[1]) == 0)
 	{
 		path = ftp_cli_fs_get_path();
@@ -52,6 +53,8 @@ void	ftp_cli_builtin_lpwd(t_cli_ftp *cli_ftp, char **args)
 {
 	char *path;
 
+	(void)cli_ftp;
+	(void)args;
 	path = ftp_cli_fs_get_path();
 	ft_putstr("Local directory: ");
 	ft_putendl(path);
@@ -82,6 +85,7 @@ void	ftp_cli_builtin_ls(t_cli_ftp *cli_ftp, char **args)
 
 void	ftp_cli_builtin_lls(t_cli_ftp *cli_ftp, char **args)
 {
+	(void)cli_ftp;
 	free(args[0]);
 	args[0] = ft_strdup("/bin/ls");
 	ftp_fork_process(args);
@@ -182,6 +186,7 @@ void	ftp_cli_builtin_quit(t_cli_ftp *cli_ftp, char **args)
 	t_cmd_nvt	cmd;
 	char		*msg;
 
+	(void)args;
 	cmd.name = "QUIT";
 	cmd.args = NULL;
 	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);

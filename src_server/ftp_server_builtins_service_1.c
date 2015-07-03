@@ -18,6 +18,7 @@ void	ftp_srv_builtin_pwd(t_srv_ftp *srv_ftp, char **args)
 	char	*offset_path;
 	char	*msg;
 
+	(void)args;
 	current_path = ftp_srv_fs_get_path();
 	if ((offset_path = ft_strstr(current_path, srv_ftp->config.path_srv)) &&
 		(ft_strlen(offset_path) > ft_strlen(srv_ftp->config.path_srv)))

@@ -52,7 +52,7 @@ static t_res	g_res_list[] =
 {
 	{200, "Command success."},
 	{500, "Unknown command."},
-	{0}
+	{0, 0}
 };
 
 typedef struct	s_account {
@@ -64,7 +64,7 @@ static t_account	g_account[] =
 {
 	{"anonymous", "1234"},
 	{"yana", "test"},
-	{0}
+	{0, 0}
 };
 
 typedef enum	e_type
@@ -209,7 +209,7 @@ static t_cmd_nvt	g_cmd_nvt_list[] =
 	{ "MKD", NULL, ftp_srv_builtin_mkdir},
 	{ "RMD", NULL, ftp_srv_builtin_rmdir},
 	{ "DELE", NULL, ftp_srv_builtin_delete},
-	{ 0 }
+	{ 0, 0, 0}
 };
 
 #endif

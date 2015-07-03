@@ -64,5 +64,6 @@ void		ftp_srv_builtin_ls(t_srv_ftp *srv_ftp, char **args)
 
 void		ftp_srv_builtin_noop(t_srv_ftp *srv_ftp, char **args)
 {
+	(void)args;
 	ftp_srv_pi_send_response(srv_ftp, 200, "NOOP ok.");
 }

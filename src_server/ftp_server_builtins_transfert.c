@@ -12,8 +12,8 @@
 
 #include "ftp_srv.h"
 
-static char	*ftp_srv_builtin_pasv_init(t_srv_ftp *srv_ftp,
-		struct ifaddrs *ifa, struct sockaddr_in sin)
+static char	*ftp_srv_builtin_pasv_init(struct ifaddrs *ifa,
+	struct sockaddr_in sin)
 {
 	struct in_addr		i_addr;
 	struct sockaddr_in	*sa;
@@ -43,12 +43,12 @@ static char	*ftp_srv_builtin_pasv_init(t_srv_ftp *srv_ftp,
 
 void		ftp_srv_builtin_pasv(t_srv_ftp *srv_ftp, char **args)
 {
-	int					port_ret;
 	struct sockaddr_in	sin;
 	socklen_t			len;
 	char				*msg;
 	struct ifaddrs		*ifap;
 
+	(void)args;
 	srv_ftp->sock_data = ftp_srv_dtp_create_channel(srv_ftp);
 	len = sizeof(sin);
 	if ((getsockname(srv_ftp->sock_data, (struct sockaddr *)&sin, &len) != 0) ||
@@ -57,7 +57,7 @@ void		ftp_srv_builtin_pasv(t_srv_ftp *srv_ftp, char **args)
 		ftp_srv_pi_send_response(srv_ftp, 425, "Cannot open data connection.");
 		return ;
 	}
-	msg = ftp_srv_builtin_pasv_init(srv_ftp, ifap, sin);
+	msg = ftp_srv_builtin_pasv_init(ifap, sin);
 	freeifaddrs(ifap);
 	ftp_srv_pi_send_response(srv_ftp, 227, msg);
 	free(msg);
@@ -65,6 +65,7 @@ void		ftp_srv_builtin_pasv(t_srv_ftp *srv_ftp, char **args)
 
 void		ftp_srv_builtin_port(t_srv_ftp *srv_ftp, char **args)
 {
+	(void)args;
 	ftp_srv_pi_send_response(srv_ftp, 500, "Illegal PORT command.");
 }
 

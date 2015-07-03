@@ -44,7 +44,6 @@ char	*ftp_srv_dos_to_unix(char *buf)
 	size_t	i;
 	size_t	j;
 	char	*new_str;
-	int		nb_char;
 
 	i = 0;
 	j = 0;

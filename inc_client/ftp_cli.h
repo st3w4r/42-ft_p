@@ -169,7 +169,7 @@ static t_cmd_cli	g_cmd_cli_list[] =
 	{"mkdir", ftp_cli_builtin_mkdir},
 	{"rmdir", ftp_cli_builtin_rmdir},
 	{"delete", ftp_cli_builtin_delete},
-	{0}
+	{0, 0}
 };
 
 #endif

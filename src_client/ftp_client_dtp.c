@@ -47,7 +47,6 @@ void	ftp_cli_dtp_read_on_channel(t_cli_ftp *cli_ftp)
 
 void	ftp_cli_dtp_create_channel(t_cli_ftp *cli_ftp)
 {
-	int					r;
 	int					sock;
 	struct protoent		*proto;
 	struct sockaddr_in	sin;

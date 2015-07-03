@@ -26,8 +26,8 @@ PATH_INC_LIBFT = ./libft/includes/
 INCLUDES =  -I $(PATH_INC_CLI) -I $(PATH_INC_SRV) -I $(PATH_INC_LIBFT)
 
 CC = cc
-#CFLAGS = -Wall -Wextra -Werror -Ofast $(INCLUDES)
-CFLAGS = -Ofast $(INCLUDES) -g
+CFLAGS = -Wall -Wextra -Werror -Ofast $(INCLUDES)
+#CFLAGS = -Ofast $(INCLUDES) -g
 LIBS = -L libft/ -lft
 
 #____________FILES____________#
