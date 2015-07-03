@@ -92,14 +92,34 @@ void	ftp_cli_builtin_lls(t_cli_ftp *cli_ftp, char **args)
 	g_need_read = FALSE;
 }
 
+static void	ftp_cli_builtin_get_receive(t_cli_ftp *cli_ftp, char **args,
+										int argc, t_res res)
+{
+	int		fd_create;
+	int		len;
+	char	*data_one;
+
+	if (res.code == 150)
+	{
+		if ((fd_create = ftp_cli_fs_create_file(args[argc - 1])) != -1)
+		{
+			while ((data_one = ftp_cli_dtp_read_on_channel_one(cli_ftp, &len)))
+			{
+				ftp_cli_fs_write_in_file(fd_create, data_one, len);
+				free(data_one);
+			}
+			close(fd_create);
+		}
+	}
+	else
+		g_need_read = FALSE;
+}
+
 void	ftp_cli_builtin_get(t_cli_ftp *cli_ftp, char **args)
 {
 	t_cmd_nvt	cmd;
 	t_res		res;
 	char		*response;
-	char		*data_one;
-	int			len;
-	int			fd_create;
 	int			argc;
 
 	argc = ft_arrlen(args) - 1;
@@ -117,20 +137,7 @@ void	ftp_cli_builtin_get(t_cli_ftp *cli_ftp, char **args)
 	response = ftp_cli_pi_recive_data(cli_ftp->sock_ctl);
 	ftp_receive_msg(response);
 	res = ftp_parse_response(response);
-	if (res.code == 150)
-	{
-		if ((fd_create = ftp_cli_fs_create_file(args[argc - 1])) != -1)
-		{
-			while ((data_one = ftp_cli_dtp_read_on_channel_one(cli_ftp, &len)))
-			{
-				ftp_cli_fs_write_in_file(fd_create, data_one, len);
-				free(data_one);
-			}
-			close(fd_create);
-		}
-	}
-	else
-		g_need_read = FALSE;
+	ftp_cli_builtin_get_receive(cli_ftp, args, argc, res);
 	free(cmd.line_send);
 	free(res.msg);
 	free(response);
