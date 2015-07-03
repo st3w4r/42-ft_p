@@ -63,10 +63,11 @@ char	*ftp_srv_dtp_read_on_channel_one(t_srv_ftp *srv_ftp, int *len)
 	int		r;
 	char	*buf;
 
-	if (!(buf = (char*)malloc(sizeof(char) * 1024)))
+	if (!(buf = (char*)malloc(sizeof(char) * (BUFF_SIZE_RECV + 1))))
 		ft_malloc_error();
-	if ((r = recv(srv_ftp->cs_data, buf, 1024, 0)) > 0)
+	if ((r = recv(srv_ftp->cs_data, buf, BUFF_SIZE_RECV, 0)) > 0)
 	{
+		buf[r] = 0;
 		*len = r;
 		return (buf);
 	}

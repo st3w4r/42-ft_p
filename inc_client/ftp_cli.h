@@ -33,6 +33,9 @@
 # define SRV_CONF DOS
 # define CLI_CONF UNIX
 
+# define BUFF_SIZE_READ 1024
+# define BUFF_SIZE_RECV 1024
+
 typedef unsigned char	t_bool;
 
 typedef struct	s_res {

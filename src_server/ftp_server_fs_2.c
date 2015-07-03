@@ -16,8 +16,8 @@ char	*ftp_srv_fs_get_path(void)
 {
 	char *buf;
 
-	buf = NULL;
-	return (getcwd(buf, 0));
+	buf = getcwd(0, 0);
+	return (buf);
 }
 
 t_bool	ftp_srv_fs_path_allow(t_srv_ftp *srv_ftp, char *path)

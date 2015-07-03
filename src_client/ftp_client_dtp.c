@@ -22,10 +22,11 @@ char	*ftp_cli_dtp_read_on_channel_one(t_cli_ftp *cli_ftp, int *len)
 	int		r;
 	char	*buf;
 
-	if (!(buf = (char*)malloc(sizeof(char) * 1024)))
+	if (!(buf = (char*)malloc(sizeof(char) * (BUFF_SIZE_RECV + 1))))
 		ft_malloc_error();
-	if ((r = recv(cli_ftp->sock_data, buf, 1024, 0)) > 0)
+	if ((r = recv(cli_ftp->sock_data, buf, BUFF_SIZE_RECV, 0)) > 0)
 	{
+		buf[r] = 0;
 		*len = r;
 		return (buf);
 	}
@@ -36,9 +37,9 @@ char	*ftp_cli_dtp_read_on_channel_one(t_cli_ftp *cli_ftp, int *len)
 void	ftp_cli_dtp_read_on_channel(t_cli_ftp *cli_ftp)
 {
 	int		r;
-	char	buf[1024];
+	char	buf[BUFF_SIZE_RECV + 1];
 
-	while ((r = recv(cli_ftp->sock_data, buf, 1023, 0)) > 0)
+	while ((r = recv(cli_ftp->sock_data, buf, BUFF_SIZE_RECV, 0)) > 0)
 	{
 		buf[r] = '\0';
 		ft_putstr(buf);

@@ -35,10 +35,11 @@ char	*ftp_cli_fs_read_file(int fd, int *len)
 	int		r;
 	char	*buf;
 
-	if (!(buf = (char*)malloc(sizeof(char) * 1024)))
+	if (!(buf = (char*)malloc(sizeof(char) * (BUFF_SIZE_READ + 1))))
 		ft_malloc_error();
-	if ((r = read(fd, buf, 1024)) > 0)
+	if ((r = read(fd, buf, BUFF_SIZE_READ)) > 0)
 	{
+		buf[r] = 0;
 		*len = r;
 		return (buf);
 	}
