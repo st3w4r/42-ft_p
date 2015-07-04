@@ -142,7 +142,8 @@ char			*ftp_cli_crlf(char *data, int from, int to);
 void			ftp_receive_msg(char *msg);
 t_res			ftp_parse_response(char *response);
 char			*ftp_create_cmd_line(char *name, char **args);
-void			ftp_parse_addr_port(t_cli_ftp *cli_ftp, char *msg);
+void			ftp_parse_pasv_addr_port(t_cli_ftp *cli_ftp, char *msg);
+void			ftp_parse_epsv_port(t_cli_ftp *cli_ftp, char *msg);
 void			ftp_fork_process(char **av);
 
 /*
