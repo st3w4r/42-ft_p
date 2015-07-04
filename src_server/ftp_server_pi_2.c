@@ -23,7 +23,7 @@ void	ftp_srv_pi_send_response(t_srv_ftp *srv_ftp, int co, char *msg)
 	send(srv_ftp->cs, res, ft_strlen(res), 0);
 }
 
-int		ftp_use_ipv4(int port)
+int		ftp_srv_use_ipv4(int port)
 {
 	int					sock;
 	struct protoent		*proto;
@@ -41,7 +41,7 @@ int		ftp_use_ipv4(int port)
 	return (sock);
 }
 
-int		ftp_use_ipv6(int port)
+int		ftp_srv_use_ipv6(int port)
 {
 	int					sock;
 	struct protoent		*proto;

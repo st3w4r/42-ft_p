@@ -99,7 +99,7 @@ typedef struct	s_srv_ftp
 	int					sock_data;
 	int					cs;
 	int					cs_data;
-	struct sockaddr_in	csin;
+	struct sockaddr_in6	csin;
 	t_srv_config		config;
 
 }				t_srv_ftp;
@@ -111,6 +111,8 @@ typedef struct	s_srv_ftp
 */
 void			ftp_srv_pi_send_response(t_srv_ftp *srv_ftp, int co, char *msg);
 void			ftp_create_socket(t_srv_ftp *srv_ftp);
+int				ftp_srv_use_ipv4(int port);
+int				ftp_srv_use_ipv6(int port);
 
 /*
 ** Name: ftp_server_dtp

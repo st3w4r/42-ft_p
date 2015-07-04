@@ -86,21 +86,11 @@ static void		ftp_recv_on_socket(t_srv_ftp *srv_ftp)
 	}
 }
 
-static int		ftp_create_server(int port)
+static int		ftp_create_server(t_srv_ftp *srv_ftp)
 {
-	int					sock;
-	struct protoent		*proto;
-	struct sockaddr_in	sin;
+	int		sock;
 
-	proto = getprotobyname("tcp");
-	if (proto == 0)
-		return (-1);
-	sock = socket(PF_INET, SOCK_STREAM, proto->p_proto);
-	sin.sin_family = AF_INET;
-	sin.sin_port = htons(port);
-	sin.sin_addr.s_addr = htonl(INADDR_ANY);
-	if (bind(sock, (const struct sockaddr *)&sin, sizeof(sin)) == -1)
-		ft_error_str_exit("Bind error\n");
+	sock = ftp_srv_use_ipv6(srv_ftp->port);
 	if (listen(sock, 42) == -1)
 		ft_error_str_exit("Listen error\n");
 	return (sock);
@@ -111,7 +101,7 @@ void			ftp_create_socket(t_srv_ftp *srv_ftp)
 	pid_t				pid;
 	unsigned int		cslen;
 
-	srv_ftp->sock = ftp_create_server(srv_ftp->port);
+	srv_ftp->sock = ftp_create_server(srv_ftp);
 	while (42)
 	{
 		cslen = sizeof(srv_ftp->csin);

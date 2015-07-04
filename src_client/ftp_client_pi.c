@@ -38,21 +38,8 @@ t_bool		ftp_cli_pi_search_builtins(t_cli_ftp *cli_ftp, char **args)
 
 int			ftp_cli_pi_create(t_cli_ftp *cli_ftp)
 {
-	int					sock;
-	/*
-	struct protoent		*proto;
-	struct sockaddr_in	sin;
+	int		sock;
 
-	proto = getprotobyname("tcp");
-	if (proto == 0)
-		return (-1);
-	sock = socket(PF_INET, SOCK_STREAM, proto->p_proto);
-	sin.sin_family = AF_INET;
-	sin.sin_port = htons(cli_ftp->port_ctl);
-	sin.sin_addr.s_addr = inet_addr(cli_ftp->addr_ctl);
-	if (connect(sock, (const struct sockaddr *)&sin, sizeof(sin)) == -1)
-		ft_error_str_exit("Connect error\n");
-	*/
 	if (cli_ftp->host->h_addrtype == AF_INET6)
 		sock = ftp_cli_use_ipv6(cli_ftp, cli_ftp->port_ctl);
 	else

@@ -14,10 +14,13 @@
 
 void	ftp_srv_ui_display_cmd(t_srv_ftp *srv_ftp, char *cmd)
 {
+	char	buf[INET6_ADDRSTRLEN];
+
 	ft_putstr("[");
-	ft_putstr(inet_ntoa(srv_ftp->csin.sin_addr));
+	ft_putstr(inet_ntop(AF_INET6, &(srv_ftp->csin.sin6_addr), buf,
+						sizeof(buf)));
 	ft_putstr(":");
-	ft_putnbr(ntohs(srv_ftp->csin.sin_port));
+	ft_putnbr(ntohs(srv_ftp->csin.sin6_port));
 	ft_putstr("] ");
 	ft_putendl(cmd);
 }
