@@ -36,7 +36,7 @@ static char	*ftp_srv_builtin_pasv_init(struct ifaddrs *ifa,
 	port[0] = ft_itoa(sin.sin_port >> 0 & 0xff);
 	port[1] = ft_itoa(sin.sin_port >> 8 & 0xff);
 	msg = ft_str_arrjoin((char *[]){"Entering Passive Mode (", addr,
-									",", port[0], ",", port[1], ")", NULL});
+									",", port[0], ",", port[1], ").", NULL});
 	ft_str_arrfree((char *[]){addr, port[0], port[1], NULL});
 	return (msg);
 }
@@ -60,6 +60,29 @@ void		ftp_srv_builtin_pasv(t_srv_ftp *srv_ftp, char **args)
 	msg = ftp_srv_builtin_pasv_init(ifap, sin);
 	freeifaddrs(ifap);
 	ftp_srv_pi_send_response(srv_ftp, 227, msg);
+	free(msg);
+}
+
+void		ftp_srv_builtin_epsv(t_srv_ftp *srv_ftp, char **args)
+{
+	struct sockaddr_in6	sin;
+	socklen_t			len;
+	char				*msg;
+	struct ifaddrs		*ifap;
+
+	(void)args;
+	srv_ftp->sock_data = ftp_srv_dtp_create_channel(srv_ftp);
+	len = sizeof(sin);
+	if ((getsockname(srv_ftp->sock_data, (struct sockaddr *)&sin, &len) != 0) ||
+		(getifaddrs(&ifap) != 0))
+	{
+		ftp_srv_pi_send_response(srv_ftp, 425, "Cannot open data connection.");
+		return ;
+	}
+	msg = ft_str_arrjoin((char *[]){"Entering Extended Passive Mode (|||",
+								ft_itoa(ntohs(sin.sin6_port)), "|).", NULL});
+	freeifaddrs(ifap);
+	ftp_srv_pi_send_response(srv_ftp, 229, msg);
 	free(msg);
 }
 

@@ -26,32 +26,10 @@ void	ftp_srv_dtp_accept_connection(t_srv_ftp *srv_ftp)
 
 int		ftp_srv_dtp_create_channel(t_srv_ftp *srv_ftp)
 {
-/*	int					sock;
-	struct protoent		*proto;
-	struct sockaddr_in	sin;
-
-	(void)srv_ftp;
-	proto = getprotobyname("tcp");
-	if (proto == 0)
-		ft_error_str_exit("Proto error\n");
-	sock = socket(PF_INET, SOCK_STREAM, proto->p_proto);
-	sin.sin_family = AF_INET;
-	sin.sin_port = 0;
-	sin.sin_addr.s_addr = htonl(INADDR_ANY);
-	if (bind(sock, (const struct sockaddr *)&sin, sizeof(sin)) == -1)
-		ft_error_str_exit("Bind error\n");
-	if (listen(sock, 42) == -1)
-		ft_error_str_exit("Listen error\n");
-	return (sock);
-*/
 	int		sock;
 
-(void)srv_ftp;
-	// if (srv_ftp->host->h_addrtype == AF_INET6)
-		sock = ftp_srv_use_ipv6(0);
-	// else
-
-		// sock = ftp_srv_use_ipv4(0);
+	(void)srv_ftp;
+	sock = ftp_srv_use_ipv6(0);
 	if (listen(sock, 42) == -1)
 		ft_error_str_exit("Listen error\n");
 	return (sock);
