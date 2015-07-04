@@ -33,7 +33,7 @@ LIBS = -L libft/ -lft
 #____________FILES____________#
 
 SRC_CLI =	ftp_client_ui.c \
-			ftp_client_pi.c \
+			ftp_client_pi_1.c \
 			ftp_client_pi_2.c \
 			ftp_client_dtp.c \
 			ftp_client_builtins_local.c \
@@ -41,7 +41,7 @@ SRC_CLI =	ftp_client_ui.c \
 			ftp_client_builtins_transfert.c \
 			ftp_client_builtins_service_1.c \
 			ftp_client_builtins_service_2.c \
-			ftp_client_helper.c \
+			ftp_client_helper_1.c \
 			ftp_client_helper_2.c \
 			ftp_client_fs.c \
 			ftp_client_conversion.c
