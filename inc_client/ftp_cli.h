@@ -45,12 +45,13 @@ typedef struct	s_res {
 
 typedef struct	s_cli_ftp
 {
-	char	*addr_ctl;
-	char	*addr_data;
-	int		port_ctl;
-	int		port_data;
-	int		sock_ctl;
-	int		sock_data;
+	char			*addr_ctl;
+	char			*addr_data;
+	int				port_ctl;
+	int				port_data;
+	int				sock_ctl;
+	int				sock_data;
+	struct hostent	*host;
 }				t_cli_ftp;
 
 typedef struct	s_cmd_nvt
@@ -78,6 +79,8 @@ t_bool			ftp_cli_pi_search_builtins(t_cli_ftp *cli_ftp, char **agrs);
 int				ftp_cli_pi_create(t_cli_ftp *cli_ftp);
 void			ftp_cli_pi_open_data_channel(t_cli_ftp *cli_ftp);
 char			*ftp_cli_pi_recive_data(int sock);
+int				ftp_cli_use_ipv4(t_cli_ftp *cli_ftp, int port);
+int				ftp_cli_use_ipv6(t_cli_ftp *cli_ftp, int port);
 
 /*
 ** Name: ftp_client_dtp
@@ -87,7 +90,7 @@ char			*ftp_cli_pi_recive_data(int sock);
 void			ftp_cli_dtp_send_data(t_cli_ftp *cli_ftp, char *data, int len);
 char			*ftp_cli_dtp_read_on_channel_one(t_cli_ftp *cli_ftp, int *len);
 void			ftp_cli_dtp_read_on_channel(t_cli_ftp *cli_ftp);
-void			ftp_cli_dtp_create_channel(t_cli_ftp *cli_ftp);
+int				ftp_cli_dtp_create_channel(t_cli_ftp *cli_ftp);
 void			ftp_cli_dtp_close_channel(t_cli_ftp *cli_ftp);
 
 /*

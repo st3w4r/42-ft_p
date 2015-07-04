@@ -46,9 +46,10 @@ void	ftp_cli_dtp_read_on_channel(t_cli_ftp *cli_ftp)
 	}
 }
 
-void	ftp_cli_dtp_create_channel(t_cli_ftp *cli_ftp)
+int		ftp_cli_dtp_create_channel(t_cli_ftp *cli_ftp)
 {
-	int					sock;
+	int		sock;
+/*
 	struct protoent		*proto;
 	struct sockaddr_in	sin;
 
@@ -62,6 +63,13 @@ void	ftp_cli_dtp_create_channel(t_cli_ftp *cli_ftp)
 	if (connect(sock, (const struct sockaddr *)&sin, sizeof(sin)) == -1)
 		ft_error_str_exit("Connect error\n");
 	cli_ftp->sock_data = sock;
+*/
+
+	if (cli_ftp->host->h_addrtype == AF_INET6)
+		sock = ftp_cli_use_ipv6(cli_ftp, cli_ftp->port_data);
+	else
+		sock = ftp_cli_use_ipv4(cli_ftp, cli_ftp->port_data);
+	return (sock);
 }
 
 void	ftp_cli_dtp_close_channel(t_cli_ftp *cli_ftp)

@@ -68,16 +68,17 @@ void			ftp_loop(t_cli_ftp *cli_ftp)
 int				main(int ac, char **av)
 {
 	t_cli_ftp		cli_ftp;
-	struct hostent	*host;
-	struct in_addr	*addr;
+	// struct hostent	*host;
+	// struct in_addr	*addr;
 
 	if (ac != 3)
 		usage(av[0]);
-	if ((host = gethostbyname(av[1])) == NULL)
+	if ((cli_ftp.host = gethostbyname2(av[1], AF_INET)) == NULL &&
+		(cli_ftp.host = gethostbyname2(av[1], AF_INET6)) == NULL)
 		ft_error_str_exit("Error get IP.\n");
-	addr = (struct in_addr*)host->h_addr_list[0];
+	// addr = (struct in_addr*)host->h_addr_list[0];
 	cli_ftp.port_ctl = ft_atoi(av[2]);
-	cli_ftp.addr_ctl = ft_strdup(inet_ntoa(*addr));
+	// cli_ftp.addr_ctl = ft_strdup(inet_ntoa(*addr));
 	cli_ftp.sock_ctl = ftp_cli_pi_create(&cli_ftp);
 	ftp_loop(&cli_ftp);
 	close(cli_ftp.sock_ctl);

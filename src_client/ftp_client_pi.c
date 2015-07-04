@@ -39,6 +39,7 @@ t_bool		ftp_cli_pi_search_builtins(t_cli_ftp *cli_ftp, char **args)
 int			ftp_cli_pi_create(t_cli_ftp *cli_ftp)
 {
 	int					sock;
+	/*
 	struct protoent		*proto;
 	struct sockaddr_in	sin;
 
@@ -51,6 +52,11 @@ int			ftp_cli_pi_create(t_cli_ftp *cli_ftp)
 	sin.sin_addr.s_addr = inet_addr(cli_ftp->addr_ctl);
 	if (connect(sock, (const struct sockaddr *)&sin, sizeof(sin)) == -1)
 		ft_error_str_exit("Connect error\n");
+	*/
+	if (cli_ftp->host->h_addrtype == AF_INET6)
+		sock = ftp_cli_use_ipv6(cli_ftp, cli_ftp->port_ctl);
+	else
+		sock = ftp_cli_use_ipv4(cli_ftp, cli_ftp->port_ctl);
 	return (sock);
 }
 
@@ -99,7 +105,7 @@ void		ftp_cli_pi_open_data_channel(t_cli_ftp *cli_ftp)
 	{
 		ftp_receive_msg(data);
 		ftp_parse_addr_port(cli_ftp, data);
-		ftp_cli_dtp_create_channel(cli_ftp);
+		cli_ftp->sock_data = ftp_cli_dtp_create_channel(cli_ftp);
 	}
 	else
 		g_need_read = FALSE;
