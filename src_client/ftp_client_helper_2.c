@@ -36,13 +36,13 @@ void	ftp_parse_pasv_addr_port(t_cli_ftp *cli_ftp, char *msg)
 
 void	ftp_parse_epsv_port(t_cli_ftp *cli_ftp, char *msg)
 {
-	char	**msg_arr;
 	int		port;
 
 	msg = ft_strchr(msg, '(');
-	msg = ft_strreplace_char(++msg, ')', '\0');
-	msg_arr = ft_strsplit(msg, '|');
-	port = ft_atoi(msg_arr[ft_arrlen(msg_arr) - 2]);
+	msg = ft_strchr(++msg, '|');
+	msg = ft_strchr(++msg, '|');
+	msg = ft_strchr(++msg, '|');
+	msg = ft_strreplace_char(++msg, '|', '\0');
+	port = ft_atoi(msg);
 	cli_ftp->port_data = port;
-	FREE_ARR(msg_arr);
 }

@@ -82,22 +82,18 @@ void		ftp_cli_pi_open_data_channel(t_cli_ftp *cli_ftp)
 	t_res		res;
 	char		*data;
 
-	cmd.name = ft_strdup("EPSV");
+	cmd.name = (cli_ftp->host->h_addrtype == AF_INET) ? ft_strdup("PASV") :
+														ft_strdup("EPSV");
 	cmd.args = NULL;
 	cmd.line_send = ftp_create_cmd_line(cmd.name, cmd.args);
 	ftp_cli_pi_send_cmd(cli_ftp, cmd);
 	data = ftp_cli_pi_recive_data(cli_ftp->sock_ctl);
 	res = ftp_parse_response(data);
-	if (res.code == 227)
+	if (res.code == 227 || res.code == 229)
 	{
 		ftp_receive_msg(data);
-		ftp_parse_pasv_addr_port(cli_ftp, data);
-		cli_ftp->sock_data = ftp_cli_dtp_create_channel(cli_ftp);
-	}
-	else if (res.code == 229)
-	{
-		ftp_receive_msg(data);
-		ftp_parse_epsv_port(cli_ftp, data);
+		res.code == 227 ? ftp_parse_pasv_addr_port(cli_ftp, data) :
+							ftp_parse_epsv_port(cli_ftp, data);
 		cli_ftp->sock_data = ftp_cli_dtp_create_channel(cli_ftp);
 	}
 	else

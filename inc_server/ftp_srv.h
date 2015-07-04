@@ -67,6 +67,7 @@ static t_account	g_account[] =
 {
 	{"anonymous", "1234"},
 	{"yana", "test"},
+	{"ybarbier", "test"},
 	{0, 0}
 };
 
